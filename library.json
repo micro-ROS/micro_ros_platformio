@@ -1,0 +1,32 @@
+{
+    "name" : "micro_ros_arduino",
+    "version" : "2.0.4-galactic",
+    "authors": [
+        {
+            "name": "Pablo Garrido",
+            "email": "pablogarrido@eprosima.com",
+            "maintainer": true
+        },
+        {
+            "name": "Antonio Cuadros",
+            "email": "antoniocuadros@eprosima.com",
+            "maintainer": true
+        }
+    ],
+
+    "description" : "micro-ROS Arduino library",
+    "homepage" : "https://micro.ros.org",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/micro-ROS/micro_ros_arduino.git"
+    },
+
+    "build": {
+        "extraScript": "./extras/library_generation/extra_script.py"
+    },
+
+    "frameworks": "arduino",
+    "platforms": "teensy, https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream, atmelsam, raspberrypi, ststm32",
+
+    "precompiled": true
+}
