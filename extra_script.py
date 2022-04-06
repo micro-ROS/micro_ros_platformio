@@ -58,6 +58,7 @@ cmake_toolchain = library_builder.CMakeToolchain(
     main_path + "/platformio_toolchain.cmake",
     env['CC'],
     env['CXX'],
+    env['AR'],
     "{} {} -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='".format(' '.join(env['CFLAGS']), ' '.join(env['CCFLAGS'])),
     "{} {} -fno-rtti -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='".format(' '.join(env['CXXFLAGS']), ' '.join(env['CCFLAGS']))
 )

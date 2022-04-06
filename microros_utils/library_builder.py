@@ -23,6 +23,7 @@ class Repository:
 
     def clone(self, folder):
         self.path = folder + "/" + self.name
+        # TODO(pablogs) ensure that git is installed
         os.system("git clone -b {} {} {} > /dev/null 2>&1".format(self.branch, self.url, self.path))
 
     def get_packages(self):
@@ -57,7 +58,7 @@ class Repository:
             return None
 
 class CMakeToolchain:
-    def __init__(self, path, cc, cxx, cflags, cxxflags):
+    def __init__(self, path, cc, cxx, ar, cflags, cxxflags):
         cmake_toolchain = """include(CMakeForceCompiler)
 set(CMAKE_SYSTEM_NAME Generic)
 
@@ -69,13 +70,14 @@ SET (CMAKE_CXX_COMPILER_WORKS 1)
 
 set(CMAKE_C_COMPILER {C_COMPILER})
 set(CMAKE_CXX_COMPILER {CXX_COMPILER})
+set(CMAKE_AR {AR_COMPILER})
 
 set(CMAKE_C_FLAGS_INIT "{C_FLAGS}" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_INIT "{CXX_FLAGS}" CACHE STRING "" FORCE)
 
 set(__BIG_ENDIAN__ 0)"""
 
-        cmake_toolchain = cmake_toolchain.format(C_COMPILER=cc, CXX_COMPILER=cxx, C_FLAGS=cflags, CXX_FLAGS=cxxflags)
+        cmake_toolchain = cmake_toolchain.format(C_COMPILER=cc, CXX_COMPILER=cxx, AR_COMPILER=ar, C_FLAGS=cflags, CXX_FLAGS=cxxflags)
 
         with open(path, "w") as file:
             file.write(cmake_toolchain)
