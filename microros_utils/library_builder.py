@@ -84,9 +84,8 @@ class CMakeToolchain:
         self.path = os.path.realpath(file.name)
 
 class Build:
-    def __init__(self, build_folder):
-        self.build_folder = build_folder
-        self.dev_environment = [
+    dev_environments = {
+        'galactic': [
             Repository("ament_cmake", "https://github.com/ament/ament_cmake", "galactic"),
             Repository("ament_lint", "https://github.com/ament/ament_lint", "galactic"),
             Repository("ament_package", "https://github.com/ament/ament_package", "galactic"),
@@ -94,8 +93,10 @@ class Build:
             Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "galactic"),
             Repository("ament_index", "https://github.com/ament/ament_index", "galactic")
         ]
+    }
 
-        self.mcu_environment = [
+    mcu_environments = {
+        'galactic': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "galactic", "ros2"),
             Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "galactic", "ros2"),
             Repository("rcl", "https://github.com/micro-ROS/rcl", "galactic"),
@@ -117,6 +118,14 @@ class Build:
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "galactic"),
             Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "galactic"),
         ]
+    }
+
+    def __init__(self, build_folder, distro = 'galactic'):
+        self.build_folder = build_folder
+        self.distro = distro
+
+        self.dev_environment = Build.dev_environments[distro]
+        self.mcu_environment = Build.mcu_environments[distro]
 
         self.dev_packages = []
         self.mcu_packages = []
