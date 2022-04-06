@@ -3,11 +3,8 @@ from glob import glob
 import os
 import microros_builder.library_builder as library_builder
 
-# access to global construction environment
 # print(env)
-
-# Dump construction environments (for debug purpose)
-print(env.Dump())
+# print(env.Dump())
 
 # Install dependencies
 # TODO(pgarrido): Check if they are already installed
@@ -21,7 +18,7 @@ env.Execute(
 project_options = env.GetProjectConfig().items(env=env["PIOENV"], as_dict=True)
 
 # Do not include the transport folder yet
-env['SRC_FILTER'] += '-<transport>'
+env['SRC_FILTER'] += '-<*>'
 
 # Retrieve the required transport
 if 'microros_version' in project_options:
@@ -69,12 +66,11 @@ else:
 
 global_env['LIBPATH'].append(builder.library_path)
 
-# print(global_env.Dump())
-global_env['_CPPDEFFLAGS'] += " -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='"
-global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include'.format(main_path)
-if 'arduino' in framework:
-    pass
-    global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
+# global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 -D__attribute__\(x\)=\'\' '
+# global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
+# if 'arduino' in framework:
+#     pass
+#     global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
 
 
 
