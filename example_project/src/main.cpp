@@ -30,7 +30,7 @@ void error_loop(){
 }
 
 void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
-{  
+{
   RCLC_UNUSED(last_call_time);
   if (timer != NULL) {
     RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
@@ -40,10 +40,10 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 
 void setup() {
   set_microros_transports();
-  
+
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);  
-  
+  digitalWrite(LED_PIN, HIGH);
+
   delay(2000);
 
   allocator = rcl_get_default_allocator();
