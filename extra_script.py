@@ -1,4 +1,5 @@
 Import("env")
+from glob import glob
 import os
 import microros_builder.library_builder as library_builder
 
@@ -6,7 +7,7 @@ import microros_builder.library_builder as library_builder
 # print(env)
 
 # Dump construction environments (for debug purpose)
-# print(env.Dump())
+print(env.Dump())
 
 # Install dependencies
 # TODO(pgarrido): Check if they are already installed
@@ -20,8 +21,7 @@ env.Execute(
 project_options = env.GetProjectConfig().items(env=env["PIOENV"], as_dict=True)
 
 # Do not include the transport folder yet
-env['SRC_FILTER'] += ' -transports/*'
-print(env['SRC_FILTER'])
+env['SRC_FILTER'] += '-<transport>'
 
 # Retrieve the required transport
 if 'microros_version' in project_options:
@@ -55,7 +55,7 @@ cmake_toolchain = library_builder.CMakeToolchain(
 global_env = DefaultEnvironment()
 
 builder = library_builder.Build(library_path)
-builder.run('/home/pgarrido/dev/micro-ROS/micro_ros_platformio/meta_files/colcon.meta', cmake_toolchain.path)
+# builder.run('/home/pgarrido/dev/micro-ROS/micro_ros_platformio/meta_files/colcon.meta', cmake_toolchain.path)
 
 # Add microros lib
 if (board == "portenta_h7_m7" or board == "nanorp2040connect"):
@@ -70,11 +70,38 @@ else:
 global_env['LIBPATH'].append(builder.library_path)
 
 # print(global_env.Dump())
-# if 'arduino' in framework:
-#     # global_env['SRC_FILTER'] += '+arduino/*'
-#     # global_env.Append(SRC_FILTER=['+<*> +<arduino/*>'])
-#     env.ProcessFlags("-Iother/inc")
-#     # env['CFLAGS'].append('-Iarduinoasdfasdfasdfasdf/')
+global_env['_CPPDEFFLAGS'] += " -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='"
+global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include'.format(main_path)
+if 'arduino' in framework:
+    pass
+    global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Use this to select micro-ROS branch
