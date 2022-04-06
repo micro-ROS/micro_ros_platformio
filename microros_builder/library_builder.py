@@ -192,7 +192,12 @@ class Build:
         os.system("cd {} && . {}/install/setup.sh && {} > /dev/null 2>&1".format(self.mcu_folder, self.dev_folder, colcon_command))
 
     def package_mcu_library(self):
-        if self.library_path is not None:
+        self.library = self.build_folder + "/libmicroros/libmicroros.a"
+        self.library_path = self.build_folder + "/libmicroros"
+        self.includes = self.build_folder + "/libmicroros/include"
+        self.library_name = "microros"
+        if os.path.exists(self.includes):
+            print("micro-ROS already packaged")
             return
 
         shutil.rmtree(self.build_folder + "/aux", ignore_errors=True)
