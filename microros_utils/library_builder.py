@@ -58,23 +58,22 @@ class Repository:
 
 class CMakeToolchain:
     def __init__(self, path, cc, cxx, cflags, cxxflags):
-        cmake_toolchain = """
-            include(CMakeForceCompiler)
-            set(CMAKE_SYSTEM_NAME Generic)
+        cmake_toolchain = """include(CMakeForceCompiler)
+set(CMAKE_SYSTEM_NAME Generic)
 
-            set(CMAKE_CROSSCOMPILING 1)
-            set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+set(CMAKE_CROSSCOMPILING 1)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-            SET (CMAKE_C_COMPILER_WORKS 1)
-            SET (CMAKE_CXX_COMPILER_WORKS 1)
+SET (CMAKE_C_COMPILER_WORKS 1)
+SET (CMAKE_CXX_COMPILER_WORKS 1)
 
-            set(CMAKE_C_COMPILER {C_COMPILER})
-            set(CMAKE_CXX_COMPILER {CXX_COMPILER})
+set(CMAKE_C_COMPILER {C_COMPILER})
+set(CMAKE_CXX_COMPILER {CXX_COMPILER})
 
-            set(CMAKE_C_FLAGS_INIT "{C_FLAGS}" CACHE STRING "" FORCE)
-            set(CMAKE_CXX_FLAGS_INIT "{CXX_FLAGS}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_INIT "{C_FLAGS}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_INIT "{CXX_FLAGS}" CACHE STRING "" FORCE)
 
-            set(__BIG_ENDIAN__ 0)"""
+set(__BIG_ENDIAN__ 0)"""
 
         cmake_toolchain = cmake_toolchain.format(C_COMPILER=cc, CXX_COMPILER=cxx, C_FLAGS=cflags, CXX_FLAGS=cxxflags)
 
