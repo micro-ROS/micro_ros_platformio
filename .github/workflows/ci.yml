@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-    micro_ros_arduino:
+    micro_ros_platformio:
         runs-on: ubuntu-20.04
         container: ubuntu:20.04
 
@@ -19,7 +19,7 @@ jobs:
         - name: Build
           run: |
             apt update
-            DEBIAN_FRONTEND=noninteractive
+            export DEBIAN_FRONTEND=noninteractive
             apt install -y git curl python3 python3-pip git cmake
             python3 -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
             PATH=$PATH:~/.platformio/penv/bin
