@@ -81,10 +81,10 @@ global_env['LIBPATH'].append(builder.library_path)
 global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 '
 # global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 -D__attribute__\(x\)=\'\' '
 global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
-global_env['_CPPDEFFLAGS'] += ' -I{}/src '.format(main_path)
+global_env['_CPPDEFFLAGS'] += ' -I{}/platform_code '.format(main_path)
 
 if 'arduino' == framework:
     global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
-    env['SRC_FILTER'] += ' +<src/arduino/clock_gettime.cpp>'
+    env['SRC_FILTER'] += ' +<platform_code/arduino/clock_gettime.cpp>'
 
-env['SRC_FILTER'] += ' +<src/{}/{}/transport.cpp>'.format(framework,microros_transport)
+env['SRC_FILTER'] += ' +<platform_code/{}/{}/transport.cpp>'.format(framework,microros_transport)
