@@ -1,6 +1,5 @@
 Import("env")
-from glob import glob
-import os
+import os, sys
 import microros_builder.library_builder as library_builder
 
 # print(env)
@@ -20,7 +19,7 @@ project_options = env.GetProjectConfig().items(env=env["PIOENV"], as_dict=True)
 global_env = DefaultEnvironment()
 
 # Do not include the transport folder yet
-env['SRC_FILTER'] += '-<build/include/*>'
+env['SRC_FILTER'] += ' -<build/include/*>'
 
 # Retrieve the required transport
 if 'microros_version' in project_options:
@@ -35,7 +34,7 @@ else:
     microros_transport = 'serial'
 
 board = env['BOARD']
-framework = env['PIOFRAMEWORK']
+framework = env['PIOFRAMEWORK'][0]
 
 print("Configuring {} with transport {}".format(board, microros_transport))
 
@@ -68,9 +67,13 @@ global_env['LIBPATH'].append(builder.library_path)
 global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 '
 # global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 -D__attribute__\(x\)=\'\' '
 global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
-if 'arduino' in framework:
-    pass
+
+if 'arduino' == framework:
     global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
+    env['SRC_FILTER'] += ' +<arduino/clock_gettime.cpp>'
+
+env['SRC_FILTER'] += ' +<{}/{}/transport.cpp>'.format(framework,microros_transport)
+
 
 
 
