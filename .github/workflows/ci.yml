@@ -21,7 +21,7 @@ jobs:
           with:
             path: repo
         - name: Install environment
-          uses: ./.github/actions/platformio-env
+          uses: ./repo/.github/actions/platformio-env
         - name: Build
           shell: bash
           run: |
