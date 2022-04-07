@@ -50,7 +50,7 @@ void setup() {
   IPAddress agent_ip(192, 168, 1, 113);
   size_t agent_port = 9999;
 
-  set_microros_native_ethernet_udp_transports(local_mac, local_ip, agent_ip, agent_port);
+  set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
 #else
 #error "No transport defined"
 #endif
