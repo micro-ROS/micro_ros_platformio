@@ -5,8 +5,6 @@
 
 extern "C" {
 
-bool platformio_transport_require_framing = false;
-
 bool platformio_transport_open(struct uxrCustomTransport * transport)
 {
   Serial.begin(115200);

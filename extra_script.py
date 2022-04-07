@@ -92,8 +92,16 @@ global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 '
 # Add micro-ROS include path
 global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
 
+# Add micro-ROS include path to library include path
+env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
+
 # Add platformio library general include path
 global_env['_CPPDEFFLAGS'] += ' -I{}/platform_code '.format(main_path)
+global_env['_CPPDEFFLAGS'] += ' -I{}/platform_code/{}/{} '.format(main_path, framework, microros_transport)
+
+# Add platformio library general to library include path
+env['_CPPDEFFLAGS'] += ' -I{}/platform_code '.format(main_path)
+env['_CPPDEFFLAGS'] += ' -I{}/platform_code/{}/{} '.format(main_path, framework, microros_transport)
 
 # Add platformio library for Arduino framework
 if 'arduino' == framework:
@@ -103,4 +111,4 @@ if 'arduino' == framework:
     env['SRC_FILTER'] += ' +<platform_code/arduino/clock_gettime.cpp>'
 
 # Add transport sources according to the framework and the transport
-env['SRC_FILTER'] += ' +<platform_code/{}/{}/transport.cpp>'.format(framework, microros_transport)
+env['SRC_FILTER'] += ' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport)
