@@ -6,11 +6,14 @@ import microros_utils.library_builder as library_builder
 #### Install dependencies ####
 ##############################
 
-pip_packages = [x.split("==")[0] for x in os.popen('$PYTHONEXE -m pip freeze').read().split('\n')]
-required_packages = ["catkin_pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources", "setuptools"]
+pip_packages = [x.split("==")[0] for x in os.popen('{} -m pip freeze'.format(env['PYTHONEXE'])).read().split('\n')]
+required_packages = ["catkin-pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources"]
+if all([x in pip_packages for x in required_packages]):
+    print("All required Python pip packages are installed")
+
 for p in [x for x in required_packages if x not in pip_packages]:
     print('Installing {} with pip at PlatformIO environment'.format(p))
-    os.system('$PYTHONEXE -m pip install {}'.format(p))
+    env.Execute('$PYTHONEXE -m pip install {}'.format(p))
 
 ##########################
 #### Global variables ####
@@ -76,10 +79,7 @@ builder.run('{}/metas/{}'.format(main_path, boards_metas[board]), cmake_toolchai
 if (board == "portenta_h7_m7" or board == "nanorp2040connect"):
     # Workaround for including the library in the linker group
     #   This solves a problem with duplicated symbols in Galactic
-    global_env["_LIBFLAGS"] =  ('-Wl,--start-group -Wl,--whole-archive '
-                '${_stripixes(LIBLINKPREFIX, LIBS, LIBLINKSUFFIX, LIBPREFIXES, '
-                'LIBSUFFIXES, __env__)} -Wl,--no-whole-archive -lstdc++ '
-                '-lsupc++ -lm -lc -lgcc -lnosys -l{} -Wl,--end-group'.format(builder.library_name))
+    global_env["_LIBFLAGS"] = "-Wl,--start-group " + global_env["_LIBFLAGS"] + " -l{} -Wl,--end-group".format(builder.library_name)
 else:
     global_env['LIBS'].append(builder.library_name)
 

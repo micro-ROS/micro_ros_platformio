@@ -11,17 +11,15 @@ jobs:
         runs-on: ubuntu-20.04
         container: ubuntu:20.04
 
-        steps:
-        - uses: actions/checkout@v2
-          with:
-            path: checkout/
+        strategy:
+          fail-fast: false
+          matrix:
+            platform: [teensy41, nanorp2040connect, portenta_h7_m7]
 
+        steps:
+        - uses: actions/checkout@v3
+        - uses: .github/actions/platformio-env
         - name: Build
           run: |
-            apt update
-            export DEBIAN_FRONTEND=noninteractive
-            apt install -y git curl python3 python3-pip git cmake
-            python3 -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
-            PATH=$PATH:~/.platformio/penv/bin
-            cd checkout/example_project_2
-            pio run
+            cd ci/arduino_serial
+            pio run -e ${{ matrix.platform }}

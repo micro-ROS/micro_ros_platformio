@@ -7,8 +7,10 @@ class Package:
     def __init__(self, name, path):
         self.name = name
         self.path = path
+        self.ignored = False
 
     def ignore(self):
+        self.ignored = True
         ignore_path = self.path + '/COLCON_IGNORE'
         with open(ignore_path, 'a'):
             os.utime(ignore_path, None)
@@ -185,19 +187,17 @@ class Build:
             repo.clone(self.mcu_src_folder)
             self.mcu_packages.extend(repo.get_packages())
             for package in repo.get_packages():
-                print('\t - Downloaded {}{}'.format(package.name, " (ignored)" if package.name in Build.ignore_packages[self.distro] else ""))
+                if package.name in Build.ignore_packages[self.distro] or package.name.endswith("_cpp"):
+                    package.ignore()
+
+                print('\t - Downloaded {}{}'.format(package.name, " (ignored)" if package.ignored else ""))
 
     def build_mcu_environment(self, meta_file, toolchain_file):
         if os.path.exists(self.mcu_folder + '/build'):
             print("micro-ROS already built")
             return
 
-        # TODO(pablogs): Move this to a distro dependant variable
-        for name in Build.ignore_packages[self.distro]:
-            self.ignore_package(name)
-
         print("Building micro-ROS library")
-
         colcon_command = 'colcon build --merge-install --packages-ignore-regex=.*_cpp --metas {} --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF  -DTHIRDPARTY=ON  -DBUILD_SHARED_LIBS=OFF  -DBUILD_TESTING=OFF  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE={}'.format(meta_file, toolchain_file)
         os.system("cd {} && . {}/install/setup.sh && {} > /dev/null 2>&1".format(self.mcu_folder, self.dev_folder, colcon_command))
 
