@@ -41,7 +41,19 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 }
 
 void setup() {
-  set_microros_transports();
+
+#if defined(MICRO_ROS_TRANSPORT_SERIAL)
+  set_microros_serial_transports();
+#elif defined(MICRO_ROS_TRANSPORT_NATIVE_ETHERNET)
+  byte local_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
+  IPAddress local_ip(192, 168, 1, 177);
+  IPAddress agent_ip(192, 168, 1, 113);
+  size_t agent_port = 9999;
+
+  set_microros_native_ethernet_udp_transports(local_mac, local_ip, agent_ip, agent_port);
+#else
+#error "No transport defined"
+#endif
 
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
