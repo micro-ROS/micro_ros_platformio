@@ -2,57 +2,57 @@ Import("env")
 import os, sys
 import microros_utils.library_builder as library_builder
 
-# Install dependencies
-# TODO(pgarrido): Check if they are already installed
-env.Execute(
-    env.VerboseAction(
-        '$PYTHONEXE -m pip install catkin_pkg lark-parser empy colcon-common-extensions importlib-resources setuptools',
-        "Installing micro-ROS build system dependencies",
-    )
-)
+##############################
+#### Install dependencies ####
+##############################
 
-# Board metas
+pip_packages = [x.split("==")[0] for x in os.popen('$PYTHONEXE -m pip freeze').read().split('\n')]
+required_packages = ["catkin_pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources", "setuptools"]
+for p in [x for x in required_packages if x not in pip_packages]:
+    print('Installing {} with pip at PlatformIO environment'.format(p))
+    os.system('$PYTHONEXE -m pip install {}'.format(p))
+
+##########################
+#### Global variables ####
+##########################
+
 boards_metas = {
-        "portenta_h7_m7" : "colcon.meta",
-        "nanorp2040connect" : "colcon_verylowmem.meta",
-        "teensy41" : "colcon.meta",
-        "teensy40" : "colcon.meta",
-        "teensy36" : "colcon_lowmem.meta",
-        "teensy35" : "colcon_lowmem.meta",
-        "teensy32" : "colcon_lowmem.meta",
-        "teensy31" : "colcon_lowmem.meta",
-        "esp32dev" : "colcon.meta",
-        "olimex_e407" :  "colcon.meta",
-        "due" : "colcon_verylowmem.meta",
-        "zero" : "colcon_verylowmem.meta"
-    }
+    "portenta_h7_m7" : "colcon.meta",
+    "nanorp2040connect" : "colcon_verylowmem.meta",
+    "teensy41" : "colcon.meta",
+    "teensy40" : "colcon.meta",
+    "teensy36" : "colcon_lowmem.meta",
+    "teensy35" : "colcon_lowmem.meta",
+    "teensy32" : "colcon_lowmem.meta",
+    "teensy31" : "colcon_lowmem.meta",
+    "esp32dev" : "colcon.meta",
+    "olimex_e407" :  "colcon.meta",
+    "due" : "colcon_verylowmem.meta",
+    "zero" : "colcon_verylowmem.meta"
+}
 
 project_options = env.GetProjectConfig().items(env=env["PIOENV"], as_dict=True)
-
 global_env = DefaultEnvironment()
-
-# Do not include the transport folder yet
-env['SRC_FILTER'] += ' -<build/include/*>'
-
-# Retrieve the required transport
-if 'microros_version' in project_options:
-    microros_version = project_options['microros_version']
-else:
-    microros_version = 'galactic'
-
-# Retrieve the required transport
-if 'microros_transport' in project_options:
-    microros_transport = project_options['microros_transport']
-else:
-    microros_transport = 'serial'
-
 board = env['BOARD']
 framework = env['PIOFRAMEWORK'][0]
-
-print("Configuring {} with transport {}".format(board, microros_transport))
-
 main_path = os.path.realpath(".")
 library_path = main_path + "/build"
+
+# Retrieve the required transport
+microros_version = project_options['microros_version'] if 'microros_version' in project_options else 'galactic'
+
+# Retrieve the required transport
+microros_transport = project_options['microros_transport'] if 'microros_transport' in project_options else 'serial'
+
+# Do not include build folder
+env['SRC_FILTER'] += ' -<build/include/*>'
+
+
+#################################
+#### Build micro-ROS library ####
+#################################
+
+print("Configuring {} with transport {}".format(board, microros_transport))
 
 cmake_toolchain = library_builder.CMakeToolchain(
     main_path + "/platformio_toolchain.cmake",
@@ -63,12 +63,19 @@ cmake_toolchain = library_builder.CMakeToolchain(
     "{} {} -fno-rtti -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='".format(' '.join(env['CXXFLAGS']), ' '.join(env['CCFLAGS']))
 )
 
+# TODO(pablogs): Add meta file handler.
+
 builder = library_builder.Build(library_path)
 builder.run('{}/metas/{}'.format(main_path, boards_metas[board]), cmake_toolchain.path)
 
-# Add microros lib
+#######################################################
+#### Add micro-ROS library/includes to environment ####
+#######################################################
+
+# Add library
 if (board == "portenta_h7_m7" or board == "nanorp2040connect"):
-    # Linker fix for galactic
+    # Workaround for including the library in the linker group
+    #   This solves a problem with duplicated symbols in Galactic
     global_env["_LIBFLAGS"] =  ('-Wl,--start-group -Wl,--whole-archive '
                 '${_stripixes(LIBLINKPREFIX, LIBS, LIBLINKSUFFIX, LIBPREFIXES, '
                 'LIBSUFFIXES, __env__)} -Wl,--no-whole-archive -lstdc++ '
@@ -76,15 +83,24 @@ if (board == "portenta_h7_m7" or board == "nanorp2040connect"):
 else:
     global_env['LIBS'].append(builder.library_name)
 
+# Add library path
 global_env['LIBPATH'].append(builder.library_path)
 
+# Add required defines
 global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 '
-# global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 -D__attribute__\(x\)=\'\' '
+
+# Add micro-ROS include path
 global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
+
+# Add platformio library general include path
 global_env['_CPPDEFFLAGS'] += ' -I{}/platform_code '.format(main_path)
 
+# Add platformio library for Arduino framework
 if 'arduino' == framework:
+    # Include path for Arduino framework
     global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
+    # Clock implementation for Arduino framework
     env['SRC_FILTER'] += ' +<platform_code/arduino/clock_gettime.cpp>'
 
-env['SRC_FILTER'] += ' +<platform_code/{}/{}/transport.cpp>'.format(framework,microros_transport)
+# Add transport sources according to the framework and the transport
+env['SRC_FILTER'] += ' +<platform_code/{}/{}/transport.cpp>'.format(framework, microros_transport)

@@ -121,12 +121,13 @@ class Build:
         ]
     }
 
+    ignore_packages = {
+        'galactic': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
+    }
+
     def __init__(self, build_folder, distro = 'galactic'):
         self.build_folder = build_folder
         self.distro = distro
-
-        self.dev_environment = Build.dev_environments[distro]
-        self.mcu_environment = Build.mcu_environments[distro]
 
         self.dev_packages = []
         self.mcu_packages = []
@@ -160,7 +161,7 @@ class Build:
 
         os.makedirs(self.dev_src_folder, exist_ok=True)
         print("Downloading micro-ROS dev dependencies")
-        for repo in self.dev_environment:
+        for repo in Build.dev_environments[self.distro]:
             repo.clone(self.dev_src_folder)
             print("\t - Downloaded {}".format(repo.name))
             self.dev_packages.extend(repo.get_packages())
@@ -180,21 +181,20 @@ class Build:
 
         os.makedirs(self.mcu_src_folder)
         print("Downloading micro-ROS library")
-        for repo in self.mcu_environment:
+        for repo in Build.mcu_environments[self.distro]:
             repo.clone(self.mcu_src_folder)
             self.mcu_packages.extend(repo.get_packages())
             for package in repo.get_packages():
-                print('\t - Downloaded {}'.format(package.name))
+                print('\t - Downloaded {}{}'.format(package.name, " (ignored)" if package.name in Build.ignore_packages[self.distro] else ""))
 
     def build_mcu_environment(self, meta_file, toolchain_file):
         if os.path.exists(self.mcu_folder + '/build'):
             print("micro-ROS already built")
             return
 
-        self.ignore_package('rcl_logging_log4cxx')
-        self.ignore_package('rcl_logging_spdlog')
-        self.ignore_package('rcl_yaml_param_parser')
-        self.ignore_package('rclc_examples')
+        # TODO(pablogs): Move this to a distro dependant variable
+        for name in Build.ignore_packages[self.distro]:
+            self.ignore_package(name)
 
         print("Building micro-ROS library")
 
