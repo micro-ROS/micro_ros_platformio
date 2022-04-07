@@ -18,7 +18,8 @@ jobs:
 
         steps:
         - uses: actions/checkout@v3
-          path: repo
+          with:
+            path: repo
         - name: Install environment
           uses: ./.github/actions/platformio-env
         - name: Build
