@@ -25,6 +25,6 @@ jobs:
         - name: Build
           shell: bash
           run: |
+            export PATH=$PATH:~/.platformio/penv/bin
             cd repo/ci/arduino_serial
-            ls ~/.platformio
             pio run -e ${{ matrix.platform }}
