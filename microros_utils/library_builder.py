@@ -127,8 +127,9 @@ class Build:
         'galactic': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
     }
 
-    def __init__(self, build_folder, distro = 'galactic'):
-        self.build_folder = build_folder
+    def __init__(self, library_folder, distro = 'galactic'):
+        self.library_folder = library_folder
+        self.build_folder = library_folder + "/build"
         self.distro = distro
 
         self.dev_packages = []
@@ -144,11 +145,11 @@ class Build:
         self.library_path = None
         self.library_name = None
 
-    def run(self, meta, toolchain):
+    def run(self, meta, toolchain, user_meta = ""):
         self.download_dev_environment()
         self.build_dev_environment()
         self.download_mcu_environment()
-        self.build_mcu_environment(meta, toolchain)
+        self.build_mcu_environment(meta, toolchain, user_meta)
         self.package_mcu_library()
 
     def ignore_package(self, name):
@@ -181,6 +182,8 @@ class Build:
             print("micro-ROS already downloaded")
             return
 
+        # TODO(pablogs): Implement extra_packages
+
         os.makedirs(self.mcu_src_folder)
         print("Downloading micro-ROS library")
         for repo in Build.mcu_environments[self.distro]:
@@ -192,13 +195,15 @@ class Build:
 
                 print('\t - Downloaded {}{}'.format(package.name, " (ignored)" if package.ignored else ""))
 
-    def build_mcu_environment(self, meta_file, toolchain_file):
+    def build_mcu_environment(self, meta_file, toolchain_file, user_meta = ""):
         if os.path.exists(self.mcu_folder + '/build'):
             print("micro-ROS already built")
             return
 
         print("Building micro-ROS library")
-        colcon_command = 'colcon build --merge-install --packages-ignore-regex=.*_cpp --metas {} --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF  -DTHIRDPARTY=ON  -DBUILD_SHARED_LIBS=OFF  -DBUILD_TESTING=OFF  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE={}'.format(meta_file, toolchain_file)
+
+        common_meta_path = self.library_folder + '/metas/common.meta'
+        colcon_command = 'colcon build --merge-install --packages-ignore-regex=.*_cpp --metas {} {} {} --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF  -DTHIRDPARTY=ON  -DBUILD_SHARED_LIBS=OFF  -DBUILD_TESTING=OFF  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE={}'.format(common_meta_path, meta_file, user_meta, toolchain_file)
         os.system("cd {} && . {}/install/setup.sh && {} > /dev/null 2>&1".format(self.mcu_folder, self.dev_folder, colcon_command))
 
     def package_mcu_library(self):

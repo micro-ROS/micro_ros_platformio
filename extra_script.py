@@ -39,13 +39,17 @@ global_env = DefaultEnvironment()
 board = env['BOARD']
 framework = env['PIOFRAMEWORK'][0]
 main_path = os.path.realpath(".")
-library_path = main_path + "/build"
+
+selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
 # Retrieve the required transport
 microros_version = project_options['microros_version'] if 'microros_version' in project_options else 'galactic'
 
 # Retrieve the required transport
 microros_transport = project_options['microros_transport'] if 'microros_transport' in project_options else 'serial'
+
+# Retrieve the user meta
+microros_user_meta = project_options['microros_user_meta'] if 'microros_user_meta' in project_options else ''
 
 # Do not include build folder
 env['SRC_FILTER'] += ' -<build/include/*>'
@@ -66,10 +70,8 @@ cmake_toolchain = library_builder.CMakeToolchain(
     "{} {} -fno-rtti -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='".format(' '.join(env['CXXFLAGS']), ' '.join(env['CCFLAGS']))
 )
 
-# TODO(pablogs): Add meta file handler.
-
-builder = library_builder.Build(library_path)
-builder.run('{}/metas/{}'.format(main_path, boards_metas[board]), cmake_toolchain.path)
+builder = library_builder.Build(main_path)
+builder.run('{}/metas/{}'.format(main_path, selected_board_meta), cmake_toolchain.path, microros_user_meta)
 
 #######################################################
 #### Add micro-ROS library/includes to environment ####

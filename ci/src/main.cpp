@@ -48,9 +48,17 @@ void setup() {
   byte local_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
   IPAddress local_ip(192, 168, 1, 177);
   IPAddress agent_ip(192, 168, 1, 113);
-  size_t agent_port = 9999;
+  size_t agent_port = 8888;
 
   set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
+#elif defined(MICRO_ROS_TRANSPORT_WIFI)
+  IPAddress agent_ip(192, 168, 1, 113);
+  size_t agent_port = 8888;
+
+  char ssid[] = "WIFI_SSID";
+  char psk[]= "WIFI_PSK";
+
+  set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
 #else
 #error "No transport defined"
 #endif
