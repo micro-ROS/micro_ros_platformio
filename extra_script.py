@@ -43,7 +43,7 @@ main_path = os.path.realpath(".")
 selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
 # Retrieve the required transport
-microros_version = project_options['microros_version'] if 'microros_version' in project_options else 'galactic'
+microros_distro = project_options['microros_distro'] if 'microros_distro' in project_options else 'galactic'
 
 # Retrieve the required transport
 microros_transport = project_options['microros_transport'] if 'microros_transport' in project_options else 'serial'
@@ -107,7 +107,7 @@ env['_CPPDEFFLAGS'] += ' -I{}/platform_code/{}/{} '.format(main_path, framework,
 
 # Add micro-ROS defines to user application
 global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_TRANSPORT_{} '.format(microros_transport.upper())
-global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_DISTRO_ '.format(microros_version.upper())
+global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_DISTRO_ '.format(microros_distro.upper())
 
 # Add platformio library for Arduino framework
 if 'arduino' == framework:
