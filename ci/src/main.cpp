@@ -36,7 +36,7 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
   RCLC_UNUSED(last_call_time);
   if (timer != NULL) {
     RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
-    msg.data = 555;
+    msg.data++;
   }
 }
 
@@ -84,11 +84,10 @@ void setup() {
     "microros_platformio_publisher"));
 
   // create timer,
-  const unsigned int timer_timeout = 1;
   RCCHECK(rclc_timer_init_default(
     &timer,
     &support,
-    RCL_MS_TO_NS(timer_timeout),
+    RCL_MS_TO_NS(100),
     timer_callback));
 
   // create executor
