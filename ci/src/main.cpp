@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#if defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI) || defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI_NINA)
+#if defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI)
 #include <WiFi.h>
 #endif
 
