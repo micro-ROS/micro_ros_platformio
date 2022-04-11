@@ -1,4 +1,5 @@
-#include <WiFi.h>
+#include <SPI.h>
+#include <WiFiNINA.h>
 #include <WiFiUdp.h>
 
 struct micro_ros_agent_locator {
