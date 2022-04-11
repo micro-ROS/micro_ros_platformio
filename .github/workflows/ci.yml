@@ -14,7 +14,7 @@ jobs:
         strategy:
           fail-fast: false
           matrix:
-            platform: [teensy41, teensy40, teensy36, teensy35, teensy31, due, zero, olimex_e407, esp32dev, nanorp2040connect, portenta_h7_m7, teensy41_eth, nanorp2040connect_eth, portenta_h7_m7_wifi, esp32dev_wifi]
+            platform: [teensy41, teensy40, teensy36, teensy35, teensy31, due, zero, olimex_e407, esp32dev, nanorp2040connect, portenta_h7_m7, teensy41_eth, nanorp2040connect_wifi, portenta_h7_m7_wifi, esp32dev_wifi]
 
         steps:
         - uses: actions/checkout@v3
