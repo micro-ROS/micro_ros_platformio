@@ -1,5 +1,11 @@
 #include <micro_ros_platformio.h>
 
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+#include <libopencm3/cm3/nvic.h>
+#include <libopencm3/cm3/systick.h>
+#include <libopencm3/stm32/usart.h>
+
 #include <stdio.h>
 #include <rcl/rcl.h>
 #include <rcl/error_handling.h>
@@ -28,40 +34,61 @@ void error_loop(){
   }
 }
 
-void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
+void timer_callback(rcl_timer_t * inner_timer, int64_t last_call_time)
 {
   RCLC_UNUSED(last_call_time);
-  if (timer != NULL) {
+  if (inner_timer != NULL) {
     RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
     msg.data++;
   }
 }
 
+volatile uint32_t system_millis;
+
+/* Called when systick fires */
+void sys_tick_handler(void)
+{
+	system_millis++;
+}
+
 void setup() {
 
-#if defined(MICRO_ROS_TRANSPORT_ARDUINO_SERIAL)
-  Serial.begin(115200);
-  set_microros_serial_transports(Serial);
-#elif defined(MICRO_ROS_TRANSPORT_ARDUINO_NATIVE_ETHERNET)
-  byte local_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
-  IPAddress local_ip(192, 168, 1, 177);
-  IPAddress agent_ip(192, 168, 1, 113);
-  size_t agent_port = 8888;
+  rcc_clock_setup_pll(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_168MHZ]);
+  systick_set_reload(168000);
+  systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+  systick_counter_enable();
+  systick_interrupt_enable();
 
-  set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
-#elif defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI) || defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI_NINA)
-  IPAddress agent_ip(192, 168, 1, 113);
-  size_t agent_port = 8888;
+  // Enable uart
+	/* Enable GPIOC clock. */
+	rcc_periph_clock_enable(RCC_GPIOC);
+	rcc_periph_clock_enable(RCC_USART6);
 
-  char ssid[] = "WIFI_SSID";
-  char psk[]= "WIFI_PSK";
+	/* Setup GPIO pins for USART2 transmit. */
+	gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO6);
 
-  set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
-#elif defined(MICRO_ROS_TRANSPORT_LIBOPENCM3_SERIAL)
+	/* Setup USART2 TX pin as alternate function. */
+	gpio_set_af(GPIOA, GPIO_AF1, GPIO6);
+
+	/* Setup UART parameters. */
+	usart_set_baudrate(USART6, 115200);
+	usart_set_databits(USART6, 8);
+	usart_set_stopbits(USART6, USART_STOPBITS_1);
+	usart_set_mode(USART6, USART_MODE_TX);
+	usart_set_parity(USART6, USART_PARITY_NONE);
+	usart_set_flow_control(USART6, USART_FLOWCONTROL_NONE);
+
+	/* Finally enable the USART. */
+	usart_enable(USART6);
+
+  while(1) {
+    usart_send_blocking(USART6, 'a');
+    usart_send_blocking(USART6, '\n');
+  }
+
+
   set_microros_serial_transports();
-#else
-#error "No transport defined"
-#endif
+
 
   allocator = rcl_get_default_allocator();
 
@@ -96,10 +123,77 @@ void loop() {
   RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
 }
 
-int main() {
+int main(){
   setup();
-  while(1) {
+  while(1){
     loop();
   }
-  return 0;
+  return 1;
 }
+
+// #include <libopencm3/stm32/rcc.h>
+// #include <libopencm3/stm32/gpio.h>
+// #include <libopencm3/cm3/nvic.h>
+// #include <libopencm3/cm3/systick.h>
+
+// /* monotonically increasing number of milliseconds from reset
+//  * overflows every 49 days if you're wondering
+//  */
+// volatile uint32_t system_millis;
+
+// /* Called when systick fires */
+// void sys_tick_handler(void)
+// {
+// 	system_millis++;
+// }
+
+// /* sleep for delay milliseconds */
+// static void msleep(uint32_t delay)
+// {
+// 	uint32_t wake = system_millis + delay;
+// 	while (wake > system_millis);
+// }
+
+// /* Set up a timer to create 1mS ticks. */
+// static void systick_setup(void)
+// {
+// 	/* clock rate / 1000 to get 1mS interrupt rate */
+// 	systick_set_reload(168000);
+// 	systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+// 	systick_counter_enable();
+// 	/* this done last */
+// 	systick_interrupt_enable();
+// }
+
+// /* Set STM32 to 168 MHz. */
+// static void clock_setup(void)
+// {
+// 	rcc_clock_setup_pll(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_168MHZ]);
+
+// 	/* Enable GPIOD clock. */
+// 	rcc_periph_clock_enable(RCC_GPIOC);
+// }
+
+// static void gpio_setup(void)
+// {
+// 	/* Set GPIO11-15 (in GPIO port D) to 'output push-pull'. */
+// 	gpio_mode_setup(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
+// }
+
+// int main(void)
+// {
+// 	clock_setup();
+// 	gpio_setup();
+// 	systick_setup();
+
+// 	/* Set two LEDs for wigwag effect when toggling. */
+// 	gpio_set(GPIOC, GPIO13);
+
+// 	/* Blink the LEDs (PD12, PD13, PD14 and PD15) on the board. */
+// 	while (1) {
+// 		gpio_toggle(GPIOC, GPIO13);
+// 		msleep(1000);
+// 	}
+
+// 	return 0;
+// }
