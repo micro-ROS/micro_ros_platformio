@@ -106,7 +106,7 @@ env['_CPPDEFFLAGS'] += ' -I{}/platform_code '.format(main_path)
 env['_CPPDEFFLAGS'] += ' -I{}/platform_code/{}/{} '.format(main_path, framework, microros_transport)
 
 # Add micro-ROS defines to user application
-global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_TRANSPORT_{} '.format(microros_transport.upper())
+global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_TRANSPORT_{}_{} '.format(framework.upper(), microros_transport.upper())
 global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_DISTRO_ '.format(microros_distro.upper())
 
 # Add platformio library for Arduino framework
