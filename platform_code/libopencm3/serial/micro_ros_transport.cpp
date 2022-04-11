@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <sys/time.h>
@@ -19,20 +18,23 @@ bool platformio_transport_close(struct uxrCustomTransport * transport)
 
 size_t platformio_transport_write(struct uxrCustomTransport * transport, uint8_t *buf, size_t len, uint8_t *errcode)
 {
-  (void)errcode;
+  // (void)errcode;
 
-  Stream * stream = (Stream *) transport->args;
-  size_t sent = stream->write(buf, len);
-  return sent;
+  // Stream * stream = (Stream *) transport->args;
+  // size_t sent = stream->write(buf, len);
+  // return sent;
+
+  return 0;
 }
 
 size_t platformio_transport_read(struct uxrCustomTransport * transport, uint8_t *buf, size_t len, int timeout, uint8_t *errcode)
 {
-  (void)errcode;
+  // (void)errcode;
 
-  Stream * stream = (Stream *) transport->args;
-  stream->setTimeout(timeout);
-  return stream->readBytes((char *)buf, len);
+  // Stream * stream = (Stream *) transport->args;
+  // stream->setTimeout(timeout);
+  // return stream->readBytes((char *)buf, len);
+  return 0;
 }
 
 }

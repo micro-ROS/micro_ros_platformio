@@ -115,6 +115,12 @@ if 'arduino' == framework:
     global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
     # Clock implementation for Arduino framework
     env['SRC_FILTER'] += ' +<platform_code/arduino/clock_gettime.cpp>'
+elif 'libopencm3' == framework:
+    # Include path for libopencm3 framework
+    global_env['_CPPDEFFLAGS'] += ' -I{}/libopencm3'.format(main_path)
+    # Clock implementation for libopencm3 framework
+    env['SRC_FILTER'] += ' +<platform_code/libopencm3/clock_gettime.cpp>'
 
 # Add transport sources according to the framework and the transport
+print(' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport))
 env['SRC_FILTER'] += ' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport)

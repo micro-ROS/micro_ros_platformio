@@ -25,6 +25,6 @@
         "extraScript": "./extra_script.py"
     },
 
-    "frameworks": "arduino",
+    "frameworks": "arduino, libopencm3",
     "platforms": "teensy, https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream, atmelsam, raspberrypi, ststm32"
 }

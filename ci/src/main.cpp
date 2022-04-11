@@ -1,9 +1,3 @@
-#include <Arduino.h>
-
-#if defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI)
-#include <WiFi.h>
-#endif
-
 #include <micro_ros_platformio.h>
 
 #include <stdio.h>
@@ -30,8 +24,7 @@ rcl_timer_t timer;
 
 void error_loop(){
   while(1){
-    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-    delay(100);
+
   }
 }
 
@@ -64,14 +57,11 @@ void setup() {
   char psk[]= "WIFI_PSK";
 
   set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+#elif defined(MICRO_ROS_TRANSPORT_LIBOPENCM3_SERIAL)
+  set_microros_serial_transports();
 #else
 #error "No transport defined"
 #endif
-
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
-
-  delay(2000);
 
   allocator = rcl_get_default_allocator();
 
@@ -104,4 +94,12 @@ void setup() {
 
 void loop() {
   RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
+}
+
+int main() {
+  setup();
+  while(1) {
+    loop();
+  }
+  return 0;
 }
