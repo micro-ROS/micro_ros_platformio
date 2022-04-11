@@ -43,7 +43,8 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 void setup() {
 
 #if defined(MICRO_ROS_TRANSPORT_SERIAL)
-  set_microros_serial_transports();
+  Serial.begin(115200);
+  set_microros_serial_transports(Serial);
 #elif defined(MICRO_ROS_TRANSPORT_NATIVE_ETHERNET)
   byte local_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
   IPAddress local_ip(192, 168, 1, 177);
