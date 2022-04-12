@@ -2,6 +2,8 @@
 #ifndef MICRO_ROS_PLATFORMIO
 #define MICRO_ROS_PLATFORMIO
 
+#define __attribute__(x)
+
 #include <uxr/client/transport.h>
 #include <rmw_microros/rmw_microros.h>
 
