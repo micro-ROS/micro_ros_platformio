@@ -1,0 +1,45 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/pgarrido/dev/micro-ROS/micro_ros_platformio/disco/include",
+                "/home/pgarrido/dev/micro-ROS/micro_ros_platformio/disco/src",
+                "/home/pgarrido/.platformio/packages/framework-libopencm3",
+                "/home/pgarrido/.platformio/packages/framework-libopencm3/include",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/pgarrido/dev/micro-ROS/micro_ros_platformio/disco/include",
+                    "/home/pgarrido/dev/micro-ROS/micro_ros_platformio/disco/src",
+                    "/home/pgarrido/.platformio/packages/framework-libopencm3",
+                    "/home/pgarrido/.platformio/packages/framework-libopencm3/include",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=50205",
+                "STM32L475xx",
+                "STM32L4",
+                "F_CPU=80000000L",
+                ""
+            ],
+            "compilerPath": "/home/pgarrido/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mthumb",
+                "-mcpu=cortex-m4",
+                "-mfloat-abi=hard",
+                "-mfpu=fpv4-sp-d16",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,47 @@
+// AUTOMATICALLY GENERATED FILE. PLEASE DO NOT MODIFY IT MANUALLY
+//
+// PIO Unified Debugger
+//
+// Documentation: https://docs.platformio.org/page/plus/debugging.html
+// Configuration: https://docs.platformio.org/page/projectconf/section_env_debug.html
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug",
+            "executable": "/home/pgarrido/dev/micro-ROS/micro_ros_platformio/disco/.pio/build/disco/firmware.elf",
+            "projectEnvName": "disco",
+            "toolchainBinDir": "/home/pgarrido/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "/home/pgarrido/.platformio/platforms/ststm32/misc/svd/STM32L4x5.svd",
+            "preLaunchTask": {
+                "type": "PlatformIO",
+                "task": "Pre-Debug"
+            }
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (skip Pre-Debug)",
+            "executable": "/home/pgarrido/dev/micro-ROS/micro_ros_platformio/disco/.pio/build/disco/firmware.elf",
+            "projectEnvName": "disco",
+            "toolchainBinDir": "/home/pgarrido/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "/home/pgarrido/.platformio/platforms/ststm32/misc/svd/STM32L4x5.svd"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (without uploading)",
+            "executable": "/home/pgarrido/dev/micro-ROS/micro_ros_platformio/disco/.pio/build/disco/firmware.elf",
+            "projectEnvName": "disco",
+            "toolchainBinDir": "/home/pgarrido/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "/home/pgarrido/.platformio/platforms/ststm32/misc/svd/STM32L4x5.svd",
+            "loadMode": "manual"
+        }
+    ]
+}
