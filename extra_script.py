@@ -89,7 +89,7 @@ else:
 global_env.Append(LIBPATH=[builder.library_path])
 
 # Add required defines
-global_env.Append(CCFLAGS=['-DCLOCK_MONOTONIC=0'])
+global_env.Append(CPPDEFINES=[("CLOCK_MONOTONIC", 1)])
 
 # Add micro-ROS include path
 global_env.Append(CPPPATH=[main_path + "/build/libmicroros/include"])
@@ -108,9 +108,8 @@ env.Append(CPPPATH=[
     main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
 # Add micro-ROS defines to user application
-global_env.Append(CCFLAGS=[
-    '-DMICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()),
-    '-DMICRO_ROS_DISTRO_ {} '.format(microros_distro.upper())])
+global_env.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
+global_env.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_ {} '.format(microros_distro.upper()), 1)])
 
 # Add platformio library for Arduino framework
 if 'arduino' == framework:
