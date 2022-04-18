@@ -83,36 +83,38 @@ if (board == "portenta_h7_m7" or board == "nanorp2040connect"):
     #   This solves a problem with duplicated symbols in Galactic
     global_env["_LIBFLAGS"] = "-Wl,--start-group " + global_env["_LIBFLAGS"] + " -l{} -Wl,--end-group".format(builder.library_name)
 else:
-    global_env['LIBS'].append(builder.library_name)
+    global_env.Append(LIBS=[builder.library_name])
 
 # Add library path
-global_env['LIBPATH'].append(builder.library_path)
+global_env.Append(LIBPATH=[builder.library_path])
 
 # Add required defines
-global_env['_CPPDEFFLAGS'] += ' -DCLOCK_MONOTONIC=0 '
+global_env.Append(CPPDEFINES=[("CLOCK_MONOTONIC", 1)])
 
 # Add micro-ROS include path
-global_env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
+global_env.Append(CPPPATH=[main_path + "/build/libmicroros/include"])
 
 # Add micro-ROS include path to library include path
-env['_CPPDEFFLAGS'] += ' -I{}/build/libmicroros/include '.format(main_path)
+env.Append(CPPPATH=[main_path + "/build/libmicroros/include"])
 
 # Add platformio library general include path
-global_env['_CPPDEFFLAGS'] += ' -I{}/platform_code '.format(main_path)
-global_env['_CPPDEFFLAGS'] += ' -I{}/platform_code/{}/{} '.format(main_path, framework, microros_transport)
+global_env.Append(CPPPATH=[
+    main_path + "/platform_code",
+    main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
 # Add platformio library general to library include path
-env['_CPPDEFFLAGS'] += ' -I{}/platform_code '.format(main_path)
-env['_CPPDEFFLAGS'] += ' -I{}/platform_code/{}/{} '.format(main_path, framework, microros_transport)
+env.Append(CPPPATH=[
+    main_path + "/platform_code",
+    main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
 # Add micro-ROS defines to user application
-global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_TRANSPORT_{}_{} '.format(framework.upper(), microros_transport.upper())
-global_env['_CPPDEFFLAGS'] += ' -DMICRO_ROS_DISTRO_ '.format(microros_distro.upper())
+global_env.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
+global_env.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_ {} '.format(microros_distro.upper()), 1)])
 
 # Add platformio library for Arduino framework
 if 'arduino' == framework:
     # Include path for Arduino framework
-    global_env['_CPPDEFFLAGS'] += ' -I{}/arduino'.format(main_path)
+    global_env.Append(CPPPATH=[main_path + "/arduino"])
     # Clock implementation for Arduino framework
     env['SRC_FILTER'] += ' +<platform_code/arduino/clock_gettime.cpp>'
 
