@@ -46,7 +46,7 @@ selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.
 microros_distro = project_options['microros_distro'] if 'microros_distro' in project_options else 'galactic'
 
 # Retrieve the required transport
-microros_transport = project_options['microros_transport'] if 'microros_transport' in project_options else 'serial'
+microros_transport = env.BoardConfig().get("microros_transport")
 
 # Retrieve the user meta
 microros_user_meta = project_options['microros_user_meta'] if 'microros_user_meta' in project_options else ''
