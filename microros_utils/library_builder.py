@@ -1,5 +1,6 @@
 import os
 import json
+import yaml
 import shutil
 import xml.etree.ElementTree as xml_parser
 
@@ -203,10 +204,41 @@ class Build:
             print("\t - Extra packages folder not found, skipping...")
             return
 
-        # TODO(acuadros95) ensure that vcs is installed
-        os.system("vcs import --input {}/*.repos {}".format(self.packages_folder, self.mcu_src_folder))
+        print("Checking extra packages")
+
+        # Load and clone repositories from extra_packages.repos file
+        extra_repos = self.get_repositories("{}/extra_packages.repos".format(self.packages_folder))
+        for repo_name in extra_repos:
+            repo_values = extra_repos[repo_name]
+            version = repo_values['version'] if 'version' in repo_values else None
+            Repository(repo_name, repo_values['url'], self.distro, version).clone(self.mcu_src_folder)
+            print("\t - Downloaded {}".format(repo_name))
+
         shutil.copytree(self.packages_folder, self.mcu_src_folder, ignore=shutil.ignore_patterns('*.repos'), dirs_exist_ok=True)
-        print("\t - Downloaded extra packages")
+
+    def get_repositories(self, yaml_file):
+        repos = {}
+        try:
+            with open(yaml_file, 'r') as repos_file:
+                root = yaml.safe_load(repos_file)
+                repositories = root['repositories']
+
+            if repositories:
+                for path in repositories:
+                    repo = {}
+                    attributes = repositories[path]
+                    try:
+                        repo['type'] = attributes['type']
+                        repo['url'] = attributes['url']
+                        if 'version' in attributes:
+                            repo['version'] = attributes['version']
+                    except KeyError as e:
+                        continue
+                    repos[path] = repo
+        except (yaml.YAMLError, KeyError, TypeError) as e:
+            print("Error on {}: {}".format(yaml_file, e))
+        finally:
+            return repos
 
     def build_mcu_environment(self, meta_file, toolchain_file, user_meta = ""):
         if os.path.exists(self.mcu_folder + '/build'):
