@@ -15,6 +15,7 @@ PlatformIO will handle the full build process, including dependencies, compilati
 
 - [micro-ROS for PlatformIO](#micro-ros-for-platformio)
   - [Supported boards](#supported-boards)
+  - [Requirements](#requirements)
   - [How to add to your project](#how-to-add-to-your-project)
   - [Library configuration](#library-configuration)
     - [ROS 2 distribution](#ros-2-distribution)
@@ -22,6 +23,7 @@ PlatformIO will handle the full build process, including dependencies, compilati
     - [Extra packages](#extra-packages)
     - [Other configuration](#other-configuration)
   - [Custom targets](#custom-targets)
+  - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
   - [Examples](#examples)
   - [Purpose of the Project](#purpose-of-the-project)
   - [License](#license)
@@ -44,6 +46,14 @@ Supported boards are:
   
 The community is encouraged to open pull request with tested use cases on different boards, platforms, transports, ...
 
+## Requirements
+
+- PlatformIO [local installation](https://docs.platformio.org/en/stable/core/installation.html) or [PlatformIO IDE for VSCode](https://platformio.org/install/ide?install=vscode)
+- PlatformIO needs  `git`, `cmake` and `pip3` to handle micro-ROS internal dependencies:
+  ```bash
+  apt install -y git cmake python3-pip
+  ```
+
 ## How to add to your project
 
 The library can be included as a regular git library dependence on your `platform.ini` file:
@@ -62,13 +72,12 @@ pio run # Build the firmware
 pio run --target upload # Flash the firmware
 ```
 
-micro-ROS will be built once as a static library.
+Note that after the library is compiled for first time, the build process will be skipped. To trigger a library build, <TODO(acuadros95): add clean step> This will regenerate the library on your next platformIO build, applying modifications listed on [Library configuration](#library-configuration).
 
 ## Library configuration
-This section details the multiple parameters that can be configured on the project `platform.ini` file.
+This section details the different configuration parameters available on the project `platform.ini` file.
+A explanation for adding custom targets is also present
 
-Note that after the library is compiled for first time, the build process will be skipped. To trigger a library build, <TODO(acuadros95): add clean step>
-This will regenerate the library on your next platformIO build, applying modifications on the following parameters.
 
 ### ROS 2 distribution
 The target ROS 2 distribution can be configured with the `board_microros_distro = <distribution>`, supported values are:
@@ -100,6 +109,27 @@ This library can be easily adapted to different boards, transports or RTOS, to a
 - Transport: Users can include their custom transport following the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h) and the provided sources on [platform_code](./platform_code) as a reference. More info can be found [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
 - Time: micro-ROS needs a `clock_gettime` implementation, following POSIX implementation with an accuracy of at least 1 millisecond.  
   This method is used to retrieve the elapsed time on executor spins and reliable communication, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
+
+## Using the micro-ROS Agent
+It is possible to use a **micro-ROS Agent** just by using this docker command:
+
+```bash
+# UDPv4 micro-ROS Agent
+docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host microros/micro-ros-agent:$ROS_DISTRO udp4 --port 8888 -v6
+
+# Serial micro-ROS Agent
+docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host microros/micro-ros-agent:$ROS_DISTRO serial --dev [YOUR BOARD PORT] -v6
+
+# TCPv4 micro-ROS Agent
+docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host microros/micro-ros-agent:$ROS_DISTRO tcp4 --port 8888 -v6
+
+# CAN-FD micro-ROS Agent
+docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host microros/micro-ros-agent:$ROS_DISTRO canfd --dev [YOUR CAN INTERFACE] -v6
+```
+
+For the supported transports, only the `serial` and `udp4` versions shall be used, although users can develop 
+and use the agent to test their own `tcp4` and `canfd` custom transports.  
+It is also possible to use custom transports on a `micro-XRCE Agent` instance. More info available [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/agent.html#custom-transport-agent).
 
 ## Examples
 The following example projects are available:
