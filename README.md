@@ -73,7 +73,12 @@ pio run # Build the firmware
 pio run --target upload # Flash the firmware
 ```
 
-Note that after the library is compiled for first time, the build process will be skipped. To trigger a library build, <TODO(acuadros95): add clean step> This will regenerate the library on your next platformIO build, applying modifications listed on [Library configuration](#library-configuration).
+After the library is compiled for first time the build process will be skipped, to trigger a library build and apply [library modifications](#library-configuration) on your next platformIO build:
+
+```bash
+#  TODO(acuadros95): add clean step
+pio run clean ...  # Clean library
+```
 
 ## Library configuration
 This section details the different configuration parameters available on the project `platform.ini` file.
@@ -92,7 +97,9 @@ The transport can be configured with the `board_microros_transport = <transport>
   - `native_ethernet`
 
 ### Extra packages
-Folders added to `<Project_directory>/extra_packages` and entries added to `<Project_directory>/extra_packages/extra_packages.repos` will be taken into account by this build system.
+Colcon packages can be added to the build process using this two methods:
+- Package directories copied on the `<Project_directory>/extra_packages` folder.
+- Git repositories included on the `<Project_directory>/extra_packages/extra_packages.repos` yaml file.
   
 This should be used for example when adding custom messages types or custom micro-ROS packages.
 
