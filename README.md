@@ -44,12 +44,13 @@ Supported boards are:
 | `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
   
-The community is encouraged to open pull request with tested use cases on different boards, platforms, transports, ...
+The community is encouraged to open pull request with custom use cases.
 
 ## Requirements
 
 - PlatformIO [local installation](https://docs.platformio.org/en/stable/core/installation.html) or [PlatformIO IDE for VSCode](https://platformio.org/install/ide?install=vscode)
 - PlatformIO needs  `git`, `cmake` and `pip3` to handle micro-ROS internal dependencies:
+
   ```bash
   apt install -y git cmake python3-pip
   ```
@@ -92,10 +93,12 @@ The transport can be configured with the `board_microros_transport = <transport>
 
 ### Extra packages
 Folders added to `<Project_directory>/extra_packages` and entries added to `<Project_directory>/extra_packages/extra_packages.repos` will be taken into account by this build system.
+  
 This should be used for example when adding custom messages types or custom micro-ROS packages.
 
 ### Other configuration
-Library packages can be configured with a customized meta file, configurable with the parameter `microros_user_meta = <file_name>.meta`. This file shall be on the project main folder.  
+Library packages can be configured with a customized meta file on the project main folder: `microros_user_meta = <file_name.meta>`.
+  
 This allows the user to customize the library memory resources or activate optional functionality such as multithreading, including configuration of user [Extra packages](#extra-packages).
 
 - Documentation on available parameters can be found [here](https://micro.ros.org/docs/tutorials/advanced/microxrcedds_rmw_configuration) and [here]([microxrcedds_rmw_configuration](https://micro-xrce-dds.docs.eprosima.com/en/latest/client.html)).
@@ -104,10 +107,10 @@ This allows the user to customize the library memory resources or activate optio
   *Note: the [common.meta](./metas/common.meta) file makes general adjustments to the library and shall not be modified by the user.*
 
 ## Custom targets
-This library can be easily adapted to different boards, transports or RTOS, to achieve this:
+This library can be easily adapted to different boards, transports or RTOS, to achieve this the user shall provide:
 
-- Transport: Users can include their custom transport following the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h) and the provided sources on [platform_code](./platform_code) as a reference. More info can be found [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
-- Time: micro-ROS needs a `clock_gettime` implementation, following POSIX implementation with an accuracy of at least 1 millisecond.  
+- Custom transport: Custom transport shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
+- `clock_gettime`: [POSIX compliant](https://linux.die.net/man/3/clock_gettime) implementation with a minimum resolution of 1 millisecond.  
   This method is used to retrieve the elapsed time on executor spins and reliable communication, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
 
 ## Using the micro-ROS Agent
@@ -129,6 +132,7 @@ docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host mi
 
 For the supported transports, only the `serial` and `udp4` versions shall be used, although users can develop 
 and use the agent to test their own `tcp4` and `canfd` custom transports.  
+
 It is also possible to use custom transports on a `micro-XRCE Agent` instance. More info available [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/agent.html#custom-transport-agent).
 
 ## Examples
