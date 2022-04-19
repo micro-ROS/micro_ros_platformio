@@ -1,19 +1,20 @@
 Import("env")
 import os, sys
-import microros_utils.library_builder as library_builder
 
 ##############################
 #### Install dependencies ####
 ##############################
 
 pip_packages = [x.split("==")[0] for x in os.popen('{} -m pip freeze'.format(env['PYTHONEXE'])).read().split('\n')]
-required_packages = ["catkin-pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources"]
+required_packages = ["catkin-pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources", "pyyaml"]
 if all([x in pip_packages for x in required_packages]):
     print("All required Python pip packages are installed")
 
 for p in [x for x in required_packages if x not in pip_packages]:
     print('Installing {} with pip at PlatformIO environment'.format(p))
     env.Execute('$PYTHONEXE -m pip install {}'.format(p))
+
+import microros_utils.library_builder as library_builder
 
 ##########################
 #### Global variables ####
@@ -39,6 +40,7 @@ global_env = DefaultEnvironment()
 board = env['BOARD']
 framework = env['PIOFRAMEWORK'][0]
 main_path = os.path.realpath(".")
+extra_packages_path = "{}/extra_packages".format(env['PROJECT_DIR'])
 
 selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
@@ -70,7 +72,7 @@ cmake_toolchain = library_builder.CMakeToolchain(
     "{} {} -fno-rtti -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='".format(' '.join(env['CXXFLAGS']), ' '.join(env['CCFLAGS']))
 )
 
-builder = library_builder.Build(main_path)
+builder = library_builder.Build(library_folder=main_path, packages_folder=extra_packages_path)
 builder.run('{}/metas/{}'.format(main_path, selected_board_meta), cmake_toolchain.path, microros_user_meta)
 
 #######################################################

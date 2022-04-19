@@ -14,6 +14,12 @@
 
 #include <std_msgs/msg/int32.h>
 
+// Test extra packages
+#include <control_msgs/msg/joint_controller_state.h>
+#include <my_custom_message/msg/my_custom_message.h>
+control_msgs__msg__JointControllerState control_message;
+my_custom_message__msg__MyCustomMessage custom_msg;
+
 rcl_publisher_t publisher;
 std_msgs__msg__Int32 msg;
 rclc_executor_t executor;
