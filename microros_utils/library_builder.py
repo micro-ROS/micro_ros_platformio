@@ -214,7 +214,14 @@ class Build:
             Repository(repo_name, repo_values['url'], self.distro, version).clone(self.mcu_src_folder)
             print("\t - Downloaded {}".format(repo_name))
 
-        shutil.copytree(self.packages_folder, self.mcu_src_folder, ignore=shutil.ignore_patterns('*.repos'), dirs_exist_ok=True)
+        extra_folders = os.listdir(self.packages_folder)
+        if 'extra_packages.repos' in extra_folders:
+            extra_folders.remove('extra_packages.repos')
+
+        for folder in extra_folders:
+            print("\t - Adding {}".format(folder))
+
+        shutil.copytree(self.packages_folder, self.mcu_src_folder, ignore=shutil.ignore_patterns('extra_packages.repos'), dirs_exist_ok=True)
 
     def get_repositories(self, yaml_file):
         repos = {}
