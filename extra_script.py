@@ -39,6 +39,7 @@ global_env = DefaultEnvironment()
 board = env['BOARD']
 framework = env['PIOFRAMEWORK'][0]
 main_path = os.path.realpath(".")
+extra_packages_path = "{}/extra_packages".format(env['PROJECT_DIR'])
 
 selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
@@ -70,7 +71,7 @@ cmake_toolchain = library_builder.CMakeToolchain(
     "{} {} -fno-rtti -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='".format(' '.join(env['CXXFLAGS']), ' '.join(env['CCFLAGS']))
 )
 
-builder = library_builder.Build(main_path)
+builder = library_builder.Build(library_folder=main_path, packages_folder=extra_packages_path)
 builder.run('{}/metas/{}'.format(main_path, selected_board_meta), cmake_toolchain.path, microros_user_meta)
 
 #######################################################

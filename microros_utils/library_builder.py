@@ -127,8 +127,9 @@ class Build:
         'galactic': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
     }
 
-    def __init__(self, library_folder, distro = 'galactic'):
+    def __init__(self, library_folder, packages_folder, distro = 'galactic'):
         self.library_folder = library_folder
+        self.packages_folder = packages_folder
         self.build_folder = library_folder + "/build"
         self.distro = distro
 
@@ -194,6 +195,18 @@ class Build:
                     package.ignore()
 
                 print('\t - Downloaded {}{}'.format(package.name, " (ignored)" if package.ignored else ""))
+
+        self.download_extra_packages()
+
+    def download_extra_packages(self):
+        if not os.path.exists(self.packages_folder):
+            print("\t - Extra packages folder not found, skipping...")
+            return
+
+        # TODO(acuadros95) ensure that vcs is installed
+        os.system("vcs import --input {}/*.repos {} > /dev/null 2>&1".format(self.packages_folder, self.mcu_src_folder))
+        shutil.copytree(self.packages_folder, self.mcu_src_folder, ignore=shutil.ignore_patterns('*.repos'), dirs_exist_ok=True)
+        print("\t - Downloaded extra packages")
 
     def build_mcu_environment(self, meta_file, toolchain_file, user_meta = ""):
         if os.path.exists(self.mcu_folder + '/build'):
