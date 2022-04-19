@@ -204,7 +204,7 @@ class Build:
             return
 
         # TODO(acuadros95) ensure that vcs is installed
-        os.system("vcs import --input {}/*.repos {} > /dev/null 2>&1".format(self.packages_folder, self.mcu_src_folder))
+        os.system("vcs import --input {}/*.repos {}".format(self.packages_folder, self.mcu_src_folder))
         shutil.copytree(self.packages_folder, self.mcu_src_folder, ignore=shutil.ignore_patterns('*.repos'), dirs_exist_ok=True)
         print("\t - Downloaded extra packages")
 
@@ -217,7 +217,7 @@ class Build:
 
         common_meta_path = self.library_folder + '/metas/common.meta'
         colcon_command = 'colcon build --merge-install --packages-ignore-regex=.*_cpp --metas {} {} {} --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF  -DTHIRDPARTY=ON  -DBUILD_SHARED_LIBS=OFF  -DBUILD_TESTING=OFF  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE={}'.format(common_meta_path, meta_file, user_meta, toolchain_file)
-        os.system("cd {} && . {}/install/setup.sh && {} > /dev/null 2>&1".format(self.mcu_folder, self.dev_folder, colcon_command))
+        os.system("cd {} && . {}/install/setup.sh && {}".format(self.mcu_folder, self.dev_folder, colcon_command))
 
     def package_mcu_library(self):
         self.library = self.build_folder + "/libmicroros/libmicroros.a"
