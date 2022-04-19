@@ -207,7 +207,7 @@ class Build:
         print("Checking extra packages")
 
         # Load and clone repositories from extra_packages.repos file
-        extra_repos = self.get_repositories("{}/extra_packages.repos".format(self.packages_folder))
+        extra_repos = self.get_repositories_from_yaml("{}/extra_packages.repos".format(self.packages_folder))
         for repo_name in extra_repos:
             repo_values = extra_repos[repo_name]
             version = repo_values['version'] if 'version' in repo_values else None
@@ -223,7 +223,7 @@ class Build:
 
         shutil.copytree(self.packages_folder, self.mcu_src_folder, ignore=shutil.ignore_patterns('extra_packages.repos'), dirs_exist_ok=True)
 
-    def get_repositories(self, yaml_file):
+    def get_repositories_from_yaml(self, yaml_file):
         repos = {}
         try:
             with open(yaml_file, 'r') as repos_file:
