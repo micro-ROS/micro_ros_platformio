@@ -1,6 +1,5 @@
 Import("env")
 import os, sys
-import microros_utils.library_builder as library_builder
 
 ##############################
 #### Install dependencies ####
@@ -14,6 +13,8 @@ if all([x in pip_packages for x in required_packages]):
 for p in [x for x in required_packages if x not in pip_packages]:
     print('Installing {} with pip at PlatformIO environment'.format(p))
     env.Execute('$PYTHONEXE -m pip install {}'.format(p))
+
+import microros_utils.library_builder as library_builder
 
 ##########################
 #### Global variables ####
