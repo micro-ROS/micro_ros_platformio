@@ -44,14 +44,14 @@ extra_packages_path = "{}/extra_packages".format(env['PROJECT_DIR'])
 
 selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
-# Retrieve the required transport
-microros_distro = project_options['microros_distro'] if 'microros_distro' in project_options else 'galactic'
+# Retrieve the required transport. Default galactic
+microros_distro = global_env.BoardConfig().get("microros_distro", "galactic")
 
-# Retrieve the required transport
-microros_transport = project_options['microros_transport'] if 'microros_transport' in project_options else 'serial'
+# Retrieve the required transport. Default serial
+microros_transport = global_env.BoardConfig().get("microros_transport", "serial")
 
-# Retrieve the user meta
-microros_user_meta = project_options['microros_user_meta'] if 'microros_user_meta' in project_options else ''
+# Retrieve the user meta. Default none
+microros_user_meta = global_env.BoardConfig().get("microros_user_meta", "")
 
 # Do not include build folder
 env['SRC_FILTER'] += ' -<build/include/*>'
