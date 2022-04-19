@@ -1,5 +1,4 @@
 <br/>
-
 <a>
    <p align="center">
       <img width="40%" src=".images/microros_logo.png">
@@ -20,8 +19,8 @@ PlatformIO will handle the full build process, including dependencies, compilati
   - [Library configuration](#library-configuration)
     - [ROS 2 distribution](#ros-2-distribution)
     - [Transport configuration](#transport-configuration)
-    - [Memory configuration](#memory-configuration)
     - [Extra packages](#extra-packages)
+    - [Other configuration](#other-configuration)
   - [Custom targets](#custom-targets)
   - [Examples](#examples)
   - [Purpose of the Project](#purpose-of-the-project)
@@ -29,23 +28,21 @@ PlatformIO will handle the full build process, including dependencies, compilati
   - [Known Issues/Limitations](#known-issueslimitations)
 
 ## Supported boards
+Supported boards are:
 
-Tested boards are:
-
-
-| Board               | Platform      | Framework | Transports         |
-| ------------------- | ------------- | --------- | ----------------- |
-| portenta_h7_m7    | ststm32     | arduino | serial <br/> wifi |
-| teensy41          | teensy      | arduino | serial <br/> native_ethernet |
-| teensy40 <br/> teensy36 <br/> teensy35 <br/> teensy31 <br/>  | teensy | arduino | serial |
-| due               | atmelsam    | arduino | serial |
-| zero              | atmelsam    | arduino | serial |
-| olimex_e407       | ststm32     | arduino | serial |
-| esp32dev          | espressif32 | arduino | serial <br/> wifi |
-| nanorp2040connect | raspberrypi | arduino | serial <br/> wifi_nina |
-
-The community is encouraged to test this library on different boards, platforms, transports, ...  
-Pull request with tested use cases are always welcome.
+| Board                                        | Platform      | Framework   | Transports                       | Default meta file       |
+| -------------------------------------------- | ------------- | ----------- | -------------------------------- | ------------------------ |
+| `portenta_h7_m7`                             | `ststm32`     | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
+| `teensy41`                                   | `teensy`      | `arduino`   | `serial` <br/> `native_ethernet` | `colcon.meta`            |
+| `teensy40`                                   | `teensy`      | `arduino`   | `serial`                         | `colcon.meta`            |
+| `teensy36` <br/> `teensy35` <br/> `teensy31` | `teensy`      | `arduino`   | `serial`                         | `colcon_lowmem.meta`     |
+| `due`                                        | `atmelsam`    | `arduino`   | `serial`                         | `colcon_verylowmem.meta` |
+| `zero`                                       | `atmelsam`    | `arduino`   | `serial`                         | `colcon_verylowmem.meta` |
+| `olimex_e407`                                | `ststm32`     | `arduino`   | `serial`                         | `colcon.meta`            |
+| `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
+| `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
+  
+The community is encouraged to open pull request with tested use cases on different boards, platforms, transports, ...
 
 ## How to add to your project
 
@@ -84,20 +81,23 @@ The transport can be configured with the `board_microros_transport = <transport>
   - `wifi_nina`
   - `native_ethernet`
 
-### Memory configuration
-The middleware memory resources can be configured with a customized meta file, the `microros_user_meta = <file_name>.meta`, the file shall be on the project main folder.
-Documentation on configurable values can be found [here](https://micro.ros.org/docs/tutorials/advanced/microxrcedds_rmw_configuration/).
-
-Example configurations can be found on the [metas](./metas) folder.
-
 ### Extra packages
 Folders added to `<Project_directory>/extra_packages` and entries added to `<Project_directory>/extra_packages/extra_packages.repos` will be taken into account by this build system.
 This should be used for example when adding custom messages types or custom micro-ROS packages.
 
+### Other configuration
+Library packages can be configured with a customized meta file, configurable with the parameter `microros_user_meta = <file_name>.meta`. This file shall be on the project main folder.  
+This allows the user to customize the library memory resources or activate optional functionality such as multithreading, including configuration of user [Extra packages](#extra-packages).
+
+- Documentation on available parameters can be found [here](https://micro.ros.org/docs/tutorials/advanced/microxrcedds_rmw_configuration) and [here]([microxrcedds_rmw_configuration](https://micro-xrce-dds.docs.eprosima.com/en/latest/client.html)).
+- Default configurations can be found on the [metas](./metas) folder.  
+  
+  *Note: the [common.meta](./metas/common.meta) file makes general adjustments to the library and shall not be modified by the user.*
+
 ## Custom targets
 This library can be easily adapted to different boards, transports or RTOS, to achieve this:
 
-- Transport: Users can include their custom transport following the signatures shown on [./platform_code/arduino/micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h) and the provided sources on [./platform_code/arduino/<transport>](./platform_code/arduino) as a reference. More info can be found [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
+- Transport: Users can include their custom transport following the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h) and the provided sources on [platform_code](./platform_code) as a reference. More info can be found [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
 - Time: micro-ROS needs a `clock_gettime` implementation, following POSIX implementation with an accuracy of at least 1 millisecond.  
   This method is used to retrieve the elapsed time on executor spins and reliable communication, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
 
