@@ -17,65 +17,52 @@ Users can modify the micro-ROS library configuration or [RMW parameters](https:/
 - [micro-ROS for PlatformIO](#micro-ros-for-platformio)
   - [Supported boards](#supported-boards)
   - [How to add to your project](#how-to-add-to-your-project)
-- [TODO(acuadros95): Add a platformIO example](#todoacuadros95-add-a-platformio-example)
-  - [Known platformIO issues](#known-platformio-issues)
   - [Library configuration](#library-configuration)
+    - [ROS 2 distribution](#ros-2-distribution)
+    - [Transport configuration](#transport-configuration)
+    - [Memory configuration](#memory-configuration)
+    - [Extra packages](#extra-packages)
+  - [Custom targets](#custom-targets)
+  - [Examples](#examples)
   - [Purpose of the Project](#purpose-of-the-project)
   - [License](#license)
   - [Known Issues/Limitations](#known-issueslimitations)
 
 ## Supported boards
 
-Supported boards are:
+Tested boards are:
 
-| Board                                                                               | Min version | State      | Details                                                                                             | .meta file               |
-| ----------------------------------------------------------------------------------- | ----------- | ---------- | --------------------------------------------------------------------------------------------------- | ------------------------ |
-| [Arduino Portenta H7 M7 Core](https://store.arduino.cc/portenta-h7)                 | v1.8.5      | Supported  | Official Arduino support                                                                            | `colcon.meta`            |
-| [Arduino Nano RP2040 Connect](https://docs.arduino.cc/hardware/nano-rp2040-connect) | v1.8.5      | Supported  | Official Arduino support                                                                            | `colcon_verylowmem.meta` |
-| [Teensy 4.0](https://www.pjrc.com/store/teensy40.html)                              | v1.8.5      | Not tested | [Based on Teensyduino](https://www.pjrc.com/teensy/td_download.html)                                | `colcon.meta`            |
-| [Teensy 4.1](https://www.pjrc.com/store/teensy41.html)                              | v1.8.5      | Supported  | [Based on Teensyduino](https://www.pjrc.com/teensy/td_download.html)                                | `colcon.meta`            |
-| [Teensy 3.2/3.1](https://www.pjrc.com/store/teensy32.html)                          | v1.8.5      | Supported  | [Based on Teensyduino](https://www.pjrc.com/teensy/td_download.html)                                | `colcon_lowmem.meta`     |
-| [Teensy 3.5](https://www.pjrc.com/store/teensy35.html)                              | v1.8.5      | Not tested | [Based on Teensyduino](https://www.pjrc.com/teensy/td_download.html)                                | `colcon_lowmem.meta`     |
-| [Teensy 3.6](https://www.pjrc.com/store/teensy36.html)                              | v1.8.5      | Supported  | [Based on Teensyduino](https://www.pjrc.com/teensy/td_download.html)                                | `colcon_lowmem.meta`     |
-| [ESP32 Dev Module](https://docs.espressif.com/projects/arduino-esp32/en/latest/boards/ESP32-DevKitC-1.html) | v1.8.5  | Supported  | [Arduino core for the ESP32 (v2.0.2)](https://github.com/espressif/arduino-esp32/releases/tag/2.0.2) | `colcon.meta`   |
 
-Community contributed boards are:
+| Board               | Platform      | Framework | Transport         |
+| ------------------- | ------------- | --------- | ----------------- |
+| `portenta_h7_m7`    | `ststm32`     | `arduino` | `serial`          |
+| `teensy41`          | `teensy`      | `arduino` | `serial`          |
+| `teensy40`          | `teensy`      | `arduino` | `serial`          |
+| `teensy36`          | `teensy`      | `arduino` | `serial`          |
+| `teensy35`          | `teensy`      | `arduino` | `serial`          |
+| `teensy31`          | `teensy`      | `arduino` | `serial`          |
+| `due`               | `atmelsam`    | `arduino` | `serial`          |
+| `zero`              | `atmelsam`    | `arduino` | `serial`          |
+| `olimex_e407`       | `ststm32`     | `arduino` | `serial`          |
+| `esp32dev`          | `espressif32` | `arduino` | `serial`          |
+| `nanorp2040connect` | `raspberrypi` | `arduino` | `serial`          |
+| `teensy41`          | `teensy`      | `arduino` | `native_ethernet` |
+| `nanorp2040connect` | `raspberrypi` | `arduino` | `wifi_nina`       |
+| `portenta_h7_m7`    | `ststm32`     | `arduino` | `wifi`            |
+| `esp32dev`          | `espressif32` | `arduino` | `wifi`            |
 
-| Board                                                                                    | Min version | Contributor                                    | Details | .meta file               |
-| ---------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------- | ------- | ------------------------ |
-| [Arduino Due](https://store.arduino.cc/arduino-due)                                      | -           | [@lukicdarkoo](https://github.com/lukicdarkoo) |         | `colcon_verylowmem.meta` |
-| [Arduino Zero](https://store.arduino.cc/arduino-zero)                                    | -           | [@lukicdarkoo](https://github.com/lukicdarkoo) |         | `colcon_verylowmem.meta` |
-| [STM32-E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/resources/STM32-E407.pdf) | -           | [@dominikn](https://github.com/dominikn)       |         | `colcon.meta`            |
-
-You can find the available precompiled ROS 2 types for messages and services in [available_ros2_types](available_ros2_types).
+The community is encouraged to test this library on different boards, platforms, transports, ...
+Pull request with tested use cases are always welcome.
 
 ## How to add to your project
 
-For boards supported by micro-ROS, all you have to do to add the library to your project is including the following lines in the existing `platformio.ini` file:
+The library can be included as a regular git library dependence on your `platform.ini` file:
 
 ```ini
-[env:<YOUR_BOARD>]
-
 ...
 lib_deps =
-    https://github.com/micro-ROS/micro_ros_arduino
-
-build_flags =
-    -D <TARGET_DEFINITION>
+    https://github.com/micro-ROS/micro_ros_platformio
 ```
-
-| Board                       | <YOUR_BOARD>        | <TARGET_DEFINITION>                 |
-| ----------------------------| ------------------- | ----------------------------------- |
-| Arduino Portenta H7 M7 Core | portenta_h7_m7      | TARGET_PORTENTA_H7_M7               |
-| Arduino Nano RP2040 Connect | nanorp2040connect   | ARDUINO_NANO_RP2040_CONNECT         |
-| Teensy 4.1/4.0              | teensy41 / teensy40 | ARDUINO_TEENSY41                    |
-| Teensy 3.6                  | teensy36            | ARDUINO_TEENSY36                    |
-| Teensy 3.5                  | teensy35            | ARDUINO_TEENSY35                    |
-| Teensy 3.2  / 3.1           | teensy31            | ARDUINO_TEENSY32 / ARDUINO_TEENSY31 |
-| ESP32 Dev Module            | esp32dev            | ESP32                               |
-| STM32-E407                  | olimex_e407         | TARGET_STM32F4                      |
-| Arduino Due                 | due                 | -                                   |
-| Arduino Zero                | zero                | -                                   |
 
 Now to proceed with the PlatformIO workflow:
 
@@ -85,54 +72,45 @@ pio run # Build the firmware
 pio run --target upload # Flash the firmware
 ```
 
-# TODO(acuadros95): Add a platformIO example
-An example of a micro-ROS application using PlatformIO is available [here](https://github.com/husarion/micro_ros_stm32_template).
-
-## Known platformIO issues
-
-- Arduino Nano RP2040 Connect
-
-  - The following versioning shall be used:
-    ```
-    lib_deps =
-      arduino-libraries/WiFiNINA@^1.8.13
-      ...
-
-    platform_packages =
-      framework-arduino-mbed @ ~2.4.1
-    ```
-
-  - Library dependency finder shall be set to `chain+`: `lib_ldf_mode = chain+`
-
-    Related: https://github.com/micro-ROS/micro_ros_arduino/issues/780
-
-- ESP32 Dev Module
-  - Known issues with espressif32 arduino package, use `2.0.2` version:
-    ```
-    [env:esp32dev]
-    platform = https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
-    board = esp32dev
-    framework = arduino
-    lib_deps =
-        https://github.com/micro-ROS/micro_ros_arduino.git
-    build_flags =
-        -D ESP32
-
-    platform_packages =
-      framework-arduinoespressif32@https://github.com/espressif/arduino-esp32.git#2.0.2
-    ```
-
-    Related: https://github.com/micro-ROS/micro_ros_arduino/issues/736, https://github.com/platformio/platform-espressif32/issues/616
+micro-ROS will be built once as a static library.
 
 ## Library configuration
+This section details the multiple parameters that can be configured on the project `platform.ini` file.
 
-Folders added to `extras/library_generation/extra_packages` and entries added to `extras/library_generation/extra_packages/extra_packages.repos` will be taken into account by this build system.
+Note that after the library is compiled for first time, the build process will be skipped. To trigger a library build, <TODO(acuadros95): add clean step>
+This will regenerate the library on your next platformIO build, applying modifications on the following parameters.
+
+### ROS 2 distribution
+The target ROS 2 distribution can be configured with the `board_microros_distro = <distribution>`, supported values are:
+  - `galactic` *(default value)*
+
+### Transport configuration
+The transport can be configured with the `board_microros_transport = <transport>`, supported values are:
+  - `serial` *(default value)*
+  - `wifi`
+  - `wifi_nina`
+  - `native_ethernet`
+
+### Memory configuration
+The middleware memory resources can be configured with a customized meta file, the `microros_user_meta = <file_name>.meta`, the file shall be on the project main folder.
+Documentation on configurable values can be found [here](https://micro.ros.org/docs/tutorials/advanced/microxrcedds_rmw_configuration/).
+
+Example configurations can be found on the [metas](./metas) folder.
+
+### Extra packages
+Folders added to `<Project_directory>/extra_packages` and entries added to `<Project_directory>/extra_packages/extra_packages.repos` will be taken into account by this build system.
 This should be used for example when adding custom messages types or custom micro-ROS packages.
 
-You can so [configure many parameters](https://micro.ros.org/docs/tutorials/advanced/microxrcedds_rmw_configuration/) of the library by editing the respective `.meta` file in the `extras/library_generation/` directory.
+## Custom targets
+This library can be easily adapted to different boards, transports or RTOS, to archieve this:
 
-Note that after the library is compiled for first time, the build process will be skipped. To trigger a library build you can delete the generated `include` folder.  
-This will regenerate the library on your next platformIO build.
+- Transport: Users can include their custom transport following the signatures shown on [./platform_code/arduino/micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h) and the provided sources on [./platform_code/arduino/<transport>](./platform_code/arduino) as a reference. More info can be found [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
+- Time: micro-ROS needs a `clock_gettime` implementation, following POSIX implementation with an accuracy of atleast 1 millisecond.  
+  This method is used to retrieve the elapsed time on executor spins and reliable communication, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
+
+## Examples
+The following example projects are available:
+- TODO
 
 ## Purpose of the Project
 
