@@ -1,0 +1,15 @@
+{
+    "names": {
+        "rmw_microxrcedds": {
+            "cmake-args": [
+                "-DRMW_UXRCE_MAX_NODES=1",
+                "-DRMW_UXRCE_MAX_PUBLISHERS=1",
+                "-DRMW_UXRCE_MAX_SUBSCRIPTIONS=1",
+                "-DRMW_UXRCE_MAX_SERVICES=0",
+                "-DRMW_UXRCE_MAX_CLIENTS=0",
+                "-DRMW_UXRCE_MAX_HISTORY=1",
+                "-DRMW_UXRCE_TRANSPORT=custom"
+            ]
+        }
+    }
+}

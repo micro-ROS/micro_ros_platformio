@@ -1,6 +1,6 @@
 {
-    "name" : "micro_ros_arduino",
-    "version" : "2.0.4-galactic",
+    "name" : "micro_ros_platformio",
+    "version" : "0.0.1",
     "authors": [
         {
             "name": "Pablo Garrido",
@@ -14,7 +14,7 @@
         }
     ],
 
-    "description" : "micro-ROS Arduino library",
+    "description" : "micro-ROS Platform.IO library",
     "homepage" : "https://micro.ros.org",
     "repository": {
         "type": "git",
@@ -22,11 +22,9 @@
     },
 
     "build": {
-        "extraScript": "./extras/library_generation/extra_script.py"
+        "extraScript": "./extra_script.py"
     },
 
     "frameworks": "arduino",
-    "platforms": "teensy, https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream, atmelsam, raspberrypi, ststm32",
-
-    "precompiled": true
+    "platforms": "teensy, https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream, atmelsam, raspberrypi, ststm32"
 }

@@ -1,0 +1,14 @@
+name: 'platformio-env'
+description: 'Install Platform.IO environment'
+runs:
+  using: "composite"
+  steps:
+    - id: install-platformio-env
+      shell: bash
+      run: |
+        apt update
+        export DEBIAN_FRONTEND=noninteractive
+        apt install -y git curl python3 python3-pip git cmake
+        python3 -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
+        echo 'export PATH=$PATH:~/.platformio/penv/bin' >> ~/.bashrc
+
