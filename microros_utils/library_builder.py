@@ -5,6 +5,12 @@ import yaml
 import shutil
 import xml.etree.ElementTree as xml_parser
 
+def run_cmd(command):
+    return subprocess.run(command,
+        capture_output = True,
+        shell = True,
+    )
+
 class Package:
     def __init__(self, name, path):
         self.name = name
@@ -28,13 +34,11 @@ class Repository:
     def clone(self, folder):
         self.path = folder + "/" + self.name
         # TODO(pablogs) ensure that git is installed
-        proc = subprocess.run("git clone -b {} {} {}".format(self.branch, self.url, self.path),
-            capture_output = True,
-            shell = True,
-        )
+        command = "git clone -b {} {} {}".format(self.branch, self.url, self.path)
+        result = run_cmd(command)
 
-        if 0 != proc.returncode:
-            print("{} clone failed: \n{}".format(self.name, proc.stderr.decode("utf-8")))
+        if 0 != result.returncode:
+            print("{} clone failed: \n{}".format(self.name, result.stderr.decode("utf-8")))
             sys.exit(1)
 
     def get_packages(self):
@@ -185,13 +189,11 @@ class Build:
 
     def build_dev_environment(self):
         print("Building micro-ROS dev dependencies")
-        proc = subprocess.run("cd {} && colcon build --cmake-args -DBUILD_TESTING=OFF".format(self.dev_folder),
-            capture_output = True,
-            shell = True,
-        )
+        command = "cd {} && colcon build --cmake-args -DBUILD_TESTING=OFF".format(self.dev_folder)
+        result = run_cmd(command)
 
-        if 0 != proc.returncode:
-            print("Build dev micro-ROS environment failed: \n {}".format(proc.stderr.decode("utf-8")))
+        if 0 != result.returncode:
+            print("Build dev micro-ROS environment failed: \n {}".format(result.stderr.decode("utf-8")))
             sys.exit(1)
 
     def download_mcu_environment(self):
@@ -262,13 +264,11 @@ class Build:
 
         common_meta_path = self.library_folder + '/metas/common.meta'
         colcon_command = 'colcon build --merge-install --packages-ignore-regex=.*_cpp --metas {} {} {} --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF  -DTHIRDPARTY=ON  -DBUILD_SHARED_LIBS=OFF  -DBUILD_TESTING=OFF  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE={}'.format(common_meta_path, meta_file, user_meta, toolchain_file)
-        proc = subprocess.run("cd {} && . {}/install/setup.sh && {}".format(self.mcu_folder, self.dev_folder, colcon_command),
-            capture_output = True,
-            shell = True,
-        )
+        command = "cd {} && . {}/install/setup.sh && {}".format(self.mcu_folder, self.dev_folder, colcon_command)
+        result = run_cmd(command)
 
-        if 0 != proc.returncode:
-            print("Build mcu micro-ROS environment failed: \n{}".format(proc.stderr.decode("utf-8")))
+        if 0 != result.returncode:
+            print("Build mcu micro-ROS environment failed: \n{}".format(result.stderr.decode("utf-8")))
             sys.exit(1)
 
     def package_mcu_library(self):
@@ -288,7 +288,13 @@ class Build:
                         os.rename(obj, '../' + f.split('.')[0] + "__" + obj)
 
         os.chdir(aux_folder)
-        os.system('ar rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; ranlib libmicroros.a')
+        command = "ar rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; ranlib libmicroros.a"
+        result = run_cmd(command)
+
+        if 0 != result.returncode:
+            print("micro-ROS static library build failed: \n{}".format(result.stderr.decode("utf-8")))
+            sys.exit(1)
+
         os.rename('libmicroros.a', self.library)
 
         # Copy includes

@@ -1,21 +1,7 @@
 Import("env")
-import os, sys
+
+import os
 import shutil
-
-##############################
-#### Install dependencies ####
-##############################
-
-pip_packages = [x.split("==")[0] for x in os.popen('{} -m pip freeze'.format(env['PYTHONEXE'])).read().split('\n')]
-required_packages = ["catkin-pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources", "pyyaml", "pytz", "markupsafe==2.0.1"]
-if all([x in pip_packages for x in required_packages]):
-    print("All required Python pip packages are installed")
-
-for p in [x for x in required_packages if x not in pip_packages]:
-    print('Installing {} with pip at PlatformIO environment'.format(p))
-    env.Execute('$PYTHONEXE -m pip install {}'.format(p))
-
-import microros_utils.library_builder as library_builder
 
 ##########################
 #### Global variables ####
@@ -74,11 +60,26 @@ def clean_microros_callback(*args, **kwargs):
 
 env.AddPlatformTarget("clean_microros", None, clean_microros_callback)
 
-#################################
-#### Build micro-ROS library ####
-#################################
-
 def build_microros(*args, **kwargs):
+    ##############################
+    #### Install dependencies ####
+    ##############################
+
+    pip_packages = [x.split("==")[0] for x in os.popen('{} -m pip freeze'.format(env['PYTHONEXE'])).read().split('\n')]
+    required_packages = ["catkin-pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources", "pyyaml", "pytz", "markupsafe==2.0.1"]
+    if all([x in pip_packages for x in required_packages]):
+        print("All required Python pip packages are installed")
+
+    for p in [x for x in required_packages if x not in pip_packages]:
+        print('Installing {} with pip at PlatformIO environment'.format(p))
+        env.Execute('$PYTHONEXE -m pip install {}'.format(p))
+
+    import microros_utils.library_builder as library_builder
+
+    #################################
+    #### Build micro-ROS library ####
+    #################################
+
     print("Configuring {} with transport {}".format(board, microros_transport))
 
     cmake_toolchain = library_builder.CMakeToolchain(
