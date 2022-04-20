@@ -26,5 +26,5 @@ jobs:
           shell: bash
           run: |
             export PATH=$PATH:~/.platformio/penv/bin
-            cd repo/examples${{ matrix.example }}
+            cd repo/examples/${{ matrix.example }}
             pio run
