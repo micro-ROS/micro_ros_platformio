@@ -104,7 +104,7 @@ Colcon packages can be added to the build process using this two methods:
 This should be used for example when adding custom messages types or custom micro-ROS packages.
 
 ### Other configuration
-Library packages can be configured with a customized meta file on the project main folder: `microros_user_meta = <file_name.meta>`.
+Library packages can be configured with a customized meta file on the project main folder: `board_microros_user_meta = <file_name.meta>`.
   
 This allows the user to customize the library memory resources or activate optional functionality such as multithreading, including configuration of user [Extra packages](#extra-packages).
 

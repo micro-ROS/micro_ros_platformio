@@ -18,7 +18,7 @@
     "homepage" : "https://micro.ros.org",
     "repository": {
         "type": "git",
-        "url": "https://github.com/micro-ROS/micro_ros_arduino.git"
+        "url": "https://github.com/micro-ROS/micro_ros_platformio.git"
     },
 
     "build": {

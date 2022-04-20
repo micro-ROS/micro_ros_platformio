@@ -1,0 +1,30 @@
+name: CI_Examples
+
+on:
+    pull_request:
+      branches:
+        - '**'
+
+jobs:
+
+    micro_ros_platformio:
+        runs-on: ubuntu-20.04
+        container: ubuntu:20.04
+
+        strategy:
+          fail-fast: false
+          matrix:
+            example: [custom_configuration, micro-ros_publisher_serial, micro-ros_publisher_ethernet, micro-ros_publisher_wifi]
+
+        steps:
+        - uses: actions/checkout@v3
+          with:
+            path: repo
+        - name: Install environment
+          uses: ./repo/.github/actions/platformio-env
+        - name: Build
+          shell: bash
+          run: |
+            export PATH=$PATH:~/.platformio/penv/bin
+            cd repo/examples${{ matrix.example }}
+            pio run
