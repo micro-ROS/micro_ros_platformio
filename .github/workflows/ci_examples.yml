@@ -15,7 +15,6 @@ jobs:
           fail-fast: false
           matrix:
             example: [addtwoints_service, publisher_ethernet, publisher_serial, publisher_wifi, reconnection_example, subscriber, subscriber_twist, time_sync]
-            multiple_transports: [teensy41, teensy41_eth, esp32dev_wifi, nanorp2040connect_wifi]
         steps:
         - uses: actions/checkout@v3
           with:

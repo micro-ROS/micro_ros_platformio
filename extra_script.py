@@ -3,13 +3,6 @@ Import("env")
 import os
 import shutil
 
-
-from SCons.Script import COMMAND_LINE_TARGETS
-
-with open('test.txt', 'w') as file:
-    for element in COMMAND_LINE_TARGETS:
-        file.write(element)
-
 ##########################
 #### Global variables ####
 ##########################
@@ -152,5 +145,9 @@ def build_microros(*args, **kwargs):
 
 from SCons.Script import COMMAND_LINE_TARGETS
 
-if "clean_microros" not in COMMAND_LINE_TARGETS:
+# Do not run extra script when IDE fetches C/C++ project metadata
+if set(["_idedata", "idedata"]) & set(COMMAND_LINE_TARGETS):
+    os._exit(0)
+# Do not build library on clean_microros command
+elif "clean_microros" not in COMMAND_LINE_TARGETS:
     build_microros()
