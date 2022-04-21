@@ -91,11 +91,37 @@ The target ROS 2 distribution can be configured with the `board_microros_distro 
   - `galactic` *(default value)*
 
 ### Transport configuration
-The transport can be configured with the `board_microros_transport = <transport>`, supported values are:
+The transport can be configured with the `board_microros_transport = <transport>`, supported values and configurations are:
   - `serial` *(default value)*
+  
+    ```c
+    Serial.begin(115200);
+    set_microros_serial_transports(Serial);
+    ```
+
   - `wifi`
   - `wifi_nina`
+
+    ```c
+    IPAddress agent_ip(192, 168, 1, 113);
+    size_t agent_port = 8888;
+
+    char ssid[] = "WIFI_SSID";
+    char psk[]= "WIFI_PSK";
+
+    set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+    ```
+
   - `native_ethernet`
+
+    ```c
+    byte local_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
+    IPAddress local_ip(192, 168, 1, 177);
+    IPAddress agent_ip(192, 168, 1, 113);
+    size_t agent_port = 8888;
+
+    set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
+    ```
 
 ### Extra packages
 Colcon packages can be added to the build process using this two methods:
@@ -158,8 +184,10 @@ and use the agent to test their own `tcp4` and `canfd` custom transports.
 It is also possible to use custom transports on a `micro-XRCE Agent` instance. More info available [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/agent.html#custom-transport-agent).
 
 ## Examples
-Examples for different transports and micro-ROS entities are available on the [examples](./examples) directory.
-This examples can be modified to work with any of the current support boards.
+A simple publisher project using serial transport is available on the [examples](./examples) directory, this examples is meant to be modified with the user board.
+
+- More micro-ROS usage examples the [](https://github.com/micro-ROS/micro-ROS-demos/tree/galactic/rclc) available.
+- For an indeep micro-ROS tutorial, visit [Programming with rcl and rclc](https://micro.ros.org/docs/tutorials/programming_rcl_rclc/overview/) documentation.
 
 ## Purpose of the Project
 
@@ -179,4 +207,9 @@ see the file [3rd-party-licenses.txt](3rd-party-licenses.txt).
 
 ## Known Issues/Limitations
 
-- TODO
+- For `wifi_nina` transport, the following versioning shall be used:
+
+    ```ini
+    lib_deps =
+      arduino-libraries/WiFiNINA@^1.8.13
+    ```
