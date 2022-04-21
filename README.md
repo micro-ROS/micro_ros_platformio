@@ -76,8 +76,7 @@ pio run --target upload # Flash the firmware
 After the library is compiled for first time the build process will be skipped, to trigger a library build and apply [library modifications](#library-configuration) on your next platformIO build:
 
 ```bash
-#  TODO(acuadros95): add clean step
-pio run clean ...  # Clean library
+pio run --target clean_microros  # Clean library
 ```
 
 ## Library configuration
