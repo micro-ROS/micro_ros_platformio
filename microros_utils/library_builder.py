@@ -202,5 +202,5 @@ class Build:
                 repeated_path = folder_path + "/{}".format(folder)
 
                 if os.path.exists(repeated_path):
-                    shutil.copytree(repeated_path + "/*", folder_path)
+                    shutil.copytree(repeated_path, folder_path, copy_function=shutil.move, dirs_exist_ok=True)
                     shutil.rmtree(repeated_path)
