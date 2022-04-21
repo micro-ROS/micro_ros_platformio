@@ -33,4 +33,7 @@ jobs:
           run: |
             export PATH=$PATH:~/.platformio/penv/bin
             cd repo/examples/custom_configuration
-            pio run -e ${{ matrix.multiple_transports }}
+            pio run -e teensy41
+            pio run -e teensy41_eth
+            pio run -e esp32dev_wifi
+            pio run -e nanorp2040connect_wifi
