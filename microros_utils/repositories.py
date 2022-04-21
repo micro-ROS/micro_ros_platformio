@@ -82,6 +82,14 @@ class Sources:
             Repository("googletest", "https://github.com/ament/googletest", "rolling", "ros2"),
             Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "rolling", "master"),
             Repository("ament_index", "https://github.com/ament/ament_index", "rolling", "master")
+        ],
+        'foxy': [
+            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "foxy"),
+            Repository("ament_lint", "https://github.com/ament/ament_lint", "foxy"),
+            Repository("ament_package", "https://github.com/ament/ament_package", "foxy"),
+            Repository("googletest", "https://github.com/ament/googletest", "foxy"),
+            Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "foxy"),
+            Repository("ament_index", "https://github.com/ament/ament_index", "foxy")
         ]
     }
 
@@ -129,10 +137,33 @@ class Sources:
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "rolling", "master"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "rolling", "master"),
             Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "rolling", "master"),
+        ],
+        'foxy': [
+            Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "foxy", "ros2"),
+            Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "foxy", "ros2"),
+            Repository("rcl", "https://github.com/micro-ROS/rcl", "foxy"),
+            Repository("rclc", "https://github.com/ros2/rclc", "foxy"),
+            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "foxy"),
+            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "foxy"),
+            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "foxy"),
+            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "foxy"),
+            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "foxy"),
+            Repository("tinydir_vendor", "https://github.com/ros2/tinydir_vendor", "foxy", "master"),
+            Repository("rosidl", "https://github.com/ros2/rosidl", "foxy"),
+            Repository("rmw", "https://github.com/ros2/rmw", "foxy"),
+            Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "foxy"),
+            Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "foxy"),
+            Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "foxy"),
+            Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "foxy"),
+            Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "foxy"),
+            Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "foxy"),
+            Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "foxy"),
+            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "foxy", "foxy_microros"),
         ]
     }
 
     ignore_packages = {
         'galactic': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
-        'rolling': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
+        'rolling': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
+        'foxy': [ 'rosidl_typesupport_introspection_c', 'rosidl_typesupport_introspection_cpp', 'rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
     }

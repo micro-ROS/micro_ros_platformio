@@ -90,6 +90,7 @@ A explanation for adding custom targets is also present
 The target ROS 2 distribution can be configured with the `board_microros_distro = <distribution>`, supported values are:
   - `galactic` *(default value)*
   - `rolling`
+  - `foxy`
 
 ### Transport configuration
 The transport can be configured with the `board_microros_transport = <transport>`, supported values and configurations are:
