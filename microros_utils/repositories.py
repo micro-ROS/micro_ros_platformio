@@ -76,7 +76,7 @@ class Sources:
             Repository("ament_index", "https://github.com/ament/ament_index", "galactic")
         ],
         'rolling': [
-            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "rolling", "mastera"),
+            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "rolling", "master"),
             Repository("ament_lint", "https://github.com/ament/ament_lint", "rolling", "master"),
             Repository("ament_package", "https://github.com/ament/ament_package", "rolling", "master"),
             Repository("googletest", "https://github.com/ament/googletest", "rolling", "ros2"),
