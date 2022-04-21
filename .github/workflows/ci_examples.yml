@@ -14,17 +14,23 @@ jobs:
         strategy:
           fail-fast: false
           matrix:
-            example: [custom_configuration, micro-ros_publisher_serial, micro-ros_publisher_ethernet, micro-ros_publisher_wifi]
-
+            example: [addtwoints_service, publisher_ethernet, publisher_serial, publisher_wifi, reconnection_example, subscriber, subscriber_twist, time_sync]
+            multiple_transports: [teensy41, teensy41_eth, esp32dev_wifi, nanorp2040connect_wifi]
         steps:
         - uses: actions/checkout@v3
           with:
             path: repo
         - name: Install environment
           uses: ./repo/.github/actions/platformio-env
-        - name: Build
+        - name: Build examples
           shell: bash
           run: |
             export PATH=$PATH:~/.platformio/penv/bin
             cd repo/examples/${{ matrix.example }}
             pio run
+        - name: Build multiple transport example
+          shell: bash
+          run: |
+            export PATH=$PATH:~/.platformio/penv/bin
+            cd repo/examples/custom_configuration
+            pio run -e ${{ matrix.multiple_transports }}

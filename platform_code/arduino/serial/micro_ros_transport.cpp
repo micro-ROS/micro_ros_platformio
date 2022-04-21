@@ -20,7 +20,7 @@ bool platformio_transport_close(struct uxrCustomTransport * transport)
   return true;
 }
 
-size_t platformio_transport_write(struct uxrCustomTransport * transport, uint8_t *buf, size_t len, uint8_t *errcode)
+size_t platformio_transport_write(struct uxrCustomTransport * transport, const uint8_t *buf, size_t len, uint8_t *errcode)
 {
   (void)errcode;
 

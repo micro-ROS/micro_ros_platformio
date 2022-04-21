@@ -1,14 +1,14 @@
+#include <Arduino.h>
 #include <micro_ros_platformio.h>
 
 #include <rcl/rcl.h>
-#include <rcl/error_handling.h>
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
 
 #include <std_msgs/msg/int32.h>
 
-#if !defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI) && !defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI_NINA)
-#error This example is only avaliable for Arduino framework with wifi or wifi_nina transports.
+#if !defined(MICRO_ROS_TRANSPORT_ARDUINO_SERIAL)
+#error This example is only avaliable for Arduino framework with serial transport.
 #endif
 
 rcl_publisher_t publisher;
@@ -20,20 +20,18 @@ rcl_allocator_t allocator;
 rcl_node_t node;
 rcl_timer_t timer;
 
-#define LED_PIN 13
-
 #define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){error_loop();}}
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
 
-void error_loop(){
-  while(1){
-    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+// Error handle loop
+void error_loop() {
+  while(1) {
     delay(100);
   }
 }
 
-void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
-{
+
+void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
   RCLC_UNUSED(last_call_time);
   if (timer != NULL) {
     RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
@@ -42,18 +40,9 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 }
 
 void setup() {
-  // Configure wifi transport and credentials
-  IPAddress agent_ip(192, 168, 1, 113);
-  size_t agent_port = 8888;
-
-  char ssid[] = "WIFI_SSID";
-  char psk[]= "WIFI_PSK";
-
-  set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
-
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
-
+  // Configure serial transport
+  Serial.begin(115200);
+  set_microros_serial_transports(Serial);
   delay(2000);
 
   allocator = rcl_get_default_allocator();

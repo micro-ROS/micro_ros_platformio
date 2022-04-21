@@ -1,13 +1,18 @@
+#include <Arduino.h>
 #include <micro_ros_platformio.h>
 
 #include <rcl/rcl.h>
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
 
-#include <my_custom_message/msg/my_custom_message.h>
+#include <std_msgs/msg/int32.h>
+
+#if !defined(MICRO_ROS_TRANSPORT_ARDUINO_NATIVE_ETHERNET)
+#error This example is only avaliable for Arduino framework with native ethernet transport.
+#endif
 
 rcl_publisher_t publisher;
-my_custom_message__msg__MyCustomMessage custom_msg;
+std_msgs__msg__Int32 msg;
 
 rclc_executor_t executor;
 rclc_support_t support;
@@ -20,25 +25,27 @@ rcl_timer_t timer;
 
 // Error handle loop
 void error_loop() {
-  while(1){
+  while(1) {
     delay(100);
   }
 }
 
 void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
   RCLC_UNUSED(last_call_time);
-
   if (timer != NULL) {
-    RCSOFTCHECK(rcl_publish(&publisher, &custom_msg, NULL));
-    custom_msg.int8_test++;
+    RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
+    msg.data++;
   }
 }
 
 void setup() {
-  // Configure micro-ROS transport
-  Serial.begin(115200);
-  set_microros_serial_transports(Serial);
+  // Configure ethernet transport
+  byte local_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
+  IPAddress local_ip(192, 168, 1, 177);
+  IPAddress agent_ip(192, 168, 1, 113);
+  size_t agent_port = 8888;
 
+  set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
   delay(2000);
 
   allocator = rcl_get_default_allocator();
@@ -53,7 +60,7 @@ void setup() {
   RCCHECK(rclc_publisher_init_default(
     &publisher,
     &node,
-    ROSIDL_GET_MSG_TYPE_SUPPORT(my_custom_message, msg, MyCustomMessage),
+    ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
     "micro_ros_platformio_node_publisher"));
 
   // create timer,
