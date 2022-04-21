@@ -186,8 +186,8 @@ It is also possible to use custom transports on a `micro-XRCE Agent` instance. M
 ## Examples
 A simple publisher project using serial transport is available on the [examples](./examples) directory, this examples is meant to be modified with the user board.
 
-- More micro-ROS usage examples the [](https://github.com/micro-ROS/micro-ROS-demos/tree/galactic/rclc) available.
-- For an indeep micro-ROS tutorial, visit [Programming with rcl and rclc](https://micro.ros.org/docs/tutorials/programming_rcl_rclc/overview/) documentation.
+- More micro-ROS usage examples are available on [micro-ROS-demos/rclc](https://github.com/micro-ROS/micro-ROS-demos/tree/galactic/rclc).
+- For a complete micro-ROS tutorial, check [Programming with rcl and rclc](https://micro.ros.org/docs/tutorials/programming_rcl_rclc/overview/) documentation.
 
 ## Purpose of the Project
 
