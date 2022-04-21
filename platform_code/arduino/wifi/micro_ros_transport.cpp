@@ -56,7 +56,7 @@ size_t platformio_transport_read(struct uxrCustomTransport * transport, uint8_t 
     available = udp_client.read(buf, len);
   }
 
-  return (available < 0) ? 0 : available;
+  return (available > 0) ? available : 0;
 }
 
 }

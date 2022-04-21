@@ -213,3 +213,9 @@ see the file [3rd-party-licenses.txt](3rd-party-licenses.txt).
     lib_deps =
       arduino-libraries/WiFiNINA@^1.8.13
     ```
+
+- For `nanorp2040connect` board with `serial` transport, the library dependency finder shall be set to `chain+`:
+
+    ```ini
+    lib_ldf_mode = chain+
+    ```
