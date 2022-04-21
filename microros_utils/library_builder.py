@@ -192,3 +192,21 @@ class Build:
 
         # Copy includes
         shutil.copytree(self.build_folder + "/mcu/install/include", self.includes)
+
+        # Fix include paths
+        if self.distro == "rolling":
+            include_folders = os.listdir(self.includes)
+
+            for folder in include_folders:
+                folder_path = self.includes + "/{}".format(folder)
+                repeated_path = folder_path + "/{}".format(folder)
+
+                if os.path.exists(repeated_path):
+                    command = "rsync -r {}/* {}".format(repeated_path, folder_path)
+                    result = run_cmd(command)
+
+                    if 0 != result.returncode:
+                        print("Build dev micro-ROS environment failed: \n {}".format(result.stderr.decode("utf-8")))
+                        sys.exit(1)
+                    else:
+                        shutil.rmtree(repeated_path)
