@@ -194,7 +194,7 @@ class Build:
         shutil.copytree(self.build_folder + "/mcu/install/include", self.includes)
 
         # Fix include paths
-        if self.distro != "galactic":
+        if self.distro is not "galactic":
             include_folders = os.listdir(self.includes)
 
             for folder in include_folders:
