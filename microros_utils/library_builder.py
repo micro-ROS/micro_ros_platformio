@@ -1,76 +1,9 @@
-import subprocess
 import os, sys
-import json
 import yaml
 import shutil
-import xml.etree.ElementTree as xml_parser
 
-def run_cmd(command):
-    return subprocess.run(command,
-        capture_output = True,
-        shell = True,
-    )
-
-class Package:
-    def __init__(self, name, path):
-        self.name = name
-        self.path = path
-        self.ignored = False
-
-    def ignore(self):
-        self.ignored = True
-        ignore_path = self.path + '/COLCON_IGNORE'
-        with open(ignore_path, 'a'):
-            os.utime(ignore_path, None)
-
-class Repository:
-    def __init__(self, name, url, distribution, branch=None):
-        self.name = name
-        self.url = url
-        self.distribution = distribution
-        self.branch = distribution if branch is None else branch
-        self.path = None
-
-    def clone(self, folder):
-        self.path = folder + "/" + self.name
-        # TODO(pablogs) ensure that git is installed
-        command = "git clone -b {} {} {}".format(self.branch, self.url, self.path)
-        result = run_cmd(command)
-
-        if 0 != result.returncode:
-            print("{} clone failed: \n{}".format(self.name, result.stderr.decode("utf-8")))
-            sys.exit(1)
-
-    def get_packages(self):
-        packages = []
-        if os.path.exists(self.path + '/package.xml'):
-            packages.append(Package(self.name, self.path))
-        else:
-            for root, dirs, files in os.walk(self.path):
-                path = root.split(os.sep)
-                if 'package.xml' in files:
-                    package_name = Repository.get_package_name_from_package_xml(os.path.join(root, 'package.xml'))
-                    package_path = os.path.join(os.getcwd(), root)
-                    packages.append(Package(package_name, package_path))
-                elif 'colcon.pkg' in files:
-                    package_name = Repository.get_package_name_from_colcon_pkg(os.path.join(root, 'colcon.pkg'))
-                    package_path = os.path.join(os.getcwd(), root)
-                    packages.append(Package(package_name, package_path))
-        return packages
-
-    def get_package_name_from_package_xml(xml_file):
-        root_node = xml_parser.parse(xml_file).getroot()
-        name_node = root_node.find('name')
-        if name_node is not None:
-            return name_node.text
-        return None
-
-    def get_package_name_from_colcon_pkg(colcon_pkg):
-        with open(colcon_pkg, 'r') as f:
-            content = json.load(f)
-            if content['name']:
-                return content['name']
-            return None
+from .utils import run_cmd
+from .repositories import Repository, Sources
 
 class CMakeToolchain:
     def __init__(self, path, cc, cxx, ar, cflags, cxxflags):
@@ -100,47 +33,7 @@ set(__BIG_ENDIAN__ 0)"""
         self.path = os.path.realpath(file.name)
 
 class Build:
-    dev_environments = {
-        'galactic': [
-            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "galactic"),
-            Repository("ament_lint", "https://github.com/ament/ament_lint", "galactic"),
-            Repository("ament_package", "https://github.com/ament/ament_package", "galactic"),
-            Repository("googletest", "https://github.com/ament/googletest", "galactic"),
-            Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "galactic"),
-            Repository("ament_index", "https://github.com/ament/ament_index", "galactic")
-        ]
-    }
-
-    mcu_environments = {
-        'galactic': [
-            Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "galactic", "ros2"),
-            Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "galactic", "ros2"),
-            Repository("rcl", "https://github.com/micro-ROS/rcl", "galactic"),
-            Repository("rclc", "https://github.com/ros2/rclc", "galactic"),
-            Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "galactic"),
-            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "galactic"),
-            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "galactic"),
-            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "galactic"),
-            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "galactic"),
-            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "galactic"),
-            Repository("rosidl", "https://github.com/ros2/rosidl", "galactic"),
-            Repository("rmw", "https://github.com/ros2/rmw", "galactic"),
-            Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "galactic"),
-            Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "galactic"),
-            Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "galactic"),
-            Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "galactic"),
-            Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "galactic"),
-            Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "galactic"),
-            Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "galactic"),
-            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "galactic"),
-        ]
-    }
-
-    ignore_packages = {
-        'galactic': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
-    }
-
-    def __init__(self, library_folder, packages_folder, distro = 'galactic'):
+    def __init__(self, library_folder, packages_folder, distro):
         self.library_folder = library_folder
         self.packages_folder = packages_folder
         self.build_folder = library_folder + "/build"
@@ -182,7 +75,7 @@ class Build:
         shutil.rmtree(self.dev_src_folder, ignore_errors=True)
         os.makedirs(self.dev_src_folder)
         print("Downloading micro-ROS dev dependencies")
-        for repo in Build.dev_environments[self.distro]:
+        for repo in Sources.dev_environments[self.distro]:
             repo.clone(self.dev_src_folder)
             print("\t - Downloaded {}".format(repo.name))
             self.dev_packages.extend(repo.get_packages())
@@ -200,11 +93,11 @@ class Build:
         shutil.rmtree(self.mcu_src_folder, ignore_errors=True)
         os.makedirs(self.mcu_src_folder)
         print("Downloading micro-ROS library")
-        for repo in Build.mcu_environments[self.distro]:
+        for repo in Sources.mcu_environments[self.distro]:
             repo.clone(self.mcu_src_folder)
             self.mcu_packages.extend(repo.get_packages())
             for package in repo.get_packages():
-                if package.name in Build.ignore_packages[self.distro] or package.name.endswith("_cpp"):
+                if package.name in Sources.ignore_packages[self.distro] or package.name.endswith("_cpp"):
                     package.ignore()
 
                 print('\t - Downloaded {}{}'.format(package.name, " (ignored)" if package.ignored else ""))
@@ -299,3 +192,15 @@ class Build:
 
         # Copy includes
         shutil.copytree(self.build_folder + "/mcu/install/include", self.includes)
+
+        # Fix include paths
+        if self.distro is not "galactic":
+            include_folders = os.listdir(self.includes)
+
+            for folder in include_folders:
+                folder_path = self.includes + "/{}".format(folder)
+                repeated_path = folder_path + "/{}".format(folder)
+
+                if os.path.exists(repeated_path):
+                    shutil.copytree(repeated_path, folder_path, copy_function=shutil.move, dirs_exist_ok=True)
+                    shutil.rmtree(repeated_path)
