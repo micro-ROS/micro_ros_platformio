@@ -1,4 +1,7 @@
 #include <Arduino.h>
+
+#include <micro_ros_platformio.h>
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <sys/time.h>
