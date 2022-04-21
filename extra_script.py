@@ -132,12 +132,11 @@ def build_microros(*args, **kwargs):
     global_env.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
     global_env.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_ {} '.format(microros_distro.upper()), 1)])
 
-    # Add platformio library for Arduino framework
-    if 'arduino' == framework:
-        # Include path for Arduino framework
-        global_env.Append(CPPPATH=[main_path + "/arduino"])
-        # Clock implementation for Arduino framework
-        env['SRC_FILTER'] += ' +<platform_code/arduino/clock_gettime.cpp>'
+    # Include path for framework
+    global_env.Append(CPPPATH=[main_path + "/platform_code/{}".format(framework)])
+
+    # Add clock implementation
+    env['SRC_FILTER'] += ' +<platform_code/{}/clock_gettime.cpp>'.format(framework, )
 
     # Add transport sources according to the framework and the transport
     env['SRC_FILTER'] += ' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport)
@@ -145,5 +144,9 @@ def build_microros(*args, **kwargs):
 
 from SCons.Script import COMMAND_LINE_TARGETS
 
-if "clean_microros" not in COMMAND_LINE_TARGETS:
+# Do not run extra script when IDE fetches C/C++ project metadata
+if set(["_idedata", "idedata"]) & set(COMMAND_LINE_TARGETS):
+    os._exit(0)
+# Do not build library on clean_microros command
+elif "clean_microros" not in COMMAND_LINE_TARGETS:
     build_microros()

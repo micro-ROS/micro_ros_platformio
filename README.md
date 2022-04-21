@@ -23,6 +23,8 @@ PlatformIO will handle the full build process, including dependencies, compilati
     - [Extra packages](#extra-packages)
     - [Other configuration](#other-configuration)
   - [Custom targets](#custom-targets)
+    - [Custom transport](#custom-transport)
+    - [Time source](#time-source)
   - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
   - [Examples](#examples)
   - [Purpose of the Project](#purpose-of-the-project)
@@ -89,11 +91,37 @@ The target ROS 2 distribution can be configured with the `board_microros_distro 
   - `galactic` *(default value)*
 
 ### Transport configuration
-The transport can be configured with the `board_microros_transport = <transport>`, supported values are:
+The transport can be configured with the `board_microros_transport = <transport>`, supported values and configurations are:
   - `serial` *(default value)*
+  
+    ```c
+    Serial.begin(115200);
+    set_microros_serial_transports(Serial);
+    ```
+
   - `wifi`
   - `wifi_nina`
+
+    ```c
+    IPAddress agent_ip(192, 168, 1, 113);
+    size_t agent_port = 8888;
+
+    char ssid[] = "WIFI_SSID";
+    char psk[]= "WIFI_PSK";
+
+    set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+    ```
+
   - `native_ethernet`
+
+    ```c
+    byte local_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
+    IPAddress local_ip(192, 168, 1, 177);
+    IPAddress agent_ip(192, 168, 1, 113);
+    size_t agent_port = 8888;
+
+    set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
+    ```
 
 ### Extra packages
 Colcon packages can be added to the build process using this two methods:
@@ -103,7 +131,7 @@ Colcon packages can be added to the build process using this two methods:
 This should be used for example when adding custom messages types or custom micro-ROS packages.
 
 ### Other configuration
-Library packages can be configured with a customized meta file on the project main folder: `microros_user_meta = <file_name.meta>`.
+Library packages can be configured with a customized meta file on the project main folder: `board_microros_user_meta = <file_name.meta>`.
   
 This allows the user to customize the library memory resources or activate optional functionality such as multithreading, including configuration of user [Extra packages](#extra-packages).
 
@@ -115,9 +143,23 @@ This allows the user to customize the library memory resources or activate optio
 ## Custom targets
 This library can be easily adapted to different boards, transports or RTOS, to achieve this the user shall provide:
 
-- Custom transport: Custom transport shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
-- `clock_gettime`: [POSIX compliant](https://linux.die.net/man/3/clock_gettime) implementation with a minimum resolution of 1 millisecond.  
-  This method is used to retrieve the elapsed time on executor spins and reliable communication, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
+### Custom transport
+
+Custom transport shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport). Custom transport source code shall be added on the `./platform_code/<framework>/<board_microros_transport>` path. Example:
+
+- `platform.ini`:
+  ```ini
+  framework = arduino
+  board_microros_transport = wifi
+  ```
+- Transport source files: [platform_code/arduino/wifi](https://github.com/micro-ROS/micro_ros_platformio/tree/main/platform_code/arduino/wifi)
+- Also, a `MICRO_ROS_TRANSPORT_<FRAMEWORK>_<TRANSPORT>` definition will be available: 
+  https://github.com/micro-ROS/micro_ros_platformio/blob/de7a61c7e86fdd0186ed8b7d8ec320994e8ebcbf/ci/src/main.cpp#L3
+
+### Time source
+micro-ROS needs a time source to handle executor spins and synchronize reliable communication. To achieve this, a `clock_gettime` [POSIX compliant](https://linux.die.net/man/3/clock_gettime) implementation is required, with a minimum resolution of 1 millisecond.
+
+This method shall be included on a `clock_gettime.cpp` source file under the `./platform_code/<framework>/` path, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
 
 ## Using the micro-ROS Agent
 It is possible to use a **micro-ROS Agent** just by using this docker command:
@@ -142,8 +184,10 @@ and use the agent to test their own `tcp4` and `canfd` custom transports.
 It is also possible to use custom transports on a `micro-XRCE Agent` instance. More info available [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/agent.html#custom-transport-agent).
 
 ## Examples
-The following example projects are available:
-- TODO
+A simple publisher project using serial transport is available on the [examples](./examples) directory, this examples is meant to be modified with the user board.
+
+- More micro-ROS usage examples are available on [micro-ROS-demos/rclc](https://github.com/micro-ROS/micro-ROS-demos/tree/galactic/rclc).
+- For a complete micro-ROS tutorial, check [Programming with rcl and rclc](https://micro.ros.org/docs/tutorials/programming_rcl_rclc/overview/) documentation.
 
 ## Purpose of the Project
 
@@ -163,4 +207,15 @@ see the file [3rd-party-licenses.txt](3rd-party-licenses.txt).
 
 ## Known Issues/Limitations
 
-- TODO
+- For `wifi_nina` transport, the following versioning shall be used:
+
+    ```ini
+    lib_deps =
+      arduino-libraries/WiFiNINA@^1.8.13
+    ```
+
+- For `nanorp2040connect` board with `serial` transport, the library dependency finder shall be set to `chain+`:
+
+    ```ini
+    lib_ldf_mode = chain+
+    ```
