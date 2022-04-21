@@ -23,6 +23,8 @@ PlatformIO will handle the full build process, including dependencies, compilati
     - [Extra packages](#extra-packages)
     - [Other configuration](#other-configuration)
   - [Custom targets](#custom-targets)
+    - [Custom transport](#custom-transport)
+    - [Time source](#time-source)
   - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
   - [Examples](#examples)
   - [Purpose of the Project](#purpose-of-the-project)
@@ -115,9 +117,23 @@ This allows the user to customize the library memory resources or activate optio
 ## Custom targets
 This library can be easily adapted to different boards, transports or RTOS, to achieve this the user shall provide:
 
-- Custom transport: Custom transport shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport).
-- `clock_gettime`: [POSIX compliant](https://linux.die.net/man/3/clock_gettime) implementation with a minimum resolution of 1 millisecond.  
-  This method is used to retrieve the elapsed time on executor spins and reliable communication, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
+### Custom transport
+
+Custom transport shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport). Custom transport source code shall be added on the `./platform_code/<framework>/<board_microros_transport>` path. Example:
+
+- `platform.ini`:
+  ```ini
+  framework = arduino
+  board_microros_transport = wifi
+  ```
+- Transport source files: [platform_code/arduino/wifi](https://github.com/micro-ROS/micro_ros_platformio/tree/main/platform_code/arduino/wifi)
+- Also, a `MICRO_ROS_TRANSPORT_<FRAMEWORK>_<TRANSPORT>` definition will be available: 
+  https://github.com/micro-ROS/micro_ros_platformio/blob/de7a61c7e86fdd0186ed8b7d8ec320994e8ebcbf/ci/src/main.cpp#L3
+
+### Time source
+micro-ROS needs a time source to handle executor spins and synchronize reliable communication. To achieve this, a `clock_gettime` [POSIX compliant](https://linux.die.net/man/3/clock_gettime) implementation is required, with a minimum resolution of 1 millisecond.
+
+This method shall be included on a `clock_gettime.cpp` source file under the `./platform_code/<framework>/` path, an example implementation can be found on [clock_gettime.cpp](./platform_code/arduino/clock_gettime.cpp)
 
 ## Using the micro-ROS Agent
 It is possible to use a **micro-ROS Agent** just by using this docker command:
@@ -142,8 +158,8 @@ and use the agent to test their own `tcp4` and `canfd` custom transports.
 It is also possible to use custom transports on a `micro-XRCE Agent` instance. More info available [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/agent.html#custom-transport-agent).
 
 ## Examples
-The following example projects are available:
-- TODO
+Examples for different transports and micro-ROS entities are available on the [examples](./examples) directory.
+This examples can be modified to work with any of the current support boards.
 
 ## Purpose of the Project
 
