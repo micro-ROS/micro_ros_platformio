@@ -16,6 +16,13 @@ for p in [x for x in required_packages if x not in pip_packages]:
 
 import microros_utils.library_builder as library_builder
 
+
+from SCons.Script import COMMAND_LINE_TARGETS
+
+with open('test.txt', 'w') as file:
+    for element in COMMAND_LINE_TARGETS:
+        file.write(element)
+
 ##########################
 #### Global variables ####
 ##########################
@@ -122,3 +129,4 @@ if 'arduino' == framework:
 
 # Add transport sources according to the framework and the transport
 env['SRC_FILTER'] += ' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport)
+
