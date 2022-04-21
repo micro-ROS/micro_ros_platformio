@@ -1,3 +1,9 @@
+#include <Arduino.h>
+
+#if defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI)
+#include <WiFi.h>
+#endif
+
 #include <micro_ros_platformio.h>
 
 #include <stdio.h>
