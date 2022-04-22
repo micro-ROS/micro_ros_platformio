@@ -1,16 +1,10 @@
-<br/>
-<a>
-   <p align="center">
-      <img width="40%" src=".images/microros_logo.png">
-      <img width="14%" src=".images/PlatformIO_logo.svg">
-   </p>
-</a>
-<br/>
+![banner](.images/banner-dark-theme.png#gh-dark-mode-only)
+![banner](.images/banner-light-theme.png#gh-light-mode-only)
 
 # micro-ROS for PlatformIO
 This is a micro-ROS library for bare metal projects based on platformIO.
 
-The build process for ROS 2 and micro-ROS is based on custom meta-build system tools and [CMake](https://cmake.org/).  
+The build process for ROS 2 and micro-ROS is based on custom meta-build system tools and [CMake](https://cmake.org/).
 PlatformIO will handle the full build process, including dependencies, compilation and linkage.
 
 - [micro-ROS for PlatformIO](#micro-ros-for-platformio)
@@ -45,7 +39,7 @@ Supported boards are:
 | `olimex_e407`                                | `ststm32`     | `arduino`   | `serial`                         | `colcon.meta`            |
 | `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
-  
+
 The community is encouraged to open pull request with custom use cases.
 
 ## Requirements
@@ -95,7 +89,7 @@ The target ROS 2 distribution can be configured with the `board_microros_distro 
 ### Transport configuration
 The transport can be configured with the `board_microros_transport = <transport>`, supported values and configurations are:
   - `serial` *(default value)*
-  
+
     ```c
     Serial.begin(115200);
     set_microros_serial_transports(Serial);
@@ -129,17 +123,17 @@ The transport can be configured with the `board_microros_transport = <transport>
 Colcon packages can be added to the build process using this two methods:
 - Package directories copied on the `<Project_directory>/extra_packages` folder.
 - Git repositories included on the `<Project_directory>/extra_packages/extra_packages.repos` yaml file.
-  
+
 This should be used for example when adding custom messages types or custom micro-ROS packages.
 
 ### Other configuration
 Library packages can be configured with a customized meta file on the project main folder: `board_microros_user_meta = <file_name.meta>`.
-  
+
 This allows the user to customize the library memory resources or activate optional functionality such as multithreading, including configuration of user [Extra packages](#extra-packages).
 
 - Documentation on available parameters can be found [here](https://micro.ros.org/docs/tutorials/advanced/microxrcedds_rmw_configuration) and [here]([microxrcedds_rmw_configuration](https://micro-xrce-dds.docs.eprosima.com/en/latest/client.html)).
-- Default configurations can be found on the [metas](./metas) folder.  
-  
+- Default configurations can be found on the [metas](./metas) folder.
+
   *Note: the [common.meta](./metas/common.meta) file makes general adjustments to the library and shall not be modified by the user.*
 
 ## Custom targets
@@ -155,7 +149,7 @@ Custom transport shall follow the signatures shown on [micro_ros_platformio.h](.
   board_microros_transport = wifi
   ```
 - Transport source files: [platform_code/arduino/wifi](https://github.com/micro-ROS/micro_ros_platformio/tree/main/platform_code/arduino/wifi)
-- Also, a `MICRO_ROS_TRANSPORT_<FRAMEWORK>_<TRANSPORT>` definition will be available: 
+- Also, a `MICRO_ROS_TRANSPORT_<FRAMEWORK>_<TRANSPORT>` definition will be available:
   https://github.com/micro-ROS/micro_ros_platformio/blob/de7a61c7e86fdd0186ed8b7d8ec320994e8ebcbf/ci/src/main.cpp#L3
 
 ### Time source
@@ -180,8 +174,8 @@ docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host mi
 docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host microros/micro-ros-agent:$ROS_DISTRO canfd --dev [YOUR CAN INTERFACE] -v6
 ```
 
-For the supported transports, only the `serial` and `udp4` versions shall be used, although users can develop 
-and use the agent to test their own `tcp4` and `canfd` custom transports.  
+For the supported transports, only the `serial` and `udp4` versions shall be used, although users can develop
+and use the agent to test their own `tcp4` and `canfd` custom transports.
 
 It is also possible to use custom transports on a `micro-XRCE Agent` instance. More info available [here](https://micro-xrce-dds.docs.eprosima.com/en/latest/agent.html#custom-transport-agent).
 
