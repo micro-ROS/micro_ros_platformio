@@ -130,7 +130,7 @@ The transport can be configured with the `board_microros_transport = <transport>
     size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {...};
 
     rmw_uros_set_custom_transport(
-      false,
+      MICROROS_TRANSPORTS_FRAMING_MODE, // Set the MICROROS_TRANSPORTS_FRAMING_MODE or MICROROS_TRANSPORTS_PACKET_MODE mode accordingly
       NULL,
       platformio_transport_open,
       platformio_transport_close,

@@ -80,7 +80,7 @@ void setup() {
   set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
 #elif defined(MICRO_ROS_TRANSPORT_ARDUINO_CUSTOM)
   rmw_uros_set_custom_transport(
-    false,
+    MICROROS_TRANSPORTS_FRAMING_MODE,
     NULL,
     platformio_transport_open,
     platformio_transport_close,
