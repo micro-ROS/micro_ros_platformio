@@ -16,10 +16,10 @@
 
 // Test custom transports
 #if defined(MICRO_ROS_TRANSPORT_ARDUINO_CUSTOM)
-bool platformio_transport_open(struct uxrCustomTransport * transport) {return false};
-bool platformio_transport_close(struct uxrCustomTransport * transport) {return false};
-size_t platformio_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err) {return 0};
-size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {return 0};
+bool platformio_transport_open(struct uxrCustomTransport * transport) {return false;};
+bool platformio_transport_close(struct uxrCustomTransport * transport) {return false;};
+size_t platformio_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err) {return 0;};
+size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {return 0;};
 #endif
 
 // Test extra packages
