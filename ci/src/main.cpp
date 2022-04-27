@@ -14,6 +14,14 @@
 
 #include <std_msgs/msg/int32.h>
 
+// Test custom transports
+#if defined(MICRO_ROS_TRANSPORT_ARDUINO_CUSTOM)
+bool platformio_transport_open(struct uxrCustomTransport * transport) {return false};
+bool platformio_transport_close(struct uxrCustomTransport * transport) {return false};
+size_t platformio_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err) {return 0};
+size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {return 0};
+#endif
+
 // Test extra packages
 #include <control_msgs/msg/joint_controller_state.h>
 #include <my_custom_message/msg/my_custom_message.h>
@@ -70,6 +78,15 @@ void setup() {
   char psk[]= "WIFI_PSK";
 
   set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+#elif defined(MICRO_ROS_TRANSPORT_ARDUINO_CUSTOM)
+	rmw_uros_set_custom_transport(
+		false,
+		NULL,
+		platformio_transport_open,
+		platformio_transport_close,
+		platformio_transport_write,
+		platformio_transport_read
+	);
 #else
 #error "No transport defined"
 #endif
