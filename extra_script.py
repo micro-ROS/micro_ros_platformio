@@ -58,7 +58,7 @@ def clean_microros_callback(*args, **kwargs):
     print("micro-ROS library cleaned!")
     os._exit(0)
 
-env.AddPlatformTarget("clean_microros", None, clean_microros_callback)
+global_env.AddCustomTarget("clean_microros", None, clean_microros_callback, title="Clean Micro-ROS", description="Clean Micro-ROS build environment")
 
 def build_microros(*args, **kwargs):
     ##############################
