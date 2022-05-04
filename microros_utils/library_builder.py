@@ -74,14 +74,12 @@ class Build:
                 p.ignore()
 
     def check_env(self):
-        PATH = os.getenv('PATH')
         ROS_DISTRO = os.getenv('ROS_DISTRO')
 
         if (ROS_DISTRO):
-            PATH = PATH.replace('/opt/ros/{}/bin:'.format(ROS_DISTRO), '')
-            os.environ['PATH'] = PATH
+            PATH = os.getenv('PATH')
+            os.environ['PATH'] = PATH.replace('/opt/ros/{}/bin:'.format(ROS_DISTRO), '')
             os.environ.pop('AMENT_PREFIX_PATH', None)
-            os.environ.pop('LD_LIBRARY_PATH', None)
 
         self.env = os.environ.copy()
 
