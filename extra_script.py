@@ -120,13 +120,11 @@ def build_microros(*args, **kwargs):
 
     # Add platformio library general include path
     global_env.Append(CPPPATH=[
-        main_path + "/platform_code",
-        main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
+        main_path + "/platform_code"])
 
     # Add platformio library general to library include path
     env.Append(CPPPATH=[
-        main_path + "/platform_code",
-        main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
+        main_path + "/platform_code"])
 
     # Add micro-ROS defines to user application
     global_env.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
@@ -136,10 +134,17 @@ def build_microros(*args, **kwargs):
     global_env.Append(CPPPATH=[main_path + "/platform_code/{}".format(framework)])
 
     # Add clock implementation
-    env['SRC_FILTER'] += ' +<platform_code/{}/clock_gettime.cpp>'.format(framework, )
+    env['SRC_FILTER'] += ' +<platform_code/{}/clock_gettime.cpp>'.format(framework)
 
-    # Add transport sources according to the framework and the transport
-    env['SRC_FILTER'] += ' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport)
+    # Add transport sources and includes according to the framework and the transport
+    if microros_transport != "custom":
+        global_env.Append(CPPPATH=[
+            main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
+
+        env.Append(CPPPATH=[
+            main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
+
+        env['SRC_FILTER'] += ' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport)
 
 
 from SCons.Script import COMMAND_LINE_TARGETS
