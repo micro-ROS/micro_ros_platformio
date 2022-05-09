@@ -58,7 +58,7 @@ def clean_microros_callback(*args, **kwargs):
     print("micro-ROS library cleaned!")
     os._exit(0)
 
-env.AddPlatformTarget("clean_microros", None, clean_microros_callback)
+global_env.AddCustomTarget("clean_microros", None, clean_microros_callback, title="Clean Micro-ROS", description="Clean Micro-ROS build environment")
 
 def build_microros(*args, **kwargs):
     ##############################
@@ -144,9 +144,6 @@ def build_microros(*args, **kwargs):
 
 from SCons.Script import COMMAND_LINE_TARGETS
 
-# Do not run extra script when IDE fetches C/C++ project metadata
-if set(["_idedata", "idedata"]) & set(COMMAND_LINE_TARGETS):
-    os._exit(0)
-# Do not build library on clean_microros command
-elif "clean_microros" not in COMMAND_LINE_TARGETS:
+# Do not build library on clean_microros target or when IDE fetches C/C++ project metadata
+if set(["clean_microros", "_idedata", "idedata"]).isdisjoint(set(COMMAND_LINE_TARGETS)):
     build_microros()
