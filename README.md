@@ -16,8 +16,8 @@ PlatformIO will handle the full build process, including dependencies, compilati
     - [Transport configuration](#transport-configuration)
     - [Extra packages](#extra-packages)
     - [Other configuration](#other-configuration)
-  - [Custom targets](#custom-targets)
-    - [Custom transport](#custom-transport)
+  - [Extend library targets](#extend-library-targets)
+    - [Transport implementation](#transport-implementation)
     - [Time source](#time-source)
   - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
   - [Examples](#examples)
@@ -119,6 +119,26 @@ The transport can be configured with the `board_microros_transport = <transport>
     set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
     ```
 
+  - `custom`
+
+    The user will need to write transport functions in app code and provide it to the micro-ROS library using [`rmw_uros_set_custom_transport()` API](https://micro.ros.org/docs/tutorials/advanced/create_custom_transports/)
+
+    ```c
+    bool platformio_transport_open(struct uxrCustomTransport * transport) {...};
+    bool platformio_transport_close(struct uxrCustomTransport * transport) {...};
+    size_t platformio_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err) {...};
+    size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {...};
+
+    rmw_uros_set_custom_transport(
+      MICROROS_TRANSPORTS_FRAMING_MODE, // Set the MICROROS_TRANSPORTS_FRAMING_MODE or MICROROS_TRANSPORTS_PACKET_MODE mode accordingly
+      NULL,
+      platformio_transport_open,
+      platformio_transport_close,
+      platformio_transport_write,
+      platformio_transport_read
+    );
+    ```
+
 ### Extra packages
 Colcon packages can be added to the build process using this two methods:
 - Package directories copied on the `<Project_directory>/extra_packages` folder.
@@ -136,12 +156,12 @@ This allows the user to customize the library memory resources or activate optio
 
   *Note: the [common.meta](./metas/common.meta) file makes general adjustments to the library and shall not be modified by the user.*
 
-## Custom targets
+## Extend library targets
 This library can be easily adapted to different boards, transports or RTOS, to achieve this the user shall provide:
 
-### Custom transport
+### Transport implementation
 
-Custom transport shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport). Custom transport source code shall be added on the `./platform_code/<framework>/<board_microros_transport>` path. Example:
+New transport implementations shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport). Contributed transport source code shall be added on the `./platform_code/<framework>/<board_microros_transport>` path. Example:
 
 - `platform.ini`:
   ```ini
@@ -151,6 +171,8 @@ Custom transport shall follow the signatures shown on [micro_ros_platformio.h](.
 - Transport source files: [platform_code/arduino/wifi](https://github.com/micro-ROS/micro_ros_platformio/tree/main/platform_code/arduino/wifi)
 - Also, a `MICRO_ROS_TRANSPORT_<FRAMEWORK>_<TRANSPORT>` definition will be available:
   https://github.com/micro-ROS/micro_ros_platformio/blob/de7a61c7e86fdd0186ed8b7d8ec320994e8ebcbf/ci/src/main.cpp#L3
+
+  *Note: `board_microros_transport = custom` should not be used, as it is used to add custom transports on user app code*
 
 ### Time source
 micro-ROS needs a time source to handle executor spins and synchronize reliable communication. To achieve this, a `clock_gettime` [POSIX compliant](https://linux.die.net/man/3/clock_gettime) implementation is required, with a minimum resolution of 1 millisecond.

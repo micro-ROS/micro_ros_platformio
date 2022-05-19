@@ -136,7 +136,7 @@ def build_microros(*args, **kwargs):
     global_env.Append(CPPPATH=[main_path + "/platform_code/{}".format(framework)])
 
     # Add clock implementation
-    env['SRC_FILTER'] += ' +<platform_code/{}/clock_gettime.cpp>'.format(framework, )
+    env['SRC_FILTER'] += ' +<platform_code/{}/clock_gettime.cpp>'.format(framework)
 
     # Add transport sources according to the framework and the transport
     env['SRC_FILTER'] += ' +<platform_code/{}/{}/micro_ros_transport.cpp>'.format(framework, microros_transport)
