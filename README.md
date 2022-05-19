@@ -16,7 +16,7 @@ PlatformIO will handle the full build process, including dependencies, compilati
     - [Transport configuration](#transport-configuration)
     - [Extra packages](#extra-packages)
     - [Other configuration](#other-configuration)
-  - [Custom targets](#custom-targets)
+  - [Extend library targets](#extend-library-targets)
     - [Custom transport](#custom-transport)
     - [Time source](#time-source)
   - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
@@ -156,7 +156,7 @@ This allows the user to customize the library memory resources or activate optio
 
   *Note: the [common.meta](./metas/common.meta) file makes general adjustments to the library and shall not be modified by the user.*
 
-## Custom targets
+## Extend library targets
 This library can be easily adapted to different boards, transports or RTOS, to achieve this the user shall provide:
 
 ### Custom transport
@@ -171,6 +171,8 @@ Custom transport shall follow the signatures shown on [micro_ros_platformio.h](.
 - Transport source files: [platform_code/arduino/wifi](https://github.com/micro-ROS/micro_ros_platformio/tree/main/platform_code/arduino/wifi)
 - Also, a `MICRO_ROS_TRANSPORT_<FRAMEWORK>_<TRANSPORT>` definition will be available:
   https://github.com/micro-ROS/micro_ros_platformio/blob/de7a61c7e86fdd0186ed8b7d8ec320994e8ebcbf/ci/src/main.cpp#L3
+
+  *Note: `board_microros_transport = custom` should not be used, as it is used to add custom transports on user app code*
 
 ### Time source
 micro-ROS needs a time source to handle executor spins and synchronize reliable communication. To achieve this, a `clock_gettime` [POSIX compliant](https://linux.die.net/man/3/clock_gettime) implementation is required, with a minimum resolution of 1 millisecond.
