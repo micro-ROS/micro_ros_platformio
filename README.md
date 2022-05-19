@@ -17,7 +17,7 @@ PlatformIO will handle the full build process, including dependencies, compilati
     - [Extra packages](#extra-packages)
     - [Other configuration](#other-configuration)
   - [Extend library targets](#extend-library-targets)
-    - [Custom transport](#custom-transport)
+    - [Transport implementation](#transport-implementation)
     - [Time source](#time-source)
   - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
   - [Examples](#examples)
@@ -159,9 +159,9 @@ This allows the user to customize the library memory resources or activate optio
 ## Extend library targets
 This library can be easily adapted to different boards, transports or RTOS, to achieve this the user shall provide:
 
-### Custom transport
+### Transport implementation
 
-Custom transport shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport). Custom transport source code shall be added on the `./platform_code/<framework>/<board_microros_transport>` path. Example:
+New transport implementations shall follow the signatures shown on [micro_ros_platformio.h](./platform_code/arduino/micro_ros_platformio.h), the [provided sources](./platform_code) can be used as reference along [this documentation](https://micro-xrce-dds.docs.eprosima.com/en/latest/transport.html#custom-transport). Contributed transport source code shall be added on the `./platform_code/<framework>/<board_microros_transport>` path. Example:
 
 - `platform.ini`:
   ```ini
