@@ -31,8 +31,8 @@ extra_packages_path = "{}/extra_packages".format(env['PROJECT_DIR'])
 
 selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
-# Retrieve the required transport. Default galactic
-microros_distro = global_env.BoardConfig().get("microros_distro", "galactic")
+# Retrieve the required transport. Default humble
+microros_distro = global_env.BoardConfig().get("microros_distro", "humble")
 
 # Retrieve the required transport. Default serial
 microros_transport = global_env.BoardConfig().get("microros_transport", "serial")

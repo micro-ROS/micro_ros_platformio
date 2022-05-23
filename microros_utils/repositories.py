@@ -67,6 +67,14 @@ class Repository:
 
 class Sources:
     dev_environments = {
+         'humble': [
+            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "humble"),
+            Repository("ament_lint", "https://github.com/ament/ament_lint", "humble"),
+            Repository("ament_package", "https://github.com/ament/ament_package", "humble"),
+            Repository("googletest", "https://github.com/ament/googletest", "humble"),
+            Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "humble"),
+            Repository("ament_index", "https://github.com/ament/ament_index", "humble")
+        ],
         'galactic': [
             Repository("ament_cmake", "https://github.com/ament/ament_cmake", "galactic"),
             Repository("ament_lint", "https://github.com/ament/ament_lint", "galactic"),
@@ -94,6 +102,28 @@ class Sources:
     }
 
     mcu_environments = {
+        'humble': [
+            Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "humble", "ros2"),
+            Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "humble", "ros2"),
+            Repository("rcl", "https://github.com/micro-ROS/rcl", "humble"),
+            Repository("rclc", "https://github.com/ros2/rclc", "humble"),
+            Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "humble"),
+            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "humble"),
+            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "humble"),
+            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "humble"),
+            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "humble"),
+            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "humble"),
+            Repository("rosidl", "https://github.com/ros2/rosidl", "humble"),
+            Repository("rmw", "https://github.com/ros2/rmw", "humble"),
+            Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "humble"),
+            Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "humble"),
+            Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "humble"),
+            Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "humble"),
+            Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "humble"),
+            Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "humble"),
+            Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "humble"),
+            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "humble"),
+        ],
         'galactic': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "galactic", "ros2"),
             Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "galactic", "ros2"),
@@ -163,6 +193,7 @@ class Sources:
     }
 
     ignore_packages = {
+        'humble': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'galactic': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'rolling': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'foxy': [ 'rosidl_typesupport_introspection_c', 'rosidl_typesupport_introspection_cpp', 'rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
