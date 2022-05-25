@@ -2,8 +2,8 @@
 Changelog for package micro_ros_platformio
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2022-05-25)
+------------------
 * Add humble as default ROS2 distro (`#27 <https://github.com/micro-ROS/micro_ros_platformio/issues/27>`_)
 * Allow custom transports (`#21 <https://github.com/micro-ROS/micro_ros_platformio/issues/21>`_)
 * Make clean_microros target be listed in IDE (`#23 <https://github.com/micro-ROS/micro_ros_platformio/issues/23>`_)
