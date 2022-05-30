@@ -8,9 +8,7 @@ struct micro_ros_agent_locator {
 };
 
 static inline void set_microros_wifi_transports(char * ssid, char * pass, IPAddress agent_ip, uint16_t agent_port){
-    WiFi.begin(ssid, pass);
-
-    while (WiFi.status() != WL_CONNECTED) {
+    while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
       delay(500);
     }
 
