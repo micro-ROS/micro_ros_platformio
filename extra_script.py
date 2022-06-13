@@ -39,7 +39,7 @@ microros_distro = global_env.BoardConfig().get("microros_distro", "humble")
 microros_transport = global_env.BoardConfig().get("microros_transport", "serial")
 
 # Retrieve the user meta. Default none
-microros_user_meta = global_env.BoardConfig().get("microros_user_meta", "")
+microros_user_meta = "{}/{}".format(env['PROJECT_DIR'], global_env.BoardConfig().get("microros_user_meta", ""))
 
 # Do not include build folder
 env['SRC_FILTER'] += ' -<build/include/*>'
