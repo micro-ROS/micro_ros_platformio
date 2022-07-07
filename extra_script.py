@@ -129,7 +129,7 @@ def build_microros(*args, **kwargs):
         main_path + "/platform_code",
         main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
-    # Add micro-ROS defines to user application 
+    # Add micro-ROS defines to user application
     projenv.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
     projenv.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_{} '.format(microros_distro.upper()), 1)])
 
