@@ -1,3 +1,4 @@
+Import("projenv")
 Import("env")
 
 import os
@@ -102,18 +103,18 @@ def build_microros(*args, **kwargs):
     if (board == "portenta_h7_m7" or board == "nanorp2040connect"):
         # Workaround for including the library in the linker group
         #   This solves a problem with duplicated symbols in Galactic
-        global_env["_LIBFLAGS"] = "-Wl,--start-group " + global_env["_LIBFLAGS"] + " -l{} -Wl,--end-group".format(builder.library_name)
+        projenv["_LIBFLAGS"] = "-Wl,--start-group " + projenv["_LIBFLAGS"] + " -l{} -Wl,--end-group".format(builder.library_name)
     else:
-        global_env.Append(LIBS=[builder.library_name])
+        projenv.Append(LIBS=[builder.library_name])
 
     # Add library path
-    global_env.Append(LIBPATH=[builder.library_path])
+    projenv.Append(LIBPATH=[builder.library_path])
 
     # Add required defines
-    global_env.Append(CPPDEFINES=[("CLOCK_MONOTONIC", 1)])
+    projenv.Append(CPPDEFINES=[("CLOCK_MONOTONIC", 1)])
 
     # Add micro-ROS include path
-    global_env.Append(CPPPATH=[main_path + "/libmicroros/include"])
+    projenv.Append(CPPPATH=[main_path + "/libmicroros/include"])
 
     # Add micro-ROS include path to library include path
     env.Append(CPPPATH=[main_path + "/libmicroros/include"])
@@ -128,12 +129,12 @@ def build_microros(*args, **kwargs):
         main_path + "/platform_code",
         main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
-    # Add micro-ROS defines to user application
-    global_env.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
-    global_env.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_ {} '.format(microros_distro.upper()), 1)])
+    # Add micro-ROS defines to user application 
+    projenv.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
+    projenv.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_{} '.format(microros_distro.upper()), 1)])
 
     # Include path for framework
-    global_env.Append(CPPPATH=[main_path + "/platform_code/{}".format(framework)])
+    projenv.Append(CPPPATH=[main_path + "/platform_code/{}".format(framework)])
 
     # Add clock implementation
     env['SRC_FILTER'] += ' +<platform_code/{}/clock_gettime.cpp>'.format(framework)
