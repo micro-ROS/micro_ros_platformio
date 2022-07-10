@@ -1,4 +1,4 @@
-#include <Ethernet.h>
+#include <NativeEthernet.h>
 
 struct micro_ros_agent_locator {
 	IPAddress address;
