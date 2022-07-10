@@ -17,7 +17,7 @@ static inline void set_microros_native_ethernet_transports(byte mac[], IPAddress
 
 	rmw_uros_set_custom_transport(
 		false,
-		NULL,
+		&locator,
 		platformio_transport_open,
 		platformio_transport_close,
 		platformio_transport_write,
