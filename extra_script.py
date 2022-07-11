@@ -1,3 +1,4 @@
+Import("projenv")
 Import("env")
 
 import os
@@ -129,8 +130,8 @@ def build_microros(*args, **kwargs):
         main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
     # Add micro-ROS defines to user application
-    global_env.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
-    global_env.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_ {} '.format(microros_distro.upper()), 1)])
+    projenv.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
+    projenv.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_{} '.format(microros_distro.upper()), 1)])
 
     # Include path for framework
     global_env.Append(CPPPATH=[main_path + "/platform_code/{}".format(framework)])

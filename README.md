@@ -45,6 +45,7 @@ The community is encouraged to open pull request with custom use cases.
 ## Requirements
 
 - PlatformIO [local installation](https://docs.platformio.org/en/stable/core/installation.html) or [PlatformIO IDE for VSCode](https://platformio.org/install/ide?install=vscode)
+- PlatformIO Core version 6.1.0 or greater
 - PlatformIO needs  `git`, `cmake` and `pip3` to handle micro-ROS internal dependencies:
 
   ```bash
