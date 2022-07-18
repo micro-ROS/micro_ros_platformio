@@ -39,6 +39,7 @@ Supported boards are:
 | `olimex_e407`                                | `ststm32`     | `arduino`   | `serial`                         | `colcon.meta`            |
 | `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
+| `pico`                                       | `raspberrypi` | `arduino`   | `serial`                         | `colcon.mata`|
 
 The community is encouraged to open pull request with custom use cases.
 
