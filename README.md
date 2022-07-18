@@ -39,6 +39,7 @@ Supported boards are:
 | `olimex_e407`                                | `ststm32`     | `arduino`   | `serial`                         | `colcon.meta`            |
 | `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
+| `pico`                                       | `raspberrypi` | `arduino`   | `serial`                         | `colcon.meta`|
 
 The community is encouraged to open pull request with custom use cases.
 
@@ -235,6 +236,11 @@ see the file [3rd-party-licenses.txt](3rd-party-licenses.txt).
     ```
 
 - For `nanorp2040connect` board with `serial` transport, the library dependency finder shall be set to `chain+`:
+
+    ```ini
+    lib_ldf_mode = chain+
+    ```
+- For `pico` board with `serial` transport, the library dependency finder shall be set to `chain+`:
 
     ```ini
     lib_ldf_mode = chain+

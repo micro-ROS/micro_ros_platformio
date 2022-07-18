@@ -20,7 +20,9 @@ boards_metas = {
     "esp32dev" : "colcon.meta",
     "olimex_e407" :  "colcon.meta",
     "due" : "colcon_verylowmem.meta",
-    "zero" : "colcon_verylowmem.meta"
+    "zero" : "colcon_verylowmem.meta",
+    "pico": "colcon.meta"
+
 }
 
 project_options = env.GetProjectConfig().items(env=env["PIOENV"], as_dict=True)
@@ -100,7 +102,7 @@ def build_microros(*args, **kwargs):
     #######################################################
 
     # Add library
-    if (board == "portenta_h7_m7" or board == "nanorp2040connect"):
+    if (board == "portenta_h7_m7" or board == "nanorp2040connect" or board == "pico"):
         # Workaround for including the library in the linker group
         #   This solves a problem with duplicated symbols in Galactic
         global_env["_LIBFLAGS"] = "-Wl,--start-group " + global_env["_LIBFLAGS"] + " -l{} -Wl,--end-group".format(builder.library_name)
