@@ -240,3 +240,8 @@ see the file [3rd-party-licenses.txt](3rd-party-licenses.txt).
     ```ini
     lib_ldf_mode = chain+
     ```
+- For `pico` board with `serial` transport, the library dependency finder shall be set to `chain+`:
+
+    ```ini
+    lib_ldf_mode = chain+
+    ```
