@@ -2,7 +2,7 @@
 
 #include <micro_ros_platformio.h>
 
-#include <NativeEthernetUdp.h>
+#include <EthernetUdp.h>
 
 #include <uxr/client/util/time.h>
 #include <uxr/client/profile/transport/custom/custom_transport.h>
