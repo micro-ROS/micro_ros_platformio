@@ -82,7 +82,7 @@ size_t platformio_transport_read(struct uxrCustomTransport *transport,
   DMAStream *stream = (DMAStream *)transport->args;
 
   int ms_used = 0;
-  do {
+  while (true) {
     __disable_irq();
     rtail = stream->rbuffer_size - __HAL_DMA_GET_COUNTER(stream->uart->hdmarx);
     __enable_irq();
@@ -90,11 +90,11 @@ size_t platformio_transport_read(struct uxrCustomTransport *transport,
     uint16_t data_available =
         rhead <= rtail ? rtail - rhead : stream->rbuffer_size - rhead + rtail;
 
-    if (data_available >= len) break;
+    if (data_available >= len || ms_used >= timeout) break;
 
     HAL_Delay(1);
     ms_used++;
-  } while (ms_used < timeout);
+  }
 
   size_t wrote = 0;
   while ((rhead != rtail) && (wrote < len)) {
