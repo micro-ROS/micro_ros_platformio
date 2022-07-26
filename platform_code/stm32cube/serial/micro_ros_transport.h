@@ -15,10 +15,19 @@
 #endif
 
 struct DMAStream {
+  /// UART handle to use for transport.
   UART_HandleTypeDef* uart;
+
+  /// Size of the read buffer, must be a power of 2.
   uint16_t rbuffer_size;
+
+  /// Pointer to read buffer.
   uint8_t* rbuffer;
+
+  /// Size of the transmit buffer, must be a power of 2.
   uint16_t tbuffer_size;
+
+  /// Pointer to transmit buffer.
   uint8_t* tbuffer;
 };
 
@@ -28,4 +37,6 @@ static inline void set_microros_serial_transports(DMAStream& stream) {
       platformio_transport_write, platformio_transport_read);
 }
 
+/// This function should be called from HAL_UART_TxCpltCallback. Otherwise the
+/// transform won't work properly.
 void uart_transfer_complete_callback(DMAStream* stream);
