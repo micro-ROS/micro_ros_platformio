@@ -112,6 +112,7 @@ def build_microros(*args, **kwargs):
     # Add library path
     global_env.Append(LIBPATH=[builder.library_path])
 
+def update_env():
     # Add required defines
     global_env.Append(CPPDEFINES=[("CLOCK_MONOTONIC", 1)])
 
@@ -150,3 +151,5 @@ from SCons.Script import COMMAND_LINE_TARGETS
 # Do not build library on clean_microros target or when IDE fetches C/C++ project metadata
 if set(["clean_microros", "_idedata", "idedata"]).isdisjoint(set(COMMAND_LINE_TARGETS)):
     build_microros()
+
+update_env()
