@@ -1,30 +1,51 @@
 name: CI
 
 on:
-    pull_request:
-      branches:
-        - '**'
+  pull_request:
+    branches:
+      - "**"
 
 jobs:
+  micro_ros_platformio:
+    runs-on: ubuntu-20.04
+    container: ubuntu:20.04
 
-    micro_ros_platformio:
-        runs-on: ubuntu-20.04
-        container: ubuntu:20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { framework: arduino, pio-environment: teensy41 }
+          - { framework: arduino, pio-environment: teensy41 }
+          - { framework: arduino, pio-environment: teensy40 }
+          - { framework: arduino, pio-environment: teensy36 }
+          - { framework: arduino, pio-environment: teensy35 }
+          - { framework: arduino, pio-environment: teensy31 }
+          - { framework: arduino, pio-environment: due }
+          - { framework: arduino, pio-environment: zero }
+          - { framework: arduino, pio-environment: olimex_e407 }
+          - { framework: arduino, pio-environment: esp32dev }
+          - { framework: arduino, pio-environment: nanorp2040connect }
+          - { framework: arduino, pio-environment: portenta_h7_m7 }
+          - { framework: arduino, pio-environment: teensy41_eth }
+          - { framework: arduino, pio-environment: nanorp2040connect_wifi }
+          - { framework: arduino, pio-environment: portenta_h7_m7_wifi }
+          - { framework: arduino, pio-environment: esp32dev_wifi }
+          - { framework: arduino, pio-environment: portenta_h7_m7_galactic }
+          - { framework: arduino, pio-environment: portenta_h7_m7_foxy }
+          - { framework: arduino, pio-environment: portenta_h7_m7_rolling }
+          - { framework: arduino, pio-environment: teensy41_custom }
+          - { framework: arduino, pio-environment: pico }
+          - { framework: stm32cube, pio-environment: genericSTM32F401RC }
 
-        strategy:
-          fail-fast: false
-          matrix:
-            platform: [teensy41, teensy40, teensy36, teensy35, teensy31, due, zero, olimex_e407, esp32dev, nanorp2040connect, portenta_h7_m7, teensy41_eth, nanorp2040connect_wifi, portenta_h7_m7_wifi, esp32dev_wifi, portenta_h7_m7_galactic, portenta_h7_m7_foxy, portenta_h7_m7_rolling, teensy41_custom, pico]
-
-        steps:
-        - uses: actions/checkout@v3
-          with:
-            path: repo
-        - name: Install environment
-          uses: ./repo/.github/actions/platformio-env
-        - name: Build
-          shell: bash
-          run: |
-            export PATH=$PATH:~/.platformio/penv/bin
-            cd repo/ci
-            pio run -e ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: repo
+      - name: Install environment
+        uses: ./repo/.github/actions/platformio-env
+      - name: Build
+        shell: bash
+        run: |
+          export PATH=$PATH:~/.platformio/penv/bin
+          cd repo/ci/${{ matrix.framework }}
+          pio run -e ${{ matrix.pio-environment }}
