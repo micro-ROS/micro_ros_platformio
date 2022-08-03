@@ -1,5 +1,9 @@
 #include <rmw_microros/custom_transport.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if defined(STM32F0xx)
 #include "stm32f0xx_hal.h"
 #elif defined(STM32F1xx)
@@ -31,12 +35,16 @@ struct DMAStream {
   uint8_t* tbuffer;
 };
 
-static inline void set_microros_serial_transports(DMAStream& stream) {
+static inline void set_microros_serial_transports(struct DMAStream* stream) {
   rmw_uros_set_custom_transport(
-      true, &stream, platformio_transport_open, platformio_transport_close,
+      true, stream, platformio_transport_open, platformio_transport_close,
       platformio_transport_write, platformio_transport_read);
 }
 
 /// This function should be called from HAL_UART_TxCpltCallback. Otherwise the
 /// transform won't work properly.
-void uart_transfer_complete_callback(DMAStream* stream);
+void uart_transfer_complete_callback(struct DMAStream* stream);
+
+#ifdef __cplusplus
+}
+#endif
