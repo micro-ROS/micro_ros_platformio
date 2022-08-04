@@ -13,7 +13,7 @@ static void stream_flush(DMAStream *stream) {
     if (thead != ttail) {
       uint16_t len =
           thead < ttail ? ttail - thead : stream->tbuffer_size - thead;
-      thead_next = (thead + len) & (stream->tbuffer_size - 1);
+      thead_next = (thead + len) % stream->tbuffer_size;
       HAL_UART_Transmit_DMA(stream->uart, stream->tbuffer + thead, len);
     }
     mutex = false;
@@ -69,7 +69,7 @@ size_t platformio_transport_write(struct uxrCustomTransport *transport,
     memcpy(stream->tbuffer, buf + n_tail, n - n_tail);
   }
 
-  ttail = (ttail + n) & (stream->tbuffer_size - 1);
+  ttail = (ttail + n) % stream->tbuffer_size;
 
   stream_flush(stream);
 
@@ -96,7 +96,7 @@ size_t platformio_transport_read(struct uxrCustomTransport *transport,
   size_t wrote = 0;
   while ((rhead != rtail) && (wrote < len)) {
     buf[wrote++] = stream->rbuffer[rhead];
-    rhead = (rhead + 1) & (stream->rbuffer_size - 1);
+    rhead = (rhead + 1) % stream->rbuffer_size;
   }
 
   return wrote;
