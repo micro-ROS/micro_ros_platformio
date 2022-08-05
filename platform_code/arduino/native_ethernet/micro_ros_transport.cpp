@@ -2,7 +2,11 @@
 
 #include <micro_ros_platformio.h>
 
-#include <EthernetUdp.h>
+#if defined(ARDUINO_PORTENTA_H7_M7)
+  #include <EthernetUdp.h>
+#else
+  #include <NativeEthernetUdp.h>
+#endif
 
 #include <uxr/client/util/time.h>
 #include <uxr/client/profile/transport/custom/custom_transport.h>
