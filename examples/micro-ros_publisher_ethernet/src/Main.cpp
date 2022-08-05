@@ -1,3 +1,5 @@
+// based on https://github.com/micro-ROS/micro_ros_arduino/blob/humble/examples/micro-ros_publisher_ethernet/micro-ros_publisher_ethernet.ino
+
 #include <micro_ros_arduino.h>
 
 #include <stdio.h>
@@ -32,8 +34,8 @@ void error_loop(){
 void setup() {
    byte arduino_mac[] = { 0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF };
 
-  IPAddress arduino_ip(192, 168, 1, 177);
-  IPAddress agent_ip(192, 168, 1, 113);
+  IPAddress arduino_ip(10, 100, 0, 177);
+  IPAddress agent_ip(10, 100, 0, 111);
   set_microros_native_ethernet_transports(arduino_mac, arduino_ip, agent_ip, 9999);
 
   pinMode(LED_PIN, OUTPUT);
