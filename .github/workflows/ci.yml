@@ -16,7 +16,6 @@ jobs:
       matrix:
         pio-environment:
           - teensy41
-          - teensy41
           - teensy40
           - teensy36
           - teensy35
