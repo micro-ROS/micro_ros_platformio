@@ -11,18 +11,18 @@
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN PD */
-#define RCCHECK(fn)                \
-  {                                \
-    rcl_ret_t temp_rc = fn;        \
-    if ((temp_rc != RCL_RET_OK)) { \
-      Error_Handler();             \
-    }                              \
+#define RCCHECK(fn)                                                            \
+  {                                                                            \
+    rcl_ret_t temp_rc = fn;                                                    \
+    if ((temp_rc != RCL_RET_OK)) {                                             \
+      Error_Handler();                                                         \
+    }                                                                          \
   }
-#define RCSOFTCHECK(fn)            \
-  {                                \
-    rcl_ret_t temp_rc = fn;        \
-    if ((temp_rc != RCL_RET_OK)) { \
-    }                              \
+#define RCSOFTCHECK(fn)                                                        \
+  {                                                                            \
+    rcl_ret_t temp_rc = fn;                                                    \
+    if ((temp_rc != RCL_RET_OK)) {                                             \
+    }                                                                          \
   }
 /* USER CODE END PD */
 
@@ -35,19 +35,19 @@ static rcl_allocator_t allocator;
 static rcl_node_t node;
 static rcl_timer_t timer;
 
-static uint8_t uart_rbuffer[2048];
-static uint8_t uart_tbuffer[2048];
+static uint8_t uart_rbuffer[512];
+static uint8_t uart_tbuffer[512];
 static struct DMAStream stream = {
-    .uart = &huart1,
-    .rbuffer_size = 2048,
+    .uart = &huart2,
+    .rbuffer_size = 512,
     .rbuffer = uart_rbuffer,
-    .tbuffer_size = 2048,
+    .tbuffer_size = 512,
     .tbuffer = uart_tbuffer,
 };
 /* USER CODE END PV */
 
 /* USER CODE BEGIN 0 */
-void timer_callback(rcl_timer_t* timer, int64_t last_call_time) {
+void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
   RCLC_UNUSED(last_call_time);
   if (timer != NULL) {
     RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
@@ -55,15 +55,14 @@ void timer_callback(rcl_timer_t* timer, int64_t last_call_time) {
   }
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart) {
-  if (huart == &huart1) {
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
+  if (huart == &huart2) {
     uart_transfer_complete_callback(&stream);
   }
 }
 /* USER CODE END 0 */
 
-int main(void)
-{
+int main(void) {
   /* USER CODE BEGIN 2 */
   set_microros_serial_transports(&stream);
 
