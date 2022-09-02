@@ -1,18 +1,6 @@
 #include <sys/time.h>
 
-#if defined(STM32F0xx)
-#include "stm32f0xx_hal.h"
-#elif defined(STM32F1xx)
-#include "stm32f1xx_hal.h"
-#elif defined(STM32F2xx)
-#include "stm32f2xx_hal.h"
-#elif defined(STM32F3xx)
-#include "stm32f3xx_hal.h"
-#elif defined(STM32F4xx)
-#include "stm32f4xx_hal.h"
-#elif defined(STM32F7xx)
-#include "stm32f7xx_hal.h"
-#endif
+extern "C" uint32_t HAL_GetTick();
 
 constexpr uint64_t GETTICK_ROLLOVER_USECONDS = 4294967296000UL;
 
