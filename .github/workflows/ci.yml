@@ -57,7 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         pio-environment:
-          - genericSTM32F401RC
+          - nucleo_f103rb
 
     steps:
       - uses: actions/checkout@v3
