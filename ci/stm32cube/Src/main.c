@@ -38,7 +38,7 @@ static rcl_timer_t timer;
 static uint8_t uart_rbuffer[512];
 static uint8_t uart_tbuffer[512];
 static struct DMAStream stream = {
-    .uart = &huart2,
+    .uart = &UART_HANDLE,
     .rbuffer_size = 512,
     .rbuffer = uart_rbuffer,
     .tbuffer_size = 512,
@@ -56,7 +56,7 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-  if (huart == &huart2) {
+  if (huart == &UART_HANDLE) {
     uart_transfer_complete_callback(&stream);
   }
 }

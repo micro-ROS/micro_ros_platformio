@@ -58,6 +58,7 @@ jobs:
       matrix:
         pio-environment:
           - nucleo_f103rb
+          - nucleo_f767zi
 
     steps:
       - uses: actions/checkout@v3
@@ -99,5 +100,6 @@ jobs:
         run: |
           export PATH=$PATH:~/.platformio/penv/bin
           cd repo/ci/stm32cube
+          cp ioc/${{ matrix.pio-environment }}.ioc .
           xvfb-run --auto-servernum stm32pio -v generate
           pio run -e ${{ matrix.pio-environment }}
