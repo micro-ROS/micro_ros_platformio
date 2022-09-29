@@ -81,6 +81,11 @@ class Build:
             os.environ['PATH'] = PATH.replace('/opt/ros/{}/bin:'.format(ROS_DISTRO), '')
             os.environ.pop('AMENT_PREFIX_PATH', None)
 
+        RMW_IMPLEMENTATION = os.getenv('RMW_IMPLEMENTATION')
+
+        if (RMW_IMPLEMENTATION):
+            os.environ['RMW_IMPLEMENTATION'] = "rmw_microxrcedds"
+
         self.env = os.environ.copy()
 
     def download_dev_environment(self):
