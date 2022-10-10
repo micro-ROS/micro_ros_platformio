@@ -21,8 +21,9 @@ boards_metas = {
     "olimex_e407" :  "colcon.meta",
     "due" : "colcon_verylowmem.meta",
     "zero" : "colcon_verylowmem.meta",
-    "pico": "colcon.meta"
-
+    "pico": "colcon.meta",
+    "nucleo_f103rb": "colcon_verylowmem.meta",
+    "nucleo_f767zi": "colcon.meta"
 }
 
 project_options = env.GetProjectConfig().items(env=env["PIOENV"], as_dict=True)

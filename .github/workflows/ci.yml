@@ -1,30 +1,105 @@
 name: CI
 
 on:
-    pull_request:
-      branches:
-        - '**'
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - "**"
 
 jobs:
+  micro_ros_platformio_arduino:
+    runs-on: ubuntu-20.04
+    container: ubuntu:20.04
 
-    micro_ros_platformio:
-        runs-on: ubuntu-20.04
-        container: ubuntu:20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        pio-environment:
+          - teensy41
+          - teensy40
+          - teensy36
+          - teensy35
+          - teensy31
+          - due
+          - zero
+          - olimex_e407
+          - esp32dev
+          - nanorp2040connect
+          - portenta_h7_m7
+          - teensy41_eth
+          - nanorp2040connect_wifi
+          - portenta_h7_m7_wifi
+          - esp32dev_wifi
+          - portenta_h7_m7_galactic
+          - portenta_h7_m7_foxy
+          - portenta_h7_m7_rolling
+          - teensy41_custom
+          - pico
 
-        strategy:
-          fail-fast: false
-          matrix:
-            platform: [teensy41, teensy40, teensy36, teensy35, teensy31, due, zero, olimex_e407, esp32dev, nanorp2040connect, portenta_h7_m7, teensy41_eth, nanorp2040connect_wifi, portenta_h7_m7_wifi, esp32dev_wifi, portenta_h7_m7_galactic, portenta_h7_m7_foxy, portenta_h7_m7_rolling, teensy41_custom, pico]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: repo
+      - name: Install environment
+        uses: ./repo/.github/actions/platformio-env
+      - name: Build
+        shell: bash
+        run: |
+          export PATH=$PATH:~/.platformio/penv/bin
+          cd repo/ci/arduino
+          pio run -e ${{ matrix.pio-environment }}
 
-        steps:
-        - uses: actions/checkout@v3
-          with:
-            path: repo
-        - name: Install environment
-          uses: ./repo/.github/actions/platformio-env
-        - name: Build
-          shell: bash
-          run: |
-            export PATH=$PATH:~/.platformio/penv/bin
-            cd repo/ci
-            pio run -e ${{ matrix.platform }}
+  micro_ros_platformio_stm32cube:
+    runs-on: ubuntu-20.04
+    container: ubuntu:20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        pio-environment:
+          - nucleo_f103rb
+          - nucleo_f767zi
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: repo
+      - name: Install STM32CubeMX
+        env:
+          CUBEMX_LINK: http://files.fictionlab.pl/en.stm32cubemx-lin_v6-3-0.zip
+        run: |
+          apt update
+          export DEBIAN_FRONTEND=noninteractive
+          apt install -y wget unzip python3-pip expect fontconfig xvfb libxrender1 libxtst6 libxi6
+          wget -q -O cubemx.zip $CUBEMX_LINK
+          unzip -q cubemx.zip -d cubemx
+          expect -f - <<EOF
+          set timeout 30
+          spawn ./cubemx/SetupSTM32CubeMX-6.3.0 -console
+          expect -exact "Press 1 to continue, 2 to quit, 3 to redisplay\r"
+          send -- "1\r"
+          expect -exact "Press Enter to continue, X to exit\r"
+          send -- "\r"
+          expect -exact "Press 1 to accept, 2 to reject, 3 to redisplay\r"
+          send -- "1\r"
+          expect -exact "Press Enter to continue, X to exit\r"
+          send -- "\r"
+          expect -exact "Press 1 to accept, 2 to reject, anything else to redisplay\r"
+          send -- "2\r"
+          expect -exact "Select target path \[/usr/local/STMicroelectronics/STM32Cube/STM32CubeMX\] \r"
+          send -- "\r"
+          expect -exact "Enter Y for Yes, N for No: \r"
+          send -- "N\r"
+          expect eof
+          EOF
+          pip3 install stm32pio
+      - name: Install environment
+        uses: ./repo/.github/actions/platformio-env
+      - name: Build
+        shell: bash
+        run: |
+          export PATH=$PATH:~/.platformio/penv/bin
+          cd repo/ci/stm32cube
+          cp ioc/${{ matrix.pio-environment }}.ioc .
+          xvfb-run --auto-servernum stm32pio -v generate
+          pio run -e ${{ matrix.pio-environment }}

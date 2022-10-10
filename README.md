@@ -40,6 +40,8 @@ Supported boards are:
 | `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
 | `pico`                                       | `raspberrypi` | `arduino`   | `serial`                         | `colcon.meta`|
+| `nucleo_f103rb`                              | `ststm32`     | `stm32cube` | `serial`                         | `colcon_verylowmem.meta` |
+| `nucleo_f767zi`                              | `ststm32`     | `stm32cube` | `serial`                         | `colcon.meta`|
 
 The community is encouraged to open pull request with custom use cases.
 
