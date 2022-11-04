@@ -12,6 +12,9 @@
 #include <rclc/executor.h>
 #include <std_msgs/msg/int64.h>
 
+#if !defined(MICRO_ROS_TRANSPORT_ARDUINO_SERIAL)
+#error This example is only avaliable for Arduino framework with serial transport.
+#endif
 
 rcl_node_t node;
 rclc_support_t support;
