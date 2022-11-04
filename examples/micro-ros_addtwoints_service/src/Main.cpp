@@ -49,7 +49,7 @@ void setup() {
   RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
 
   // create node
-  RCCHECK(rclc_node_init_default(&node, "add_twoints_client_rclc", "", &support));
+  RCCHECK(rclc_node_init_default(&node, "micro_ros_platformio_node", "", &support));
 
   // create service
   RCCHECK(rclc_service_init_default(
