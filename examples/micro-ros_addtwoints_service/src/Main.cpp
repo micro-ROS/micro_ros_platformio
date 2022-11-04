@@ -19,7 +19,6 @@ rcl_allocator_t allocator;
 rclc_executor_t executor;
 
 rcl_service_t service;
-rcl_wait_set_t wait_set;
 
 example_interfaces__srv__AddTwoInts_Response res;
 example_interfaces__srv__AddTwoInts_Request req;
