@@ -157,7 +157,7 @@ This allows the user to customize the library memory resources or activate optio
 - Documentation on available parameters can be found [here](https://micro.ros.org/docs/tutorials/advanced/microxrcedds_rmw_configuration) and [here]([microxrcedds_rmw_configuration](https://micro-xrce-dds.docs.eprosima.com/en/latest/client.html)).
 - Default configurations can be found on the [metas](./metas) folder.
 
-  *Note: the [common.meta](./metas/common.meta) file makes general adjustments to the library and shall not be modified by the user.*
+  *Note: the [common.meta](./metas/common.meta) file makes general adjustments to the library and shall not be modified by the user. In addition, do not use tabs (/t) when creating the custom meta file as it result in the meta file being ignored.  Use only spaces.*
 
 ## Extend library targets
 This library can be easily adapted to different boards, transports or RTOS, to achieve this the user shall provide:
