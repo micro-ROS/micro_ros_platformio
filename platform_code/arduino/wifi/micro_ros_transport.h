@@ -1,10 +1,10 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-struct micro_ros_agent_locator {
-    IPAddress address;
-    int port;
-};
+#include <rmw_microros/rmw_microros.h>
+#include "micro_ros_transport.cpp"
+
+
 
 static inline void set_microros_wifi_transports(char * ssid, char * pass, IPAddress agent_ip, uint16_t agent_port){
 	WiFi.begin(ssid, pass);

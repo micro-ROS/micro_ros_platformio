@@ -1,12 +1,18 @@
 #include <Arduino.h>
 
-#include <micro_ros_platformio.h>
+// #include <micro_ros_platformio.h>
+// #include<micro_ros_transport.h>
 
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
 #include <uxr/client/util/time.h>
 #include <uxr/client/profile/transport/custom/custom_transport.h>
+
+struct micro_ros_agent_locator {
+    IPAddress address;
+    int port;
+};
 
 extern "C" {
 
