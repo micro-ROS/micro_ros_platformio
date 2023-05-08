@@ -75,14 +75,6 @@ class Sources:
             Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "humble"),
             Repository("ament_index", "https://github.com/ament/ament_index", "humble")
         ],
-        'galactic': [
-            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "galactic"),
-            Repository("ament_lint", "https://github.com/ament/ament_lint", "galactic"),
-            Repository("ament_package", "https://github.com/ament/ament_package", "galactic"),
-            Repository("googletest", "https://github.com/ament/googletest", "galactic"),
-            Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "galactic"),
-            Repository("ament_index", "https://github.com/ament/ament_index", "galactic")
-        ],
         'rolling': [
             Repository("ament_cmake", "https://github.com/ament/ament_cmake", "rolling", "master"),
             Repository("ament_lint", "https://github.com/ament/ament_lint", "rolling", "master"),
@@ -123,28 +115,6 @@ class Sources:
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "humble"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "humble"),
             Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "humble"),
-        ],
-        'galactic': [
-            Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "galactic", "ros2"),
-            Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "galactic", "ros2"),
-            Repository("rcl", "https://github.com/micro-ROS/rcl", "galactic"),
-            Repository("rclc", "https://github.com/ros2/rclc", "galactic"),
-            Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "galactic"),
-            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "galactic"),
-            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "galactic"),
-            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "galactic"),
-            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "galactic"),
-            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "galactic"),
-            Repository("rosidl", "https://github.com/ros2/rosidl", "galactic"),
-            Repository("rmw", "https://github.com/ros2/rmw", "galactic"),
-            Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "galactic"),
-            Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "galactic"),
-            Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "galactic"),
-            Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "galactic"),
-            Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "galactic"),
-            Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "galactic"),
-            Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "galactic"),
-            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "galactic"),
         ],
         'rolling': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "rolling", "ros2"),
@@ -195,7 +165,6 @@ class Sources:
 
     ignore_packages = {
         'humble': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
-        'galactic': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'rolling': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'foxy': [ 'rosidl_typesupport_introspection_c', 'rosidl_typesupport_introspection_cpp', 'rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
     }
