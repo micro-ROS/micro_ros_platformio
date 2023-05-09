@@ -108,7 +108,7 @@ def build_microros(*args, **kwargs):
         #   This solves a problem with duplicated symbols in Galactic
         global_env["_LIBFLAGS"] = "-Wl,--start-group " + global_env["_LIBFLAGS"] + " -l{} -Wl,--end-group".format(builder.library_name)
     else:
-        global_env.Append(LIBS=[builder.library_name])
+        global_env.Prepend(LIBS=[builder.library_name])
 
     # Add library path
     global_env.Append(LIBPATH=[builder.library_path])
