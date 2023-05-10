@@ -96,7 +96,7 @@ def build_microros(*args, **kwargs):
 
     python_env_path = env['PROJECT_CORE_DIR'] + "/penv/bin/activate"
     builder = library_builder.Build(library_folder=main_path, packages_folder=extra_packages_path, distro=microros_distro, python_env=python_env_path)
-    builder.run('{}/metas/{}'.format(main_path, selected_board_meta), cmake_toolchain.path, microros_user_meta)
+    # builder.run('{}/metas/{}'.format(main_path, selected_board_meta), cmake_toolchain.path, microros_user_meta)
 
     #######################################################
     #### Add micro-ROS library/includes to environment ####
@@ -134,8 +134,7 @@ def update_env():
         main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
     if (board == "teensy31" or board == "teensy35" or board == "teensy36"):
-        projenv.Append(CXXFLAGS=["--specs=nosys.specs"])
-        projenv.Append(CCFLAGS=["--specs=nosys.specs"])
+        projenv.Append(LINKFLAGS=["--specs=nosys.specs"])
 
     # Add micro-ROS defines to user application
     projenv.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
