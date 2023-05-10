@@ -133,6 +133,10 @@ def update_env():
         main_path + "/platform_code",
         main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
 
+    if (board == "teensy31" or board == "teensy35" or board == "teensy36"):
+        projenv.Append(CXXFLAGS=["--specs=nosys.specs"])
+        projenv.Append(CCFLAGS=["--specs=nosys.specs"])
+
     # Add micro-ROS defines to user application
     projenv.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
     projenv.Append(CPPDEFINES=[('MICRO_ROS_DISTRO_{} '.format(microros_distro.upper()), 1)])
