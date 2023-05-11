@@ -132,7 +132,7 @@ class Sources:
             Repository("rmw", "https://github.com/ros2/rmw", "rolling"),
             Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "rolling"),
             Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "rolling"),
-            Repository("rosidl_dynamic_typesupport", "https://github.com/ros2/rosidl_dynamic_typesupport", "rolling"),
+            Repository("rosidl_dynamic_typesupport", "https://github.com/micro-ROS/rosidl_dynamic_typesupport", "rolling"),
             Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "rolling"),
             Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "rolling"),
             Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "rolling"),
