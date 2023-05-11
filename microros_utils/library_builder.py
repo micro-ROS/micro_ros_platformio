@@ -33,7 +33,7 @@ set(__BIG_ENDIAN__ 0)"""
         self.path = os.path.realpath(file.name)
 
 class Build:
-    def __init__(self, library_folder, packages_folder, distro):
+    def __init__(self, library_folder, packages_folder, distro, python_env):
         self.library_folder = library_folder
         self.packages_folder = packages_folder
         self.build_folder = library_folder + "/build"
@@ -51,6 +51,7 @@ class Build:
         self.library = self.library_path + "/libmicroros.a"
         self.includes = self.library_path+ '/include'
         self.library_name = "microros"
+        self.python_env = python_env
         self.env = {}
 
     def run(self, meta, toolchain, user_meta = ""):
@@ -99,7 +100,7 @@ class Build:
 
     def build_dev_environment(self):
         print("Building micro-ROS dev dependencies")
-        command = "cd {} && colcon build --cmake-args -DBUILD_TESTING=OFF".format(self.dev_folder)
+        command = "cd {} && . {} && colcon build --cmake-args -DBUILD_TESTING=OFF".format(self.dev_folder, self.python_env)
         result = run_cmd(command, env=self.env)
 
         if 0 != result.returncode:
@@ -173,7 +174,7 @@ class Build:
         print("Building micro-ROS library")
 
         common_meta_path = self.library_folder + '/metas/common.meta'
-        colcon_command = 'colcon build --merge-install --packages-ignore-regex=.*_cpp --metas {} {} {} --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF  -DTHIRDPARTY=ON  -DBUILD_SHARED_LIBS=OFF  -DBUILD_TESTING=OFF  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE={}'.format(common_meta_path, meta_file, user_meta, toolchain_file)
+        colcon_command = '. {} && colcon build --merge-install --packages-ignore-regex=.*_cpp --metas {} {} {} --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF  -DTHIRDPARTY=ON  -DBUILD_SHARED_LIBS=OFF  -DBUILD_TESTING=OFF  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE={}'.format(self.python_env, common_meta_path, meta_file, user_meta, toolchain_file)
         command = "cd {} && . {}/install/setup.sh && {}".format(self.mcu_folder, self.dev_folder, colcon_command)
         result = run_cmd(command, env=self.env)
 
@@ -211,7 +212,7 @@ class Build:
         shutil.copytree(self.build_folder + "/mcu/install/include", self.includes)
 
         # Fix include paths
-        if self.distro not in ["galactic", "foxy"]:
+        if self.distro not in ["foxy"]:
             include_folders = os.listdir(self.includes)
 
             for folder in include_folders:

@@ -94,7 +94,8 @@ def build_microros(*args, **kwargs):
         "{} {} -fno-rtti -DCLOCK_MONOTONIC=0 -D'__attribute__(x)='".format(' '.join(env['CXXFLAGS']), ' '.join(env['CCFLAGS']))
     )
 
-    builder = library_builder.Build(library_folder=main_path, packages_folder=extra_packages_path, distro=microros_distro)
+    python_env_path = env['PROJECT_CORE_DIR'] + "/penv/bin/activate"
+    builder = library_builder.Build(library_folder=main_path, packages_folder=extra_packages_path, distro=microros_distro, python_env=python_env_path)
     builder.run('{}/metas/{}'.format(main_path, selected_board_meta), cmake_toolchain.path, microros_user_meta)
 
     #######################################################
@@ -131,6 +132,9 @@ def update_env():
     env.Append(CPPPATH=[
         main_path + "/platform_code",
         main_path + "/platform_code/{}/{}".format(framework, microros_transport)])
+
+    if (board == "teensy31" or board == "teensy35" or board == "teensy36"):
+        projenv.Append(LINKFLAGS=["--specs=nosys.specs"])
 
     # Add micro-ROS defines to user application
     projenv.Append(CPPDEFINES=[('MICRO_ROS_TRANSPORT_{}_{}'.format(framework.upper(), microros_transport.upper()), 1)])
