@@ -212,13 +212,12 @@ class Build:
         shutil.copytree(self.build_folder + "/mcu/install/include", self.includes)
 
         # Fix include paths
-        if self.distro not in ["foxy"]:
-            include_folders = os.listdir(self.includes)
+        include_folders = os.listdir(self.includes)
 
-            for folder in include_folders:
-                folder_path = self.includes + "/{}".format(folder)
-                repeated_path = folder_path + "/{}".format(folder)
+        for folder in include_folders:
+            folder_path = self.includes + "/{}".format(folder)
+            repeated_path = folder_path + "/{}".format(folder)
 
-                if os.path.exists(repeated_path):
-                    shutil.copytree(repeated_path, folder_path, copy_function=shutil.move, dirs_exist_ok=True)
-                    shutil.rmtree(repeated_path)
+            if os.path.exists(repeated_path):
+                shutil.copytree(repeated_path, folder_path, copy_function=shutil.move, dirs_exist_ok=True)
+                shutil.rmtree(repeated_path)

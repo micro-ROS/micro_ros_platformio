@@ -75,6 +75,14 @@ class Sources:
             Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "humble"),
             Repository("ament_index", "https://github.com/ament/ament_index", "humble")
         ],
+        'iron': [
+            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "iron"),
+            Repository("ament_lint", "https://github.com/ament/ament_lint", "iron"),
+            Repository("ament_package", "https://github.com/ament/ament_package", "iron"),
+            Repository("googletest", "https://github.com/ament/googletest", "iron"),
+            Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "iron"),
+            Repository("ament_index", "https://github.com/ament/ament_index", "iron")
+        ],
         'rolling': [
             Repository("ament_cmake", "https://github.com/ament/ament_cmake", "rolling"),
             Repository("ament_lint", "https://github.com/ament/ament_lint", "rolling"),
@@ -82,14 +90,6 @@ class Sources:
             Repository("googletest", "https://github.com/ament/googletest", "rolling"),
             Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "rolling"),
             Repository("ament_index", "https://github.com/ament/ament_index", "rolling")
-        ],
-        'foxy': [
-            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "foxy"),
-            Repository("ament_lint", "https://github.com/ament/ament_lint", "foxy"),
-            Repository("ament_package", "https://github.com/ament/ament_package", "foxy"),
-            Repository("googletest", "https://github.com/ament/googletest", "foxy"),
-            Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "foxy"),
-            Repository("ament_index", "https://github.com/ament/ament_index", "foxy")
         ]
     }
 
@@ -116,17 +116,39 @@ class Sources:
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "humble"),
             Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "humble"),
         ],
+        'iron': [
+            Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "iron", "ros2"),
+            Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "iron", "ros2"),
+            Repository("rcl", "https://github.com/micro-ROS/rcl", "iron"),
+            Repository("rclc", "https://github.com/ros2/rclc", "iron"),
+            Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "iron"),
+            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "iron"),
+            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "iron"),
+            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "iron"),
+            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "iron"),
+            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "iron"),
+            Repository("rosidl", "https://github.com/ros2/rosidl", "iron"),
+            Repository("rmw", "https://github.com/ros2/rmw", "iron"),
+            Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "iron"),
+            Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "iron"),
+            Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "iron"),
+            Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "iron"),
+            Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "iron"),
+            Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "iron"),
+            Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "iron"),
+            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "iron"),
+        ],
         'rolling': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "rolling", "ros2"),
             Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "rolling", "ros2"),
-            Repository("rcl", "https://github.com/micro-ROS/rcl", "rolling", "master"),
+            Repository("rcl", "https://github.com/micro-ROS/rcl", "rolling"),
             Repository("rclc", "https://github.com/ros2/rclc", "rolling", "master"),
-            Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "rolling", "main"),
-            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "rolling", "master"),
-            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "rolling", "main"),
-            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "rolling", "main"),
-            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "rolling", "master"),
-            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "rolling", "main"),
+            Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "rolling"),
+            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "rolling"),
+            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "rolling"),
+            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "rolling"),
+            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "rolling"),
+            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "rolling"),
             Repository("rosidl", "https://github.com/ros2/rosidl", "rolling"),
             Repository("rosidl_core", "https://github.com/ros2/rosidl_core", "rolling"),
             Repository("rmw", "https://github.com/ros2/rmw", "rolling"),
@@ -139,33 +161,11 @@ class Sources:
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "rolling"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "rolling"),
             Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "rolling"),
-        ],
-        'foxy': [
-            Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "foxy", "ros2"),
-            Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "foxy", "ros2"),
-            Repository("rcl", "https://github.com/micro-ROS/rcl", "foxy"),
-            Repository("rclc", "https://github.com/ros2/rclc", "foxy"),
-            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "foxy"),
-            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "foxy"),
-            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "foxy"),
-            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "foxy"),
-            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "foxy"),
-            Repository("tinydir_vendor", "https://github.com/ros2/tinydir_vendor", "foxy", "master"),
-            Repository("rosidl", "https://github.com/ros2/rosidl", "foxy"),
-            Repository("rmw", "https://github.com/ros2/rmw", "foxy"),
-            Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "foxy"),
-            Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "foxy"),
-            Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "foxy"),
-            Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "foxy"),
-            Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "foxy"),
-            Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "foxy"),
-            Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "foxy"),
-            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "foxy", "foxy_microros"),
         ]
     }
 
     ignore_packages = {
         'humble': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
-        'rolling': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
-        'foxy': [ 'rosidl_typesupport_introspection_c', 'rosidl_typesupport_introspection_cpp', 'rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
+        'iron': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
+        'rolling': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples']
     }
