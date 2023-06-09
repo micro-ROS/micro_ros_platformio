@@ -137,6 +137,7 @@ class Sources:
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "iron"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "iron"),
             Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "iron"),
+            Repository("rosidl_core", "https://github.com/ros2/rosidl_core", "iron"),
         ],
         'rolling': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "rolling", "ros2"),
@@ -161,6 +162,7 @@ class Sources:
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "rolling"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "rolling"),
             Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "rolling"),
+            Repository("rosidl_core", "https://github.com/ros2/rosidl_core", "iron"),
         ]
     }
 
