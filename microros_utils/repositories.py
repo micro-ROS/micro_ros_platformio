@@ -129,6 +129,7 @@ class Sources:
             Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "iron"),
             Repository("rosidl", "https://github.com/ros2/rosidl", "iron"),
             Repository("rosidl_dynamic_typesupport", "https://github.com/micro-ROS/rosidl_dynamic_typesupport", "iron"),
+            Repository("rosidl_core", "https://github.com/ros2/rosidl_core", "iron"),
             Repository("rmw", "https://github.com/ros2/rmw", "iron"),
             Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "iron"),
             Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "iron"),
@@ -138,13 +139,12 @@ class Sources:
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "iron"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "iron"),
             Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "iron"),
-            Repository("rosidl_core", "https://github.com/ros2/rosidl_core", "iron"),
         ],
         'rolling': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "rolling", "ros2"),
             Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "rolling", "ros2"),
             Repository("rcl", "https://github.com/micro-ROS/rcl", "rolling"),
-            Repository("rclc", "https://github.com/ros2/rclc", "rolling", "master"),
+            Repository("rclc", "https://github.com/ros2/rclc", "rolling"),
             Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "rolling"),
             Repository("rcutils", "https://github.com/micro-ROS/rcutils", "rolling"),
             Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "rolling"),
@@ -157,14 +157,12 @@ class Sources:
             Repository("rmw", "https://github.com/ros2/rmw", "rolling"),
             Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "rolling"),
             Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "rolling"),
-            Repository("rosidl_dynamic_typesupport", "https://github.com/micro-ROS/rosidl_dynamic_typesupport", "rolling"),
             Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "rolling"),
             Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "rolling"),
             Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "rolling"),
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "rolling"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "rolling"),
             Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "rolling"),
-            Repository("rosidl_core", "https://github.com/ros2/rosidl_core", "iron"),
         ]
     }
 
