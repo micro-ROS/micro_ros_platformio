@@ -114,7 +114,7 @@ class Sources:
             Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "humble"),
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "humble"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "humble"),
-            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "humble"),
+            Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "humble"),
         ],
         'iron': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "iron", "ros2"),
@@ -136,7 +136,7 @@ class Sources:
             Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "iron"),
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "iron"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "iron"),
-            Repository("ros2_tracing", "https://gitlab.com/micro-ROS/ros_tracing/ros2_tracing", "iron"),
+            Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "iron"),
         ],
         'rolling': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "rolling", "ros2"),
