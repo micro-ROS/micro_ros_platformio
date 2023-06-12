@@ -2,8 +2,8 @@
 Changelog for package micro_ros_platformio
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2023-06-12)
+------------------
 * Iron release (`#102 <https://github.com/micro-ROS/micro_ros_platformio/issues/102>`_)
 * Update rolling sources (`#99 <https://github.com/micro-ROS/micro_ros_platformio/issues/99>`_)
 * Set rmw default implementation (`#62 <https://github.com/micro-ROS/micro_ros_platformio/issues/62>`_)
