@@ -2,6 +2,20 @@
 Changelog for package micro_ros_platformio
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Iron release (`#102 <https://github.com/micro-ROS/micro_ros_platformio/issues/102>`_)
+* Update rolling sources (`#99 <https://github.com/micro-ROS/micro_ros_platformio/issues/99>`_)
+* Set rmw default implementation (`#62 <https://github.com/micro-ROS/micro_ros_platformio/issues/62>`_)
+* Add rosidl_core (`#54 <https://github.com/micro-ROS/micro_ros_platformio/issues/54>`_)
+* Fix Arduino with POSIX (`#48 <https://github.com/micro-ROS/micro_ros_platformio/issues/48>`_)
+* Fix generation of idedata (`#44 <https://github.com/micro-ROS/micro_ros_platformio/issues/44>`_)
+* micro_ros_platformio works on Raspberry Pi Pico (`#39 <https://github.com/micro-ROS/micro_ros_platformio/issues/39>`_)
+* Fix native ethernet (`#37 <https://github.com/micro-ROS/micro_ros_platformio/issues/37>`_)
+* Fix user meta path (`#34 <https://github.com/micro-ROS/micro_ros_platformio/issues/34>`_)
+* Fix project environment modifications (`#36 <https://github.com/micro-ROS/micro_ros_platformio/issues/36>`_)
+* Fix wifi transport setup (`#29 <https://github.com/micro-ROS/micro_ros_platformio/issues/29>`_)
+
 1.0.0 (2022-05-25)
 ------------------
 * Add humble as default ROS2 distro (`#27 <https://github.com/micro-ROS/micro_ros_platformio/issues/27>`_)
