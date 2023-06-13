@@ -120,7 +120,6 @@ class Build:
 
                 print('\t - Downloaded {}{}'.format(package.name, " (ignored)" if package.ignored else ""))
 
-        self.download_extra_packages()
 
     def download_extra_packages(self):
         if not os.path.exists(self.packages_folder):
