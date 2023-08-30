@@ -4,7 +4,6 @@ import shutil
 
 from .utils import run_cmd
 from .repositories import Repository, Sources
-
 class CMakeToolchain:
     def __init__(self, path, cc, cxx, ar, cflags, cxxflags):
         cmake_toolchain = """include(CMakeForceCompiler)
@@ -55,7 +54,7 @@ class Build:
         self.env = {}
 
     def run(self, meta, toolchain, user_meta = ""):
-        if os.path.exists(self.library_path):
+        if os.path.exists(self.library):
             print("micro-ROS already built")
             return
 
@@ -183,6 +182,7 @@ class Build:
             sys.exit(1)
 
     def package_mcu_library(self):
+        ar_path = self.resolve_ar_path()
         aux_folder = self.build_folder + "/aux"
 
         shutil.rmtree(aux_folder, ignore_errors=True)
@@ -194,12 +194,12 @@ class Build:
                 if f.endswith('.a'):
                     os.makedirs(aux_folder + "/naming", exist_ok=True)
                     os.chdir(aux_folder + "/naming")
-                    os.system("ar x {}".format(root + "/" + f))
+                    os.system("{} x {}".format(ar_path, root + "/" + f))
                     for obj in [x for x in os.listdir() if x.endswith('obj')]:
                         os.rename(obj, '../' + f.split('.')[0] + "__" + obj)
 
         os.chdir(aux_folder)
-        command = "ar rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; ranlib libmicroros.a"
+        command = "%s rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; ranlib libmicroros.a" % ar_path
         result = run_cmd(command)
 
         if 0 != result.returncode:
@@ -221,3 +221,16 @@ class Build:
             if os.path.exists(repeated_path):
                 shutil.copytree(repeated_path, folder_path, copy_function=shutil.move, dirs_exist_ok=True)
                 shutil.rmtree(repeated_path)
+
+    def resolve_ar_path(self):
+        homebrew_binutils_ar_path = "/opt/homebrew/opt/binutils/bin/ar"
+
+        if sys.platform == "darwin":
+            if os.path.exists(homebrew_binutils_ar_path):
+                return homebrew_binutils_ar_path
+
+            print("ERROR: GNU ar not found. ({}) Please install binutils with homebrew: brew install binutils"
+                  .format(homebrew_binutils_ar_path))
+            sys.exit(1)
+
+        return "ar"
