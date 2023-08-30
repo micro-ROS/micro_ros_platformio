@@ -182,7 +182,7 @@ class Build:
             sys.exit(1)
 
     def package_mcu_library(self):
-        ar_path = self.resolve_ar_path()
+        binutils_path = self.resolve_binutils_path()
         aux_folder = self.build_folder + "/aux"
 
         shutil.rmtree(aux_folder, ignore_errors=True)
@@ -194,12 +194,12 @@ class Build:
                 if f.endswith('.a'):
                     os.makedirs(aux_folder + "/naming", exist_ok=True)
                     os.chdir(aux_folder + "/naming")
-                    os.system("{} x {}".format(ar_path, root + "/" + f))
+                    os.system("{}ar x {}".format(binutils_path, root + "/" + f))
                     for obj in [x for x in os.listdir() if x.endswith('obj')]:
                         os.rename(obj, '../' + f.split('.')[0] + "__" + obj)
 
         os.chdir(aux_folder)
-        command = "%s rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; ranlib libmicroros.a" % ar_path
+        command = "{binutils}ar rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; {binutils}ranlib libmicroros.a".format(binutils=binutils_path)
         result = run_cmd(command)
 
         if 0 != result.returncode:
@@ -222,15 +222,14 @@ class Build:
                 shutil.copytree(repeated_path, folder_path, copy_function=shutil.move, dirs_exist_ok=True)
                 shutil.rmtree(repeated_path)
 
-    def resolve_ar_path(self):
-        homebrew_binutils_ar_path = "/opt/homebrew/opt/binutils/bin/ar"
-
+    def resolve_binutils_path(self):
         if sys.platform == "darwin":
-            if os.path.exists(homebrew_binutils_ar_path):
-                return homebrew_binutils_ar_path
+            homebrew_binutils_path = "/opt/homebrew/opt/binutils/bin/"
+            if os.path.exists(homebrew_binutils_path):
+                return homebrew_binutils_path
 
-            print("ERROR: GNU ar not found. ({}) Please install binutils with homebrew: brew install binutils"
-                  .format(homebrew_binutils_ar_path))
+            print("ERROR: GNU binutils not found. ({}) Please install binutils with homebrew: brew install binutils"
+                  .format(homebrew_binutils_path))
             sys.exit(1)
 
-        return "ar"
+        return ""
