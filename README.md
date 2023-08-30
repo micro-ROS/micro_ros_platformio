@@ -52,6 +52,17 @@ The community is encouraged to open pull request with custom use cases.
   ```bash
   apt install -y git cmake python3-pip
   ```
+  
+### Platform specific requirements
+
+#### MacOS
+
+XCode command line tools are distributed with toolchain that is not fully compatible with micro-ROS build process.
+To fix this, install GNU [binutils](https://www.gnu.org/software/binutils/) using [Homebrew](https://brew.sh/):
+
+```bash
+brew install binutils
+```
 
 ## How to add to your project
 
