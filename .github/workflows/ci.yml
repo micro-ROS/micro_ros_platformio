@@ -8,8 +8,8 @@ on:
 jobs:
 
     micro_ros_platformio:
-        runs-on: ubuntu-20.04
-        container: ubuntu:20.04
+        runs-on: ubuntu-22.04
+        container: ubuntu:22.04
 
         strategy:
           fail-fast: false
