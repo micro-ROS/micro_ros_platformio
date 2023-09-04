@@ -4,6 +4,7 @@ import shutil
 
 from .utils import run_cmd
 from .repositories import Repository, Sources
+
 class CMakeToolchain:
     def __init__(self, path, cc, cxx, ar, cflags, cxxflags):
         cmake_toolchain = """include(CMakeForceCompiler)
