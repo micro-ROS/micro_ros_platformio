@@ -9,6 +9,7 @@ runs:
         apt update
         export DEBIAN_FRONTEND=noninteractive
         apt install -y git curl python3 python3-pip python3-venv git cmake
-        python3 -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
+        curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py
+        python3 get-platformio.py
         echo 'export PATH=$PATH:~/.platformio/penv/bin' >> ~/.bashrc
 
