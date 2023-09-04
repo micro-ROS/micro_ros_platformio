@@ -55,7 +55,7 @@ class Build:
         self.env = {}
 
     def run(self, meta, toolchain, user_meta = ""):
-        if os.path.exists(self.library_path):
+        if os.path.exists(self.library):
             print("micro-ROS already built")
             return
 
@@ -183,6 +183,7 @@ class Build:
             sys.exit(1)
 
     def package_mcu_library(self):
+        binutils_path = self.resolve_binutils_path()
         aux_folder = self.build_folder + "/aux"
 
         shutil.rmtree(aux_folder, ignore_errors=True)
@@ -194,12 +195,12 @@ class Build:
                 if f.endswith('.a'):
                     os.makedirs(aux_folder + "/naming", exist_ok=True)
                     os.chdir(aux_folder + "/naming")
-                    os.system("ar x {}".format(root + "/" + f))
+                    os.system("{}ar x {}".format(binutils_path, root + "/" + f))
                     for obj in [x for x in os.listdir() if x.endswith('obj')]:
                         os.rename(obj, '../' + f.split('.')[0] + "__" + obj)
 
         os.chdir(aux_folder)
-        command = "ar rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; ranlib libmicroros.a"
+        command = "{binutils}ar rc libmicroros.a $(ls *.o *.obj 2> /dev/null); rm *.o *.obj 2> /dev/null; {binutils}ranlib libmicroros.a".format(binutils=binutils_path)
         result = run_cmd(command)
 
         if 0 != result.returncode:
@@ -221,3 +222,15 @@ class Build:
             if os.path.exists(repeated_path):
                 shutil.copytree(repeated_path, folder_path, copy_function=shutil.move, dirs_exist_ok=True)
                 shutil.rmtree(repeated_path)
+
+    def resolve_binutils_path(self):
+        if sys.platform == "darwin":
+            homebrew_binutils_path = "/opt/homebrew/opt/binutils/bin/"
+            if os.path.exists(homebrew_binutils_path):
+                return homebrew_binutils_path
+
+            print("ERROR: GNU binutils not found. ({}) Please install binutils with homebrew: brew install binutils"
+                  .format(homebrew_binutils_path))
+            sys.exit(1)
+
+        return ""
