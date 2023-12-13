@@ -30,9 +30,13 @@ main_path = os.path.realpath(".")
 global_env = DefaultEnvironment()
 board = env['BOARD']
 framework = env['PIOFRAMEWORK'][0]
+platform = env.get('PIOPLATFORM', None)
 extra_packages_path = "{}/extra_packages".format(env['PROJECT_DIR'])
 
-selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
+if platform == 'linux_arm':
+    selected_board_meta = 'linux.meta'
+else:
+    selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
 # Retrieve the required transport. Default iron
 microros_distro = global_env.BoardConfig().get("microros_distro", "iron")
