@@ -29,13 +29,15 @@ project_options = env.GetProjectConfig().items(env=env["PIOENV"], as_dict=True)
 main_path = os.path.realpath(".")
 global_env = DefaultEnvironment()
 board = env['BOARD']
-framework = env['PIOFRAMEWORK'][0]
 platform = env.get('PIOPLATFORM', None)
 extra_packages_path = "{}/extra_packages".format(env['PROJECT_DIR'])
 
 if platform == 'linux_arm':
+    # Transports built for linux do not depend on the framework
+    framework = 'linux'
     selected_board_meta = 'linux.meta'
 else:
+    framework = env['PIOFRAMEWORK'][0]
     selected_board_meta = boards_metas[board] if board in boards_metas else "colcon.meta"
 
 # Retrieve the required transport. Default iron
