@@ -43,7 +43,7 @@ jobs:
           run: |
             export PATH=$PATH:~/.platformio/penv/bin
             cd repo/examples/micro-ros_publisher
-            pio run
+            pio run -e teensy41
         - name: micro-ros_subscriber_wifi
           shell: bash
           run: |
