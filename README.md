@@ -96,7 +96,8 @@ A explanation for adding custom targets is also present
 ### ROS 2 distribution
 The target ROS 2 distribution can be configured with the `board_microros_distro = <distribution>`, supported values are:
   - `humble`
-  - `iron` *(default value)*
+  - `iron`
+  - `jazzy` *(default value)*
   - `rolling`
 
 ### Transport configuration
@@ -217,7 +218,7 @@ It is also possible to use custom transports on a `micro-XRCE Agent` instance. M
 ## Examples
 A simple publisher project using serial transport is available on the [examples](./examples) directory, this examples is meant to be modified with the user board.
 
-- More micro-ROS usage examples are available on [micro-ROS-demos/rclc](https://github.com/micro-ROS/micro-ROS-demos/tree/iron/rclc).
+- More micro-ROS usage examples are available on [micro-ROS-demos/rclc](https://github.com/micro-ROS/micro-ROS-demos/tree/jazzy/rclc).
 - For a complete micro-ROS tutorial, check [Programming with rcl and rclc](https://micro.ros.org/docs/tutorials/programming_rcl_rclc/overview/) documentation.
 
 ## Purpose of the Project
