@@ -64,6 +64,19 @@ def clean_microros_callback(*args, **kwargs):
 if "clean_microros" not in global_env.get("__PIO_TARGETS", {}):
    global_env.AddCustomTarget("clean_microros", None, clean_microros_callback, title="Clean Micro-ROS", description="Clean Micro-ROS build environment")
 
+def clean_libmicroros_callback(*args, **kwargs):
+    library_path = main_path + '/libmicroros'
+
+    # Delete libmicroros folder
+    shutil.rmtree(library_path, ignore_errors=True)
+
+    print("libmicroros cleaned")
+    os._exit(0)
+
+if "clean_libmicroros" not in global_env.get("__PIO_TARGETS", {}):
+   global_env.AddCustomTarget("clean_libmicroros", None, clean_libmicroros_callback, title="Clean libmicroros", description="Clean libmicroros")
+
+
 def build_microros(*args, **kwargs):
     ##############################
     #### Install dependencies ####
@@ -154,7 +167,7 @@ def update_env():
 from SCons.Script import COMMAND_LINE_TARGETS
 
 # Do not build library on clean_microros target or when IDE fetches C/C++ project metadata
-if set(["clean_microros", "_idedata", "idedata"]).isdisjoint(set(COMMAND_LINE_TARGETS)):
+if set(["clean_microros", "clean_libmicroros", "_idedata", "idedata"]).isdisjoint(set(COMMAND_LINE_TARGETS)):
     build_microros()
 
 update_env()
