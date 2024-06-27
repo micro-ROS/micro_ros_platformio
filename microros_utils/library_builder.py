@@ -66,9 +66,6 @@ class Build:
         self.build_mcu_environment(meta, toolchain, user_meta)
         self.package_mcu_library()
 
-        # Delete build folders
-        shutil.rmtree(self.build_folder, ignore_errors=True)
-
     def ignore_package(self, name):
         for p in self.mcu_packages:
             if p.name == name:
@@ -90,8 +87,7 @@ class Build:
         self.env = os.environ.copy()
 
     def download_dev_environment(self):
-        shutil.rmtree(self.dev_src_folder, ignore_errors=True)
-        os.makedirs(self.dev_src_folder)
+        os.makedirs(self.dev_src_folder, exist_ok=True)
         print("Downloading micro-ROS dev dependencies")
         for repo in Sources.dev_environments[self.distro]:
             repo.clone(self.dev_src_folder)
@@ -108,8 +104,7 @@ class Build:
             sys.exit(1)
 
     def download_mcu_environment(self):
-        shutil.rmtree(self.mcu_src_folder, ignore_errors=True)
-        os.makedirs(self.mcu_src_folder)
+        os.makedirs(self.mcu_src_folder, exist_ok=True)
         print("Downloading micro-ROS library")
         for repo in Sources.mcu_environments[self.distro]:
             repo.clone(self.mcu_src_folder)
