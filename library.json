@@ -18,13 +18,17 @@
     "homepage" : "https://micro.ros.org",
     "repository": {
         "type": "git",
-        "url": "https://github.com/micro-ROS/micro_ros_platformio.git"
+        "url": "https://github.com/Darouez-Oussama/micro_ros_platformio.git" 
     },
 
     "build": {
         "extraScript": "./extra_script.py"
     },
 
-    "frameworks": "arduino",
+    "frameworks":[
+        "arduino", 
+        "stm32cube"
+
+    ] ,
     "platforms": "teensy, https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream, atmelsam, raspberrypi, ststm32"
 }
