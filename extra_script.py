@@ -83,7 +83,7 @@ def build_microros(*args, **kwargs):
     ##############################
 
     pip_packages = [x.split("==")[0] for x in os.popen('{} -m pip freeze'.format(env['PYTHONEXE'])).read().split('\n')]
-    required_packages = ["catkin-pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources", "pyyaml", "pytz", "markupsafe==2.0.1", "empy==3.3.4ss"]
+    required_packages = ["catkin-pkg", "lark-parser", "empy", "colcon-common-extensions", "importlib-resources", "pyyaml", "pytz", "markupsafe==2.0.1", "empy==3.3.4"]
     if all([x in pip_packages for x in required_packages]):
         print("All required Python pip packages are installed")
 
