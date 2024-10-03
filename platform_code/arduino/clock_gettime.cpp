@@ -3,7 +3,7 @@
 #include <sys/time.h>
 #define micro_rollover_useconds 4294967295
 
-#ifndef _POSIX_TIMERS
+#if !defined(_POSIX_TIMERS) || !_POSIX_TIMERS
 
 extern "C" int clock_gettime(clockid_t unused, struct timespec *tp)
 {
