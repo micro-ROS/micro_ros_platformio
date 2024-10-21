@@ -40,6 +40,7 @@ Supported boards are:
 | `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
 | `pico`                                       | `raspberrypi` | `arduino`   | `serial`                         | `colcon.meta`|
+| `raspberrypi_1b` <br/> `raspberrypi_2b` <br/> `raspberrypi_3b` <br/> `raspberrypi_zero` | `linux_arm` | `wiringpi` | `socket` | `linux.meta`|
 
 The community is encouraged to open pull request with custom use cases.
 
@@ -52,7 +53,7 @@ The community is encouraged to open pull request with custom use cases.
   ```bash
   apt install -y git cmake python3-pip
   ```
-  
+
 ### Platform specific requirements
 
 #### MacOS
@@ -131,6 +132,15 @@ The transport can be configured with the `board_microros_transport = <transport>
     size_t agent_port = 8888;
 
     set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
+    ```
+
+  - `socket`
+
+    ```c
+    const char* agent_ip = "192.168.1.113";
+    uint16_t agent_port = 8888;
+
+    set_microros_socket_transports(agent_ip, agent_port);
     ```
 
   - `custom`
