@@ -8,7 +8,7 @@
 #include <uxr/client/util/time.h>
 #include <uxr/client/profile/transport/custom/custom_transport.h>
 
-static void* transport_args;
+void* transport_args;
 
 extern "C" {
 

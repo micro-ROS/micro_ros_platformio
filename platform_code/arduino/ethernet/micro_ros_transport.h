@@ -1,3 +1,6 @@
+#ifndef MICRO_ROS_TRANSPORT_H_
+#define MICRO_ROS_TRANSPORT_H_
+
 #include <ETH.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
@@ -13,6 +16,15 @@ struct micro_ros_agent_locator {
     void (*on_eth_disconnected)() = nullptr;
     void (*on_eth_got_ip)(IPAddress ip) = nullptr;
 };
+
+extern void* transport_args;
+
+extern "C" {
+    bool platformio_transport_open(struct uxrCustomTransport * transport);
+    bool platformio_transport_close(struct uxrCustomTransport * transport);
+    size_t platformio_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err);
+    size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err);
+}
 
 static void ethernet_event_handler(WiFiEvent_t event) {
     auto* locator = (micro_ros_agent_locator*)transport_args;
@@ -88,3 +100,5 @@ static inline void set_microros_ethernet_transports(
         platformio_transport_read
     );
 }
+
+#endif // MICRO_ROS_TRANSPORT_H_
