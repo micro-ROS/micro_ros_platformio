@@ -28,18 +28,18 @@ PlatformIO will handle the full build process, including dependencies, compilati
 ## Supported boards
 Supported boards are:
 
-| Board                                        | Platform      | Framework   | Transports                       | Default meta file       |
-| -------------------------------------------- | ------------- | ----------- | -------------------------------- | ------------------------ |
-| `portenta_h7_m7`                             | `ststm32`     | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
-| `teensy41`                                   | `teensy`      | `arduino`   | `serial` <br/> `native_ethernet` | `colcon.meta`            |
-| `teensy40`                                   | `teensy`      | `arduino`   | `serial`                         | `colcon.meta`            |
-| `teensy36` <br/> `teensy35` <br/> `teensy31` | `teensy`      | `arduino`   | `serial`                         | `colcon_lowmem.meta`     |
-| `due`                                        | `atmelsam`    | `arduino`   | `serial`                         | `colcon_verylowmem.meta` |
-| `zero`                                       | `atmelsam`    | `arduino`   | `serial`                         | `colcon_verylowmem.meta` |
-| `olimex_e407`                                | `ststm32`     | `arduino`   | `serial`                         | `colcon.meta`            |
-| `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi`            | `colcon.meta`            |
-| `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`       | `colcon_verylowmem.meta` |
-| `pico`                                       | `raspberrypi` | `arduino`   | `serial`                         | `colcon.meta`|
+| Board                                        | Platform      | Framework   | Transports                               | Default meta file        |
+| -------------------------------------------- | ------------- | ----------- | ---------------------------------------- | ------------------------ |
+| `portenta_h7_m7`                             | `ststm32`     | `arduino`   | `serial` <br/> `wifi`                    | `colcon.meta`            |
+| `teensy41`                                   | `teensy`      | `arduino`   | `serial` <br/> `native_ethernet`         | `colcon.meta`            |
+| `teensy40`                                   | `teensy`      | `arduino`   | `serial`                                 | `colcon.meta`            |
+| `teensy36` <br/> `teensy35` <br/> `teensy31` | `teensy`      | `arduino`   | `serial`                                 | `colcon_lowmem.meta`     |
+| `due`                                        | `atmelsam`    | `arduino`   | `serial`                                 | `colcon_verylowmem.meta` |
+| `zero`                                       | `atmelsam`    | `arduino`   | `serial`                                 | `colcon_verylowmem.meta` |
+| `olimex_e407`                                | `ststm32`     | `arduino`   | `serial`                                 | `colcon.meta`            |
+| `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi` <br/> `ethernet`   | `colcon.meta`            |
+| `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`               | `colcon_verylowmem.meta` |
+| `pico`                                       | `raspberrypi` | `arduino`   | `serial`                                 | `colcon.meta`            |
 
 The community is encouraged to open pull request with custom use cases.
 
