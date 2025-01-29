@@ -1,16 +1,22 @@
+#define ETH_PHY_POWER 5
+#define ETH_PHY_MDC 23 
+#define ETH_PHY_MDIO 18
+#define ETH_PHY_TYPE ETH_PHY_LAN8720
+#define ETH_PHY_ADDR 0
+#define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
+
 #include <Arduino.h>
 #include <micro_ros_platformio.h>
-
 #include <rcl/rcl.h>
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
 #include <std_msgs/msg/string.h>
 
 // Network configuration
-const IPAddress kClientIP(192, 168, 1, 177);
-const IPAddress kGateway(192, 168, 1, 1);
+const IPAddress kClientIP(10, 4, 4, 177);
+const IPAddress kGateway(10, 4, 4, 1);
 const IPAddress kNetmask(255, 255, 255, 0);
-const IPAddress kAgentIP(192, 168, 1, 113);
+const IPAddress kAgentIP(10, 4, 4, 187);
 const uint16_t kAgentPort = 8888;
 const char* kHostname = "micro-ros-eth";
 
@@ -19,6 +25,7 @@ const char* kNodeName = "eth_pubsub_node";
 const char* kPublisherTopic = "micro_ros_response";
 const char* kSubscriberTopic = "micro_ros_name";
 const int kExecutorTimeout = 100;  // ms
+const size_t kDomainId = 8;  // ROS domain ID
 
 // ROS entities
 rclc_executor_t executor;
@@ -156,10 +163,24 @@ void PublishResponse() {
 bool CreateEntities() {
   allocator = rcl_get_default_allocator();
 
-  // Initialize support and node
-  if (rclc_support_init(&support, 0, NULL, &allocator) != RCL_RET_OK) {
+  // Initialize options and set domain ID
+  rcl_init_options_t init_options = rcl_get_zero_initialized_init_options();
+  if (rcl_init_options_init(&init_options, allocator) != RCL_RET_OK) {
     return false;
   }
+  if (rcl_init_options_set_domain_id(&init_options, kDomainId) != RCL_RET_OK) {
+    return false;
+  }
+
+  // Initialize support with domain ID options
+  if (rclc_support_init_with_options(&support, 0, NULL, &init_options, &allocator) != RCL_RET_OK) {
+    return false;
+  }
+
+  // Clean up initialization options
+  rcl_init_options_fini(&init_options);
+
+  // Initialize node and rest of entities
   if (rclc_node_init_default(&node, kNodeName, "", &support) != RCL_RET_OK) {
     return false;
   }
@@ -193,12 +214,13 @@ bool CreateEntities() {
 }
 
 void DestroyEntities() {
-  rmw_context_t* rmw_context = rcl_context_get_rmw_context(&support.context);
-  (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
+    rmw_context_t* rmw_context = rcl_context_get_rmw_context(&support.context);
+    (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
 
-  rcl_subscription_fini(&subscriber, &node);
-  rcl_publisher_fini(&publisher, &node);
-  rclc_executor_fini(&executor);
-  rcl_node_fini(&node);
-  rclc_support_fini(&support);
+    rcl_ret_t rc = RCL_RET_OK;
+    rc = rcl_subscription_fini(&subscriber, &node);
+    rc = rcl_publisher_fini(&publisher, &node);
+    rclc_executor_fini(&executor);
+    rc = rcl_node_fini(&node);
+    rclc_support_fini(&support);
 }
