@@ -2,6 +2,8 @@
 
 #if defined(MICRO_ROS_TRANSPORT_ARDUINO_WIFI)
 #include <WiFi.h>
+#elif defined(MICRO_ROS_TRANSPORT_ARDUINO_ETHERNET)
+#include <ETH.h>
 #endif
 
 #include <micro_ros_platformio.h>
@@ -78,6 +80,14 @@ void setup() {
   char psk[]= "WIFI_PSK";
 
   set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+#elif defined(MICRO_ROS_TRANSPORT_ARDUINO_ETHERNET)
+  IPAddress local_ip(192, 168, 1, 177);
+  IPAddress gateway(192, 168, 1, 1);
+  IPAddress netmask(255, 255, 255, 0);
+  IPAddress agent_ip(192, 168, 1, 113);
+  size_t agent_port = 8888;
+
+  set_microros_ethernet_transports(local_ip, gateway, netmask, agent_ip, agent_port, "micro-ros-eth");
 #elif defined(MICRO_ROS_TRANSPORT_ARDUINO_CUSTOM)
   rmw_uros_set_custom_transport(
     MICROROS_TRANSPORTS_FRAMING_MODE,

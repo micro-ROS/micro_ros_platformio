@@ -133,6 +133,19 @@ The transport can be configured with the `board_microros_transport = <transport>
     set_microros_native_ethernet_transports(local_mac, local_ip, agent_ip, agent_port);
     ```
 
+  - `ethernet`
+
+    ```c
+    IPAddress client_ip(192, 168, 1, 177);
+    IPAddress gateway(192, 168, 1, 1);
+    IPAddress netmask(255, 255, 255, 0);
+    IPAddress agent_ip(192, 168, 1, 113);
+    size_t agent_port = 8888;
+
+    // Optional hostname, defaults to nullptr (no hostname set)
+    set_microros_ethernet_transports(client_ip, gateway, netmask, agent_ip, agent_port, "my-microros-device");
+    ```
+
   - `custom`
 
     The user will need to write transport functions in app code and provide it to the micro-ROS library using [`rmw_uros_set_custom_transport()` API](https://micro.ros.org/docs/tutorials/advanced/create_custom_transports/)
