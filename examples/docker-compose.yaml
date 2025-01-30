@@ -1,0 +1,33 @@
+version: "2.1"
+
+services:
+  micro-ros-agent:
+    image: microros/micro-ros-agent:humble
+    container_name: micro-ros-agent
+    network_mode: host
+    stdin_open: true
+    tty: true
+    environment:
+      - ROS_DOMAIN_ID=8
+    ports:
+      - 8888:8888/udp
+    command: udp4 --port 8888 --verbose 6
+
+  rqt:
+    image: osrf/ros:humble-desktop
+    container_name: rqt-visualizer
+    network_mode: host
+    ipc: host
+    pid: host
+    tty: true
+    privileged: true
+    device_cgroup_rules:
+      - 'c 189:* rmw'
+    environment:
+      - ROS_DOMAIN_ID=8
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    command: bash -c "source /opt/ros/humble/setup.bash && rqt"
+
