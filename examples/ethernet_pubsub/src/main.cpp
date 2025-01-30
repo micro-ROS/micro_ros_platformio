@@ -59,18 +59,25 @@ void PublishResponse();
 bool CreateEntities();
 void DestroyEntities();
 
-// Ethernet event callbacks for debugging
-void OnEthernetConnected() {
-  Serial.println("[ETH] Connected");
-}
-
-void OnEthernetDisconnected() {
-  Serial.println("[ETH] Disconnected");
-}
-
-void OnEthernetGotIP(IPAddress ip) {
-  Serial.print("[ETH] Got IP: ");
-  Serial.println(ip);
+// Ethernet event callback
+void OnEthernetEvent(arduino_event_id_t event, void* event_info) {
+  switch (event) {
+    case ARDUINO_EVENT_ETH_CONNECTED:
+      Serial.println("[ETH] Connected");
+      break;
+      
+    case ARDUINO_EVENT_ETH_DISCONNECTED:
+      Serial.println("[ETH] Disconnected");
+      break;
+      
+    case ARDUINO_EVENT_ETH_GOT_IP:
+      Serial.print("[ETH] Got IP: ");
+      Serial.println(*(IPAddress*)event_info);
+      break;
+      
+    default:
+      break;
+  }
 }
 
 void setup() {
@@ -83,10 +90,10 @@ void setup() {
   response_msg.data.data = response_buffer;
   response_msg.data.capacity = sizeof(response_buffer);
 
-  // Initialize micro-ROS transport
+  // Initialize micro-ROS transport with unified callback
   set_microros_ethernet_transports(
     kClientIP, kGateway, kNetmask, kAgentIP, kAgentPort, 
-    kHostname, OnEthernetConnected, OnEthernetDisconnected, OnEthernetGotIP
+    kHostname, OnEthernetEvent
   );
 
   delay(2000);
