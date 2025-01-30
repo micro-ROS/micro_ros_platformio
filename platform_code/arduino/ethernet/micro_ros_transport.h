@@ -5,16 +5,15 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
+typedef void (*ethernet_event_callback_t)(arduino_event_id_t event, void* event_info);
+
 struct micro_ros_agent_locator {
     IPAddress address;    // Agent IP address
     IPAddress gateway;    // Gateway IP address
     const char* hostname; // Device hostname
     int port;            // Agent port
     
-    // Optional event callbacks
-    void (*on_eth_connected)() = nullptr;
-    void (*on_eth_disconnected)() = nullptr;
-    void (*on_eth_got_ip)(IPAddress ip) = nullptr;
+    ethernet_event_callback_t on_eth_event = nullptr;
 };
 
 extern void* transport_args;
@@ -28,34 +27,32 @@ extern "C" {
 
 static void ethernet_event_handler(WiFiEvent_t event) {
     auto* locator = (micro_ros_agent_locator*)transport_args;
-    if (!locator) return;
+    if (!locator || !locator->on_eth_event) return;
 
     switch (event) {
         case ARDUINO_EVENT_ETH_START:
             if (locator->hostname != nullptr) {
                 ETH.setHostname(locator->hostname);
             }
+            locator->on_eth_event(event, nullptr);
             break;
             
         case ARDUINO_EVENT_ETH_CONNECTED:
-            if (locator->on_eth_connected) {
-                locator->on_eth_connected();
-            }
+            locator->on_eth_event(event, nullptr);
             break;
             
-        case ARDUINO_EVENT_ETH_GOT_IP:
-            if (locator->on_eth_got_ip) {
-                locator->on_eth_got_ip(ETH.localIP());
-            }
+        case ARDUINO_EVENT_ETH_GOT_IP: {
+            IPAddress ip = ETH.localIP();
+            locator->on_eth_event(event, &ip);
             break;
+        }
             
         case ARDUINO_EVENT_ETH_DISCONNECTED:
-            if (locator->on_eth_disconnected) {
-                locator->on_eth_disconnected();
-            }
+            locator->on_eth_event(event, nullptr);
             break;
             
         case ARDUINO_EVENT_ETH_STOP:
+            locator->on_eth_event(event, nullptr);
             break;
             
         default:
@@ -70,9 +67,7 @@ static inline void set_microros_ethernet_transports(
     IPAddress agent_ip, 
     uint16_t agent_port,
     const char* hostname = nullptr,
-    void (*on_connected)() = nullptr,
-    void (*on_disconnected)() = nullptr,
-    void (*on_got_ip)(IPAddress ip) = nullptr
+    ethernet_event_callback_t event_callback = nullptr
 ) {
     static struct micro_ros_agent_locator locator;
 
@@ -85,11 +80,7 @@ static inline void set_microros_ethernet_transports(
     locator.gateway = gateway;
     locator.hostname = hostname;
     locator.port = agent_port;
-    
-    // Store optional callbacks
-    locator.on_eth_connected = on_connected;
-    locator.on_eth_disconnected = on_disconnected;
-    locator.on_eth_got_ip = on_got_ip;
+    locator.on_eth_event = event_callback;
 
     rmw_uros_set_custom_transport(
         false,
