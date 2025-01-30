@@ -185,7 +185,9 @@ bool CreateEntities() {
   }
 
   // Clean up initialization options
-  rcl_init_options_fini(&init_options);
+  if (rcl_init_options_fini(&init_options) != RCL_RET_OK) {
+    return false;
+  }
 
   // Initialize node and rest of entities
   if (rclc_node_init_default(&node, kNodeName, "", &support) != RCL_RET_OK) {
