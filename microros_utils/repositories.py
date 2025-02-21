@@ -209,6 +209,6 @@ class Sources:
     ignore_packages = {
         'humble': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'iron': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
-        'jazzy': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples','lttngpy'],
-        'rolling': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples','lttngpy']
+        'jazzy': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples', 'lttngpy'],
+        'rolling': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples', 'lttngpy', 'rmw_security_common']
     }
