@@ -41,7 +41,7 @@ Supported boards are:
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`               | `colcon_verylowmem.meta` |
 | `pico`                                       | `raspberrypi` | `arduino`   | `serial`                                 | `colcon.meta`            |
 
-\* The ESP32 ethernet transport is community contributed.
+\* Community contributed
 
 The community is encouraged to open pull request with custom use cases.
 
