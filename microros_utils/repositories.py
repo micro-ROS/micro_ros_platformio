@@ -29,10 +29,6 @@ class Repository:
         # TODO(pablogs) ensure that git is installed
         if os.path.exists(self.path):
             command = f"cd {self.path} && git pull {self.url} {self.branch}"
-            print(command)
-            if (self.name == "rmw-microxrcedds") :
-                command = f"cd {self.path} && git pull {self.url} {self.branch} && git reset --hard c31887f38c708f085d4a2117e47055e0176acc1e"
-                #print(command)
             result = run_cmd(command)
             if 0 != result.returncode:
                 print(f"{self.name} pull failed: \n{result.stderr.decode('utf-8')}")
@@ -40,6 +36,9 @@ class Repository:
             return
 
         command = "git clone -b {} {} {}".format(self.branch, self.url, self.path)
+        if (self.name == "rmw-microxrcedds") :
+                command = "git clone -b {} {} {} && cd {} && git reset --hard c31887f38c708f085d4a2117e47055e0176acc1e".format(self.branch, self.url, self.path,self.path)
+                print(command)
         result = run_cmd(command)
 
         if 0 != result.returncode:
