@@ -96,7 +96,13 @@ class Build:
 
     def build_dev_environment(self):
         print("Building micro-ROS dev dependencies")
-        command = "cd {} && . {} && colcon build --cmake-args -DBUILD_TESTING=OFF -DPython3_EXECUTABLE=`which python`".format(self.dev_folder, self.python_env)
+        
+        # Fix build: Ignore rmw_test_fixture_implementation in rolling
+        touch_command = ''
+        if self.distro == 'rolling':
+            touch_command = 'touch src/ament_cmake_ros/rmw_test_fixture_implementation/COLCON_IGNORE && '
+        
+        command = "cd {} && {} . {} && colcon build --cmake-args -DBUILD_TESTING=OFF -DPython3_EXECUTABLE=`which python`".format(self.dev_folder, touch_command, self.python_env)
         result = run_cmd(command, env=self.env)
 
         if 0 != result.returncode:
