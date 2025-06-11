@@ -99,7 +99,7 @@ class Build:
         
         # Fix build: Ignore rmw_test_fixture_implementation in rolling
         touch_command = ''
-        if self.distro == 'rolling':
+        if self.distro in ('rolling', 'kilted'):
             touch_command = 'touch src/ament_cmake_ros/rmw_test_fixture_implementation/COLCON_IGNORE && '
         
         command = "cd {} && {} . {} && colcon build --cmake-args -DBUILD_TESTING=OFF -DPython3_EXECUTABLE=`which python`".format(self.dev_folder, touch_command, self.python_env)
