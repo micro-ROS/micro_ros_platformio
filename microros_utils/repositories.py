@@ -99,6 +99,14 @@ class Sources:
             Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "jazzy"),
             Repository("ament_index", "https://github.com/ament/ament_index", "jazzy")
         ],
+        'kilted': [
+            Repository("ament_cmake", "https://github.com/ament/ament_cmake", "kilted"),
+            Repository("ament_lint", "https://github.com/ament/ament_lint", "kilted"),
+            Repository("ament_package", "https://github.com/ament/ament_package", "kilted"),
+            Repository("googletest", "https://github.com/ament/googletest", "kilted"),
+            Repository("ament_cmake_ros", "https://github.com/ros2/ament_cmake_ros", "kilted"),
+            Repository("ament_index", "https://github.com/ament/ament_index", "kilted")
+        ],
         'rolling': [
             Repository("ament_cmake", "https://github.com/ament/ament_cmake", "rolling"),
             Repository("ament_lint", "https://github.com/ament/ament_lint", "rolling"),
@@ -180,6 +188,30 @@ class Sources:
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "jazzy"),
             Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "jazzy"),
         ],
+        'kilted': [
+            Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "kilted", "ros2"),
+            Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "kilted", "ros2"),
+            Repository("rcl", "https://github.com/micro-ROS/rcl", "kilted"),
+            Repository("rclc", "https://github.com/ros2/rclc", "kilted"),
+            Repository("micro_ros_utilities", "https://github.com/micro-ROS/micro_ros_utilities", "kilted"),
+            Repository("rcutils", "https://github.com/micro-ROS/rcutils", "kilted"),
+            Repository("micro_ros_msgs", "https://github.com/micro-ROS/micro_ros_msgs", "kilted"),
+            Repository("rmw-microxrcedds", "https://github.com/micro-ROS/rmw-microxrcedds", "kilted"),
+            Repository("rosidl_typesupport", "https://github.com/micro-ROS/rosidl_typesupport", "kilted"),
+            Repository("rosidl_typesupport_microxrcedds", "https://github.com/micro-ROS/rosidl_typesupport_microxrcedds", "kilted"),
+            Repository("rosidl", "https://github.com/ros2/rosidl", "kilted"),
+            Repository("rosidl_dynamic_typesupport", "https://github.com/ros2/rosidl_dynamic_typesupport", "kilted"),
+            Repository("rosidl_core", "https://github.com/ros2/rosidl_core", "kilted"),
+            Repository("rmw", "https://github.com/ros2/rmw", "kilted"),
+            Repository("rcl_interfaces", "https://github.com/ros2/rcl_interfaces", "kilted"),
+            Repository("rosidl_defaults", "https://github.com/ros2/rosidl_defaults", "kilted"),
+            Repository("unique_identifier_msgs", "https://github.com/ros2/unique_identifier_msgs", "kilted"),
+            Repository("common_interfaces", "https://github.com/ros2/common_interfaces", "kilted"),
+            Repository("test_interface_files", "https://github.com/ros2/test_interface_files", "kilted"),
+            Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "kilted"),
+            Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "kilted"),
+            Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "kilted"),
+        ],
         'rolling': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "rolling", "ros2"),
             Repository("Micro-XRCE-DDS-Client", "https://github.com/eProsima/Micro-XRCE-DDS-Client", "rolling", "ros2"),
@@ -210,5 +242,6 @@ class Sources:
         'humble': ['rcl_logging_log4cxx', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'iron': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples'],
         'jazzy': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples', 'lttngpy'],
+        'kilted': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples', 'lttngpy', 'rmw_security_common'],
         'rolling': ['test_tracetools', 'rcl_logging_spdlog', 'rcl_yaml_param_parser', 'rclc_examples', 'lttngpy', 'rmw_security_common']
     }

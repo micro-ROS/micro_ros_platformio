@@ -100,6 +100,7 @@ The target ROS 2 distribution can be configured with the `board_microros_distro 
   - `humble`
   - `iron`
   - `jazzy` *(default value)*
+  - `kilted`
   - `rolling`
 
 ### Transport configuration
