@@ -100,8 +100,8 @@ A explanation for adding custom targets is also present
 ### ROS 2 distribution
 The target ROS 2 distribution can be configured with the `board_microros_distro = <distribution>`, supported values are:
   - `humble`
-  - `jazzy` *(default value)*
-  - `kilted`
+  - `jazzy`
+  - `kilted` *(default value)*
   - `rolling`
 
 ### Transport configuration
