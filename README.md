@@ -39,7 +39,7 @@ Supported boards are:
 | `olimex_e407`                                | `ststm32`     | `arduino`   | `serial`                                 | `colcon.meta`            |
 | `esp32dev`                                   | `espressif32` | `arduino`   | `serial` <br/> `wifi` <br/> `ethernet`*   | `colcon.meta`            |
 | `nanorp2040connect`                          | `raspberrypi` | `arduino`   | `serial` <br/> `wifi_nina`               | `colcon_verylowmem.meta` |
-| `pico`                                       | `raspberrypi` | `arduino`   | `serial`                                 | `colcon.meta`            |
+| `pico`  <br/> `pico2`                        | `raspberrypi` | `arduino`   | `serial`                                 | `colcon.meta`            |
 
 \* Community contributed
 
@@ -70,6 +70,8 @@ brew install binutils
 
 The library can be included as a regular git library dependence on your `platform.ini` file:
 
+You may find a sample ini file at `ci/platformio.ini`.
+
 ```ini
 ...
 lib_deps =
@@ -98,7 +100,6 @@ A explanation for adding custom targets is also present
 ### ROS 2 distribution
 The target ROS 2 distribution can be configured with the `board_microros_distro = <distribution>`, supported values are:
   - `humble`
-  - `iron`
   - `jazzy` *(default value)*
   - `kilted`
   - `rolling`
@@ -236,6 +237,7 @@ A simple publisher project using serial transport is available on the [examples]
 
 - More micro-ROS usage examples are available on [micro-ROS-demos/rclc](https://github.com/micro-ROS/micro-ROS-demos/tree/jazzy/rclc).
 - For a complete micro-ROS tutorial, check [Programming with rcl and rclc](https://micro.ros.org/docs/tutorials/programming_rcl_rclc/overview/) documentation.
+- Community contributed tutorials for beginners with [examples ported from micro_ros_arduino](https://github.com/hippo5329/micro_ros_arduino_examples_platformio/wiki) and [examples ported from micro-ROS-demos](https://github.com/hippo5329/micro-ROS-demos-platformio/wiki).
 
 ## Purpose of the Project
 
@@ -252,23 +254,3 @@ This repository is open-sourced under the Apache-2.0 license. See the [LICENSE](
 
 For a list of other open-source components included in this repository,
 see the file [3rd-party-licenses.txt](3rd-party-licenses.txt).
-
-## Known Issues/Limitations
-
-- For `wifi_nina` transport, the following versioning shall be used:
-
-    ```ini
-    lib_deps =
-      arduino-libraries/WiFiNINA@^1.8.13
-    ```
-
-- For `nanorp2040connect` board with `serial` transport, the library dependency finder shall be set to `chain+`:
-
-    ```ini
-    lib_ldf_mode = chain+
-    ```
-- For `pico` board with `serial` transport, the library dependency finder shall be set to `chain+`:
-
-    ```ini
-    lib_ldf_mode = chain+
-    ```
