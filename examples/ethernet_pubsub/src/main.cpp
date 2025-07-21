@@ -1,5 +1,5 @@
 #define ETH_PHY_POWER 5
-#define ETH_PHY_MDC 23 
+#define ETH_PHY_MDC 23
 #define ETH_PHY_MDIO 18
 #define ETH_PHY_TYPE ETH_PHY_LAN8720
 #define ETH_PHY_ADDR 0
@@ -25,7 +25,7 @@ const char* kNodeName = "eth_pubsub_node";
 const char* kPublisherTopic = "micro_ros_response";
 const char* kSubscriberTopic = "micro_ros_name";
 const int kExecutorTimeout = 100;  // ms
-const size_t kDomainId = 8;  // ROS domain ID
+const size_t kDomainId = 8;        // ROS domain ID
 
 // ROS entities
 rclc_executor_t executor;
@@ -65,16 +65,16 @@ void OnEthernetEvent(arduino_event_id_t event, void* event_info) {
     case ARDUINO_EVENT_ETH_CONNECTED:
       Serial.println("[ETH] Connected");
       break;
-      
+
     case ARDUINO_EVENT_ETH_DISCONNECTED:
       Serial.println("[ETH] Disconnected");
       break;
-      
+
     case ARDUINO_EVENT_ETH_GOT_IP:
       Serial.print("[ETH] Got IP: ");
       Serial.println(*(IPAddress*)event_info);
       break;
-      
+
     default:
       break;
   }
@@ -92,9 +92,8 @@ void setup() {
 
   // Initialize micro-ROS transport with unified callback
   set_microros_ethernet_transports(
-    kClientIP, kGateway, kNetmask, kAgentIP, kAgentPort, 
-    kHostname, OnEthernetEvent
-  );
+    kClientIP, kGateway, kNetmask, kAgentIP, kAgentPort,
+    kHostname, OnEthernetEvent);
 
   delay(2000);
   connection_state = ConnectionState::kWaitingForAgent;
@@ -152,7 +151,7 @@ void SubscriptionCallback(const void* msgin) {
   // Create response message: "Hello <received_name>!"
   snprintf(response_buffer, sizeof(response_buffer), "Hello %s!", msg->data.data);
   response_msg.data.size = strlen(response_buffer);
-  
+
   // Publish response
   PublishResponse();
 }
@@ -195,16 +194,18 @@ bool CreateEntities() {
   }
 
   // Create publisher
-  if (rclc_publisher_init_default(&publisher, &node, 
-      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
-      kPublisherTopic) != RCL_RET_OK) {
+  if (rclc_publisher_init_default(&publisher, &node,
+                                  ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
+                                  kPublisherTopic)
+      != RCL_RET_OK) {
     return false;
   }
 
   // Create subscriber
   if (rclc_subscription_init_default(&subscriber, &node,
-      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
-      kSubscriberTopic) != RCL_RET_OK) {
+                                     ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
+                                     kSubscriberTopic)
+      != RCL_RET_OK) {
     return false;
   }
 
@@ -215,7 +216,8 @@ bool CreateEntities() {
 
   // Add subscriber to executor
   if (rclc_executor_add_subscription(&executor, &subscriber, &received_msg,
-      &SubscriptionCallback, ON_NEW_DATA) != RCL_RET_OK) {
+                                     &SubscriptionCallback, ON_NEW_DATA)
+      != RCL_RET_OK) {
     return false;
   }
 
@@ -223,13 +225,13 @@ bool CreateEntities() {
 }
 
 void DestroyEntities() {
-    rmw_context_t* rmw_context = rcl_context_get_rmw_context(&support.context);
-    (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
+  rmw_context_t* rmw_context = rcl_context_get_rmw_context(&support.context);
+  (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
 
-    rcl_ret_t rc = RCL_RET_OK;
-    rc = rcl_subscription_fini(&subscriber, &node);
-    rc = rcl_publisher_fini(&publisher, &node);
-    rclc_executor_fini(&executor);
-    rc = rcl_node_fini(&node);
-    rclc_support_fini(&support);
+  rcl_ret_t rc = RCL_RET_OK;
+  rc = rcl_subscription_fini(&subscriber, &node);
+  rc = rcl_publisher_fini(&publisher, &node);
+  rclc_executor_fini(&executor);
+  rc = rcl_node_fini(&node);
+  rclc_support_fini(&support);
 }

@@ -20,17 +20,25 @@ rcl_allocator_t allocator;
 rcl_node_t node;
 rcl_timer_t timer;
 
-#define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){error_loop();}}
-#define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
+#define RCCHECK(fn) \
+  { \
+    rcl_ret_t temp_rc = fn; \
+    if ((temp_rc != RCL_RET_OK)) { error_loop(); } \
+  }
+#define RCSOFTCHECK(fn) \
+  { \
+    rcl_ret_t temp_rc = fn; \
+    if ((temp_rc != RCL_RET_OK)) {} \
+  }
 
 // Error handle loop
 void error_loop() {
-  while(1) {
+  while (1) {
     delay(100);
   }
 }
 
-void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
+void timer_callback(rcl_timer_t* timer, int64_t last_call_time) {
   RCLC_UNUSED(last_call_time);
   if (timer != NULL) {
     RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
