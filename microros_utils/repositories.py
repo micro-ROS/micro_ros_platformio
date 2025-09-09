@@ -187,6 +187,7 @@ class Sources:
             Repository("rmw_implementation", "https://github.com/ros2/rmw_implementation", "jazzy"),
             Repository("rcl_logging", "https://github.com/ros2/rcl_logging", "jazzy"),
             Repository("ros2_tracing", "https://github.com/ros2/ros2_tracing", "jazzy"),
+            Repository("tf2_msgs", "https://github.com/micro-ROS/micro_ros_arduino", "jazzy", "src/tf2_msgs"),
         ],
         'kilted': [
             Repository("micro-CDR", "https://github.com/eProsima/micro-CDR", "kilted", "ros2"),
