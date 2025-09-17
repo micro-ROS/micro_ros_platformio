@@ -1,4 +1,8 @@
-#include <NativeEthernet.h>
+#if defined(ARDUINO_PORTENTA_H7_M7)
+  #include <EthernetUdp.h>
+#else
+  #include <NativeEthernet.h>
+#endif
 
 struct micro_ros_agent_locator {
 	IPAddress address;
