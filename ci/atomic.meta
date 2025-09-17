@@ -1,0 +1,9 @@
+{
+    "names": {
+        "rcutils": {
+            "cmake-args": [
+                "-DRCUTILS_NO_64_ATOMIC=OFF"
+            ]
+        }
+    }
+}
