@@ -4,6 +4,8 @@ on:
     pull_request:
       branches:
         - '**'
+    schedule:
+      - cron: '59 23 * * *' # every day at 23:59 UTC
 
 jobs:
 
@@ -17,7 +19,7 @@ jobs:
             platform: [teensy41, teensy40, teensy36, teensy35, teensy31, due, zero, olimex_e407, esp32dev, nanorp2040connect, portenta_h7_m7, teensy41_eth, nanorp2040connect_wifi, portenta_h7_m7_wifi, esp32dev_wifi, esp32dev_ethernet, portenta_h7_m7_humble, portenta_h7_m7_jazzy, portenta_h7_m7_kilted, portenta_h7_m7_rolling, teensy41_custom, pico, pico2]
 
         steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v5
           with:
             path: repo
         - name: Install environment
