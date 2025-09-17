@@ -30,3 +30,25 @@ jobs:
             export PATH=$PATH:~/.platformio/penv/bin
             cd repo/ci
             pio run -e ${{ matrix.platform }}
+
+    micro_ros_platformio_examples:
+        runs-on: ubuntu-22.04
+        container: ubuntu:22.04
+        steps:
+        - uses: actions/checkout@v3
+          with:
+            path: repo
+        - name: Install environment
+          uses: ./repo/.github/actions/platformio-env
+        - name: micro-ros_publisher
+          shell: bash
+          run: |
+            export PATH=$PATH:~/.platformio/penv/bin
+            cd repo/examples/micro-ros_publisher
+            pio run -e teensy41
+        - name: micro-ros_subscriber_wifi
+          shell: bash
+          run: |
+            export PATH=$PATH:~/.platformio/penv/bin
+            cd repo/examples/micro-ros_subscriber_wifi
+            pio run -e esp32cam
