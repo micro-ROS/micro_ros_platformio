@@ -18,10 +18,18 @@
 
 // Test custom transports
 #if defined(MICRO_ROS_TRANSPORT_ARDUINO_CUSTOM)
-bool platformio_transport_open(struct uxrCustomTransport * transport) {return false;};
-bool platformio_transport_close(struct uxrCustomTransport * transport) {return false;};
-size_t platformio_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err) {return 0;};
-size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {return 0;};
+bool platformio_transport_open(struct uxrCustomTransport* transport) {
+  return false;
+};
+bool platformio_transport_close(struct uxrCustomTransport* transport) {
+  return false;
+};
+size_t platformio_transport_write(struct uxrCustomTransport* transport, const uint8_t* buf, size_t len, uint8_t* err) {
+  return 0;
+};
+size_t platformio_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {
+  return 0;
+};
 #endif
 
 // Test extra packages
@@ -40,19 +48,26 @@ rcl_timer_t timer;
 
 #define LED_PIN 13
 
-#define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){error_loop();}}
-#define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
+#define RCCHECK(fn) \
+  { \
+    rcl_ret_t temp_rc = fn; \
+    if ((temp_rc != RCL_RET_OK)) { error_loop(); } \
+  }
+#define RCSOFTCHECK(fn) \
+  { \
+    rcl_ret_t temp_rc = fn; \
+    if ((temp_rc != RCL_RET_OK)) {} \
+  }
 
 
-void error_loop(){
-  while(1){
+void error_loop() {
+  while (1) {
     digitalWrite(LED_PIN, !digitalRead(LED_PIN));
     delay(100);
   }
 }
 
-void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
-{
+void timer_callback(rcl_timer_t* timer, int64_t last_call_time) {
   RCLC_UNUSED(last_call_time);
   if (timer != NULL) {
     RCSOFTCHECK(rcl_publish(&publisher, &msg, NULL));
@@ -77,7 +92,7 @@ void setup() {
   size_t agent_port = 8888;
 
   char ssid[] = "WIFI_SSID";
-  char psk[]= "WIFI_PSK";
+  char psk[] = "WIFI_PSK";
 
   set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
 #elif defined(MICRO_ROS_TRANSPORT_ARDUINO_ETHERNET)
@@ -95,8 +110,7 @@ void setup() {
     platformio_transport_open,
     platformio_transport_close,
     platformio_transport_write,
-    platformio_transport_read
-  );
+    platformio_transport_read);
 #else
 #error "No transport defined"
 #endif

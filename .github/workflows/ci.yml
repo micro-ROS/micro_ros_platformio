@@ -24,6 +24,12 @@ jobs:
             path: repo
         - name: Install environment
           uses: ./repo/.github/actions/platformio-env
+        - name: Install clang-format
+          run: apt install -y clang-format
+        - name: Check formatting
+          run: |
+            cd repo
+            bash ci/check_formatting.sh
         - name: Build
           shell: bash
           run: |
