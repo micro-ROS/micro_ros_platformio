@@ -98,11 +98,13 @@ class Build:
         print("Building micro-ROS dev dependencies")
         
         # Fix build: Ignore rmw_test_fixture_implementation in rolling
-        touch_command = ''
+        command = ''
         if self.distro in ('rolling', 'kilted'):
             touch_command = 'touch src/ament_cmake_ros/rmw_test_fixture_implementation/COLCON_IGNORE && '
+            command = "cd {} && {} . {} && colcon build --packages-ignore rmw_test_fixture --cmake-args -DBUILD_TESTING=OFF -DPython3_EXECUTABLE=`which python`".format(self.dev_folder , touch_command, self.python_env)
+        else:
+            command = "cd {} && . {} && colcon build --cmake-args -DBUILD_TESTING=OFF -DPython3_EXECUTABLE=`which python`".format(self.dev_folder , self.python_env)
         
-        command = "cd {} && {} . {} && colcon build --cmake-args -DBUILD_TESTING=OFF -DPython3_EXECUTABLE=`which python`".format(self.dev_folder, touch_command, self.python_env)
         result = run_cmd(command, env=self.env)
 
         if 0 != result.returncode:
